@@ -1,6 +1,5 @@
 import axios from 'redaxios';
 
-axios.defaults.baseURL = 'http://localhost:80/api';
 
 function refreshHeader() {
     const isLoggedIn = localStorage.accessToken != null;
@@ -13,6 +12,7 @@ function refreshHeader() {
 }
 
 function authHeader() {
+    // return auth header with jwt if user is logged in and request is to the api url
     const isLoggedIn = localStorage.accessToken != null;
 
     if (isLoggedIn) {
@@ -30,7 +30,7 @@ const instance = axios.create({
         'X-Refresh': refreshHeader().toString(),
         'X-Forwarded-For': '',
     },
-    baseURL: 'https://localhost:80/api',
+    baseURL: 'http://localhost/api',
 });
 
 export default instance;

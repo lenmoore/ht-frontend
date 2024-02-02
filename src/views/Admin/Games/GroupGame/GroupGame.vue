@@ -1,23 +1,5 @@
 <template>
     <div>
-        <div class="header">
-            <div class="p-4">
-                <h1>Valitud grupp: {{ currentRoute }}</h1>
-                <p>
-                    Mängijad/tiimid:
-                    <span class="bg-pink">_ Helena _</span> |
-                    <span class="bg-blue">_ Sander _</span>
-                    Siia koht kust neid lisada
-                </p>
-                <h2>Stseenid</h2>
-                <select name="scene" id="scene">
-                    <option value="scene1">Stseen 1: Kohv</option>
-                    <option value="scene1">Stseen 2: Siim</option>
-                    <option value="scene1">Stseen 3: Kastame lilli</option>
-                </select>
-            </div>
-            <img src="" alt="">
-        </div>
 
         <div>
             <div class="scene-wrapper border">
@@ -141,7 +123,6 @@ export default {
             console.log('saveTask');
 
         },
-
         fileName(task) {
             return `1_${task.orderNumber}_${task.fileName}_${task.visitorName}_${this.currentRoute}.mp4`;
         },
