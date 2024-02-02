@@ -9,10 +9,24 @@ export default defineConfig({
         vue(),
         basicSsl(),
     ],
+    server: {
+        https: {
+            key: 'key.pem',
+            cert: 'cert.pem',
+        },
+        proxy: {
+            '/api': {
+                target: 'http://localhost:80',
+                changeOrigin: true,
+                secure: false,
+                ws: true,
+            },
+        },
+    },
     css: {
         preprocessorOptions: {
             scss: {
-                additionalData: `@import "src/_variables.scss";`,
+                additionalData: `@import "src/styles/_variables.scss"; @import "src/styles/neubrut.scss"; `,
             },
         },
     },

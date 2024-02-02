@@ -23,9 +23,6 @@
     </div>
 </template>
 <style lang="scss">
-body {
-    background-color: $red;
-}
 
 .nav {
     display: flex;
@@ -38,7 +35,6 @@ body {
     align-items: center;
 
     a {
-        color: white;
         padding: 1rem;
     }
 }
