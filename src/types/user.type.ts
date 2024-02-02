@@ -5,4 +5,5 @@ export interface User {
     admin: boolean;
     actor: boolean;
     group_name: string;
+    team_name: string;
 }
