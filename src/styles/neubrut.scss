@@ -1,5 +1,5 @@
 // https://neubrutalismcss-goodvessel92551.replit.app/
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Play&display=swap');
 @import './_variables.scss';
 
 .red {
@@ -11,19 +11,78 @@
 }
 
 .green {
-  --color: #38b000;
+  --color: $green;
 }
 
 .yellow {
-  --color: #ffc300;
+  --color: $yellow;
 }
 
 .pink {
-  --color: #ffafcc;
+  --color: $pink;
 }
 
 .orange {
-  --color: #f77f00;
+  --color: $orange;
+}
+
+.bg-red {
+  background-color: $red;
+}
+
+.bg-green {
+  background-color: $green;
+}
+
+.bg-purple {
+  background-color: $purple;
+}
+
+.bg-yellow {
+  background-color: $yellow;
+}
+
+.bg-pink {
+  color: black;
+  background-color: $pink;
+}
+
+.bg-orange {
+  background-color: $orange;
+}
+
+.bg-blue {
+  background-color: #535bf2;
+  color: white;
+}
+
+.border {
+  border: 2px solid black;
+
+  h1, h2, h3, h4, h5, h6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.border-top {
+  border-top: 2px solid black;
+
+}
+
+.border-bottom {
+  border-bottom: 2px solid black;
+
+}
+
+.border-left {
+  border-left: 2px solid black;
+
+}
+
+.border-right {
+  border-right: 2px solid black;
+
 }
 
 :root {
@@ -57,8 +116,8 @@
 
 body {
   background-color: var(--back);
-  padding: 20px;
   margin: 0px;
+  padding-top: 3rem;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
@@ -66,7 +125,7 @@ body {
 }
 
 * {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Play', sans-serif;
   transition: .3s filter, .3s scale, .3s border-color, .3s background-color, .3s background-image, transform .3s, box-shadow .3s;
 }
 
@@ -177,7 +236,7 @@ input[type="hidden"] {
 
 input[type="checkbox"]:not(.switch) {
   appearance: none;
-  width: 30px;
+  //width: 30px;
   height: 30px;
   border-radius: 4px;
   border: 2px solid black;
@@ -295,7 +354,7 @@ input[type="range"]::-moz-range-thumb:active {
 
 select {
   appearance: none;
-  padding: 8px 32px 8px 8px;
+  padding: 8px;
   background: #fff;
   box-shadow: 1px 1px 0px black;
   border: 2px solid black;
@@ -306,6 +365,7 @@ select {
   background-position: right;
   background-size: 20px 20px;
   cursor: pointer;
+  margin: 0.25rem;
 }
 
 select:hover:not(:disabled) {
@@ -320,6 +380,10 @@ select:focus {
   filter: brightness(80%);
 }
 
+label {
+  font-size: 0.75rem;
+  margin-top: 1rem;
+}
 
 h1 {
   font-size: 50px;
@@ -470,30 +534,32 @@ img:hover:not(:disabled), input[type="input"]:hover:not(:disabled) {
 }
 
 .card {
-  width: 200px;
-  height: 300px;
+  min-width: 7rem;
+  min-height: 15rem;
   background-color: var(--back);
   border: 2px solid black;
   float: left;
   margin: 4px;
   border-radius: 4px;
   cursor: pointer;
+  padding: 1rem;
   box-shadow: 2px 2px black;
 }
 
-.card:hover:not(:disabled) {
-  filter: brightness(95%);
-  box-shadow: none;
-  transform: translate(2px, 2px);
-}
+//.card:hover:not(:disabled) {
+//  filter: brightness(95%);
+//  box-shadow: none;
+//  transform: translate(2px, 2px);
+//}
 
 b, strong {
-  color: var(--color)
+  color: var(--color);
+  font-weight: bold;
 }
 
 u {
   text-decoration: none;
-  border-bottom: 1px solid var(--color);
+  border-bottom: 2px solid black;
 }
 
 s {
@@ -554,15 +620,18 @@ nav a:hover:not(:disabled) {
   float: right !important;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding-bottom: 1rem;
+}
+
 footer {
   position: relative;
-  height: 40px;
+  height: 10rem;
   background-color: var(--back);
   border-top: 2px solid black;
-  bottom: -20px;
-  left: -20px;
-  width: calc(100% + 40px);
-  z-index: 10;
   text-align: center;
   display: flex;
   align-items: center;

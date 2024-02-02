@@ -34,7 +34,14 @@ const routes: RouteRecordRaw[] = [
                 path: 'games',
                 name: 'games',
                 component: () => import('../views/Admin/Games/index.vue'),
-                children: [],
+                children: [
+                    {
+                        path: 'groups/:group',
+                        name: 'groups',
+                        component: () => import('../views/Admin/Games/GroupGame/GroupGame.vue'),
+                        children: [],
+                    },
+                ],
             },
             {
                 path: 'performances',

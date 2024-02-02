@@ -1,25 +1,20 @@
 <template>
     <div>
-        <div>
-            development links:
-            <div class="nav">
-                <RouterLink :to="{ name: 'visitor'} ">visitor view</RouterLink>
-                <RouterLink :to="{ name: 'dashboard'} ">actor dash</RouterLink>
-                <RouterLink :to="{ name: 'games'} ">games</RouterLink>
-                <RouterLink :to="{ name: 'performances'} ">performances</RouterLink>
-            </div>
-        </div>
+        <NavMenu/>
 
-        <div>
+        <!--        <div>-->
 
-            camera tutorial:
-            <a
-                href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Recording_a_media_element"
-            >here</a
-            >
-        </div>
+        <!--            camera tutorial:-->
+        <!--            <a-->
+        <!--                href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Recording_a_media_element"-->
+        <!--            >here</a-->
+        <!--            >-->
+        <!--        </div>-->
 
-        <RouterView/>
+        <RouterView class="container"/>
+        <footer>
+            :)
+        </footer>
     </div>
 </template>
 <style lang="scss">
@@ -40,4 +35,5 @@
 }
 </style>
 <script setup lang="ts">
+import NavMenu from './components/NavMenu.vue';
 </script>
