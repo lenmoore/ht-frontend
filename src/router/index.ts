@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/dashboard",
     name: "dashboard",
-    component: () => import("../views/ActorDashboard/index.vue"),
+    component: () => import("../views/ActorDashboard/ActorDashboard.vue"),
     children: [],
   },
   {
