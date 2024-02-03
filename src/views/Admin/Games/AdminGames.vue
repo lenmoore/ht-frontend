@@ -27,20 +27,25 @@
                     Siia koht kust neid lisada
                 </p>
                 <h2>Stseenid</h2>
-                <select name="scene" id="scene">
-                    <option value="scene1">Stseen 1: Kohv</option>
-                    <option value="scene1">Stseen 2: Siim</option>
-                    <option value="scene1">Stseen 3: Kastame lilli</option>
+                <select name="scene" id="scene" v-model="selectedScene">
+                    <option v-for="scene in scenes" :key="scene._id" :value="scene._id">{{ scene.orderNumber }}
+                        {{ scene.title }}
+                    </option>
                 </select>
 
-                <div v-if="addingScene" class="bg-yellow">
-                    <input type="number" v-model="newSceneOrderNumber">
-                    <input type="text" v-model="newSceneName">
-                    <textarea v-model="newSceneDescription"></textarea>
+                <div v-if="addingScene" class="border p-4 new-scene">
+                    <label for="number">Number</label>
+                    <input id="number" type="number" v-model="newSceneOrderNumber">
+
+                    <label for="name">Nimi</label>
+                    <input id="name" type="text" v-model="newSceneName">
+
+                    <label for="desc">Kirjeldus</label>
+                    <textarea id="desc" v-model="newSceneDescription"></textarea>
                 </div>
                 <button @click="clickAdd">Lisa stseen</button>
             </div>
-            <img src="" alt="">
+            <img src="/sakala.jpeg" alt="">
         </div>
 
         <RouterView/>
@@ -60,17 +65,33 @@ export default {
             newSceneName: '',
             newSceneDescription: '',
             newSceneOrderNumber: null,
+            selectedScene: null,
+            scenes: [],
         };
     },
+
+    async created() {
+        this.scenes = await this.getAllScenes();
+    },
+
     computed: {
         currentRoute() {
             return this.$route.params.group;
         },
     },
 
+    watch: {
+        selectedScene: {
+            immediate: true,
+            handler(val) {
+                router.push({name: 'groups', query: {scene: val}});
+            }
+        }
+    },
     methods: {
         ...mapActions(useSetupStore, {
             createScene: 'createScene',
+            getAllScenes: 'getAllScenes',
         }),
         goToGroup(name) {
             router.push({name: 'groups', params: {group: name}});
@@ -81,6 +102,7 @@ export default {
                     title: this.newSceneName,
                     description: this.newSceneDescription,
                     orderNumber: this.newSceneOrderNumber,
+                    groupName: this.currentRoute,
                     teams: [],
                     tasks: [],
                 });
@@ -89,6 +111,8 @@ export default {
                     this.newSceneName = '';
                     this.newSceneDescription = '';
                     this.newSceneOrderNumber = null;
+                    console.log(result);
+                    await router.push({name: 'groups', query: {scene: result.scene._id}});
                 }
             }
             this.addingScene = !this.addingScene;
@@ -102,5 +126,10 @@ export default {
 .group-overview {
     display: flex;
     width: 100%;
+}
+
+.new-scene {
+    display: flex;
+    flex-direction: column;
 }
 </style>

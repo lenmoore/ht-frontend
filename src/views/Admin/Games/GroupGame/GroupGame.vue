@@ -1,5 +1,10 @@
 <template>
     <div>
+        <h1 class="bg-pink">
+            todo there is some shit here: there should always be an auto-selected scene; it should be deep-linkable;
+            cant save tasks because of some reactivity issue
+        </h1>
+
 
         <div>
             <div class="scene-wrapper border">
@@ -13,9 +18,9 @@
                 <h4>Ylesanded</h4>
 
                 <div class="tasks-wrapper">
-                    <div v-for="task in tasks" :key="task.id">
+                    <div v-for="task in tasks" :key="task._id || 'new'">
                         <div class="card" :class="{ 'wide': task.isEditing }">
-                            <form class="two-part-form" v-if="task.isEditing">
+                            <div class="two-part-form" v-if="task.isEditing">
                                 <div class="form-part">
                                     <label for="orderNumber">Järjekorranumber (naitlejale)</label>
                                     <input id="orderNumber" type="text" v-model="task.orderNumber">
@@ -39,7 +44,7 @@
 
 
                                     <label for="length">Klipi pikkus (sekundites)</label>
-                                    <input id="length" type="number" v-model="task.length">
+                                    <input id="length" type="number" v-model="task.duration">
 
                                 </div>
 
@@ -49,10 +54,10 @@
 
                                     <label for="orderNumber">Kirjeldus (publikule)</label>
                                     <textarea v-model="task.descriptionOfTask"></textarea>
-                                    <button @click="saveTask" class="bg-red">Salvesta</button>
+                                    <button @click.prevent="saveTask(task)" class="bg-red">Salvesta</button>
                                 </div>
 
-                            </form>
+                            </div>
                             <div v-else class="closed-card">
                                 <div>
                                     <p><code>{{ fileName(task) }}</code> ({{ task.type }})</p>
@@ -60,12 +65,15 @@
                                 </div>
                                 <div>
                                     <p><strong>"{{ task.nameOfTask }}"</strong>: {{ task.descriptionOfTask }}</p>
-                                    <button @click="task.isEditing = !task.isEditing" class="bg-red">Muuda</button>
+                                    <button @click.prevent="task.isEditing = !task.isEditing" class="bg-red">Muuda
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <button @click="addTask">Lisa</button>
             </div>
 
 
@@ -75,11 +83,16 @@
 
 <script>
 
+import {mapActions} from "pinia";
+import {useSetupStore} from "../../../../store/setup.ts";
+
 export default {
     name: 'GroupGame',
     data() {
         return {
-            tasks: [
+            tasks: [],
+            scene: null,
+            dummyTasks: [
                 {
                     id: 1,
                     orderNumber: 1,
@@ -117,14 +130,73 @@ export default {
         currentRoute() {
             return this.$route.params.group;
         },
+        currentSceneId() {
+            return this.$route.query.scene;
+        },
+    },
+
+    watch: {
+        currentSceneId: {
+            immediate: true,
+            async handler(val) {
+                this.scene = await this.getSceneById(val);
+                this.tasks = this.scene.tasks;
+            }
+        }
     },
     methods: {
-        saveTask() {
-            console.log('saveTask');
+        ...mapActions(useSetupStore, {
+            createTask: 'createTask',
+            getSceneById: 'getSceneById',
+            updateTaskById: 'updateTaskById',
+            deleteTaskById: 'deleteTaskById',
+        }),
+        async saveTask(event) {
+            // todo there is some shit here. cannot save tasks
+            const task = event;
+            console.log('saveTask', task);
+            if (task._id === 'new') {
+                await this.createTask({
+                    orderNumber: task.orderNumber,
+                    nameOfTask: task.nameOfTask,
+                    visitorName: task.visitorName,
+                    descriptionOfTask: task.descriptionOfTask,
+                    type: task.type,
+                    fileName: this.fileName(task),
+                    duration: task.duration,
+                    sceneId: this.scene._id,
+                });
+            } else {
+                await this.updateTaskById({
+                    _id: task._id,
+                    orderNumber: task.orderNumber,
+                    nameOfTask: task.nameOfTask,
+                    visitorName: task.visitorName,
+                    descriptionOfTask: task.descriptionOfTask,
+                    type: task.type,
+                    duration: task.duration,
+                    fileName: this.fileName(task),
+                    sceneId: this.scene._id,
+                });
+            }
 
         },
         fileName(task) {
             return `1_${task.orderNumber}_${task.fileName}_${task.visitorName}_${this.currentRoute}.mp4`;
+        },
+        addTask() {
+            console.log(this.tasks);
+            this.tasks = [...this.tasks, {
+                _id: 'new',
+                orderNumber: this.tasks.length + 1,
+                nameOfTask: '',
+                visitorName: '',
+                descriptionOfTask: '',
+                type: "video",
+                fileName: '',
+                duration: 5,
+                isEditing: true,
+            }];
         },
     },
 };
