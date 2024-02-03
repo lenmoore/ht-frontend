@@ -44,5 +44,29 @@ export const useActorStore = defineStore("actor", {
         console.error(error);
       }
     },
+    async getAllScenesForActor() {
+      try {
+        const response = await api.get("/actor/template-scenes");
+        if (response) {
+          console.log(response);
+        }
+        return response.data.data.scenes;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getActorPerformanceScenes(query: any) {
+      try {
+        const response = await api.get("/actor/performance-scenes", {
+          params: query,
+        });
+        if (response) {
+          console.log(response);
+        }
+        return response.data.data.scenes;
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });

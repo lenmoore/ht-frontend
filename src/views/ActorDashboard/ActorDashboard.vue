@@ -3,22 +3,24 @@
     <h1>
       <span class="bg-purple">{{ actorName }}</span> dashboard: {{ groupName }}
     </h1>
+    <div>
+      <h2>Stseenid!</h2>
 
-    <h2>Stseenid!</h2>
-
-    <small>{{ activePerformance }}</small>
+      <ScenesOverview />
+    </div>
     <DashboardContainer v-if="showPerformanceSelector" />
     <button v-else @click="showPerformanceSelector = true">Vali etendus</button>
   </div>
 </template>
 <script lang="ts">
-import DashboardContainer from "./DashboardContainer.vue";
+import DashboardContainer from "./ActivatePerformanceBlock.vue";
 import { mapActions } from "pinia";
 import { useActorStore } from "../../store/actor.ts";
+import ScenesOverview from "./ScenesOverview.vue";
 
 export default {
   name: "ActorDashboard",
-  components: { DashboardContainer },
+  components: { ScenesOverview, DashboardContainer },
 
   data() {
     return {
