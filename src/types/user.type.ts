@@ -1,9 +1,10 @@
 export interface User {
-    name: string;
-    accessToken: string;
-    refreshToken: string;
-    admin: boolean;
-    actor: boolean;
-    group_name: string;
-    team_name: string;
+  _id: string;
+  name: string;
+  accessToken: string;
+  refreshToken: string;
+  admin: boolean;
+  actor: boolean;
+  group_name: string;
+  team_name: string;
 }
