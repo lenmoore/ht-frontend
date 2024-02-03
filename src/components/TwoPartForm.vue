@@ -78,7 +78,7 @@ export default {
 
   methods: {
     displayFileName(task: any) {
-      return `1_${task.orderNumber || "[jarjekorranr]"}_${task.fileName || "[failinimi]"}_${task.visitorName || "[tiim]"}_midagiveel.mp4`;
+      return `${this.scene.orderNumber}_${task.orderNumber || "[jarjekorranr]"}_${task.fileName || "[failinimi]"}_${task.visitorName || "[tiim]"}_midagiveel.mp4`;
     },
     saveTask(task: any) {
       task.sceneId = this.scene._id;

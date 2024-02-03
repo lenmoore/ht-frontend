@@ -9,9 +9,8 @@
     </div>
     <div class="header">
       <div class="p-4">
-        <h1>Valitud grupp: {{ currentRoute || "-" }}</h1>
+        <h1>Grupi seadistus: {{ currentRoute || "-" }}</h1>
 
-        todo lisan siia tiimide nimekirja
         <div class="scene-selector">
           <h2>Vali stseen:</h2>
           <select

@@ -95,5 +95,42 @@ export const useSetupStore = defineStore("setup", {
         console.error(error);
       }
     },
+    async addPerformance(payload: any) {
+      try {
+        const response = await api.post("/admin/performances", payload);
+        if (response) {
+          console.log(response);
+          return response.data.data;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async updatePerformanceById(payload: any) {
+      try {
+        const response = await api.put(
+          `/admin/performances/${payload.id}`,
+          payload,
+        );
+        if (response) {
+          console.log(response);
+          return response.data.data;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getPerformances() {
+      try {
+        const response = await api.get("/admin/performances");
+        if (response) {
+          console.log(response);
+          return response.data.data.performances;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });

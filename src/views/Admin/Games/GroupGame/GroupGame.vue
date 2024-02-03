@@ -142,7 +142,7 @@ export default {
       this.tasks = this.scene.tasks;
     },
     displayFileName(task) {
-      return `1_${task.orderNumber}_${task.fileName}_${this.teamNameById(task.teamId)}_${this.currentRoute}.mp4`;
+      return `${this.scene.orderNumber}_${task.orderNumber}_${task.fileName}_${this.teamNameById(task.teamId)}_${this.currentRoute}.mp4`;
     },
     addTask() {
       this.addingNewTask = true;
