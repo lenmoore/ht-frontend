@@ -36,7 +36,6 @@ import { useActorStore } from "../../store/actor.ts";
 
 export default {
   name: "ScenesOverview",
-  props: {},
 
   data() {
     return {

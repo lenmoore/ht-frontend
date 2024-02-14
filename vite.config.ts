@@ -10,14 +10,6 @@ export default defineConfig({
       key: "key.pem",
       cert: "cert.pem",
     },
-    // proxy: {
-    //     '/api': {
-    //         target: 'https://localhost',
-    //         changeOrigin: true,
-    //         secure: true,
-    //         ws: true,
-    //     },
-    // },
   },
   css: {
     preprocessorOptions: {
