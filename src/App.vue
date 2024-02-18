@@ -1,6 +1,6 @@
 <template>
   <div>
-    ok, I did it manually now, let's see if something good happens,.
+    Let's see if a handwritten bash script works instead maybe
     <NavMenu />
     <!--        <div>-->
 
