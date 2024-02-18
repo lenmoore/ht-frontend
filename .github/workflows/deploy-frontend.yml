@@ -10,11 +10,10 @@ jobs:
     steps:
       - name: Install dependencies
         uses: actions/checkout@v2
-        with:
-          script:
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-            nvm use 18
-            npm install
+        run:
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+          nvm use 18
+          npm install
       - name: Build
         run: npm run build
       - name: Deploy to Server
