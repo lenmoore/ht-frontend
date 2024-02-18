@@ -28,6 +28,11 @@ jobs:
           username: ${{ secrets.HT_SERVER_USER }}
           key: ${{ secrets.HT_SERVER_PRIVKEY }}
           script: |
+            # Initialize NVM
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+            # Now NVM and the correct Node.js version should be available
             cd /home/ubuntu/ht-frontend
             pwd
             # Ensure the SSH key permissions are correct
