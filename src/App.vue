@@ -1,7 +1,6 @@
 <template>
   <div>
     <NavMenu />
-    Does git work yet?
     <!--        <div>-->
 
     <!--            camera tutorial:-->
@@ -15,6 +14,7 @@
     <footer>:)</footer>
   </div>
 </template>
+
 <style lang="scss">
 .nav {
   display: flex;
