@@ -20,8 +20,8 @@ jobs:
           username: ${{ secrets.HT_SERVER_USER }}
           key: ${{ secrets.HT_SERVER_PRIVKEY }}
           script: |
-            export GIT_SSH_COMMAND='ssh -i /home/ubuntu/.ssh/id_ed25519 -o IdentitiesOnly=yes'
             cd /home/ubuntu/ht-frontend
+            export GIT_SSH_COMMAND='sudo ssh -i /home/ubuntu/.ssh/id_ed25519 -o IdentitiesOnly=yes'
             git pull
             npm install
             npm run build
