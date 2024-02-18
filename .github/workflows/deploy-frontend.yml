@@ -9,13 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
       - name: Install dependencies
-        run:
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-          nvm use 18
-          npm install
+        run: npm install
+
       - name: Build
         run: npm run build
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
@@ -25,11 +30,19 @@ jobs:
           script: |
             cd /home/ubuntu/ht-frontend
             pwd
-            export GIT_SSH_COMMAND='sudo ssh -i /home/ubuntu/.ssh/id_ed25519 -o IdentitiesOnly=yes'
+            # Ensure the SSH key permissions are correct
+            chmod 600 /home/ubuntu/.ssh/id_ed25519
+            # Set SSH command to use the specific key
+            export GIT_SSH_COMMAND='ssh -i /home/ubuntu/.ssh/id_ed25519 -o IdentitiesOnly=yes'
+            # Display Node.js and npm versions
             node -v
             npm -v
+            # Pull latest changes
             git pull
+            # Install dependencies and build
             npm install
             npm run build
+            # Sync built files to web directory
             rsync -av --delete /home/ubuntu/ht-frontend/dist/ /var/www/ht-frontend/
+            # Reload Nginx to apply changes
             sudo nginx -s reload
