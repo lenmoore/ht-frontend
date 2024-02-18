@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.HT_SERVER_USER }}
           key: ${{ secrets.HT_SERVER_PRIVKEY }}
           script: |
-            cd /home/ubuntu/ht-frontend/
+            cd /home/ubuntu/ht-frontend
             git pull
             npm install
             npm run build
