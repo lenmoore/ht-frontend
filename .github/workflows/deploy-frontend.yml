@@ -8,12 +8,13 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Install dependencies
-        run:
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-          nvm use 18
-          npm install
+        uses: actions/checkout@v2
+        with:
+          script:
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+            nvm use 18
+            npm install
       - name: Build
         run: npm run build
       - name: Deploy to Server
