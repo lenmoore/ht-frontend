@@ -1,6 +1,6 @@
 <template>
   <div>
-    is it even deploying it?
+    ok, I did it manually now, let's see if something good happens,.
     <NavMenu />
     <!--        <div>-->
 
