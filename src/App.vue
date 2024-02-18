@@ -1,5 +1,6 @@
 <template>
   <div>
+    is it even deploying it?
     <NavMenu />
     <!--        <div>-->
 
