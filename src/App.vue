@@ -1,8 +1,7 @@
 <template>
   <div>
     <NavMenu />
-
-    Git works :)
+    Does git work yet?
     <!--        <div>-->
 
     <!--            camera tutorial:-->
