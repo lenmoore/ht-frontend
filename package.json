@@ -6,7 +6,7 @@
   "scripts": {
     "dev-ssl": "vite --host",
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "NODE_ENV=production vue-tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
