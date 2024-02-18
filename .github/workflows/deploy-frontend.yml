@@ -24,9 +24,9 @@ jobs:
           username: ${{ secrets.HT_SERVER_USER }}
           key: ${{ secrets.HT_SERVER_PRIVKEY }}
           script: |
-            cd /var/www/ht-frontend/
+            cd /home/ubuntu/ht-frontend/
             git pull
             npm install
             npm run build
-            # No need to restart a service here, but you might want to reload Nginx
+            rsync -av --delete /home/ubuntu/ht-frontend/dist/ /var/www/ht-frontend/
             sudo nginx -s reload
