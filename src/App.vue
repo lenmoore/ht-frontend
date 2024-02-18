@@ -1,6 +1,6 @@
 <template>
   <div>
-    Let's see if a handwritten bash script works instead maybe
+    ??????? Let's see if a handwritten bash script works instead maybe
     <NavMenu />
     <!--        <div>-->
 
