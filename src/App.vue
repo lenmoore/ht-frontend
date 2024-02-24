@@ -1,6 +1,7 @@
 <template>
   <div>
-    ??????? Let's see if a handwritten bash script works instead maybe
+    The goddamn git hook still doesn't work :( Doing local development now but
+    need to fix for the testing period!!!
     <NavMenu />
     <!--        <div>-->
 

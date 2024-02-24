@@ -72,7 +72,7 @@ export const useSetupStore = defineStore("setup", {
     async getAllTasks() {},
     async updateTaskById(payload: any) {
       try {
-        const response = await api.put(`/admin/tasks/${payload.id}`, payload);
+        const response = await api.put(`/admin/tasks/${payload._id}`, payload);
         if (response) {
           console.log(response);
           return response.data.data;
@@ -84,10 +84,10 @@ export const useSetupStore = defineStore("setup", {
     async deleteTaskById() {},
     async getAllTeamsInGroup(payload: any) {
       try {
-        console.log(payload);
+        console.log("getAllTeamsInGroup payload", payload);
         const response = await api.get("/teams", { params: payload });
         if (response) {
-          console.log(response);
+          console.log(response.data.data);
           this.teams = response.data.data;
           return this.teams;
         }

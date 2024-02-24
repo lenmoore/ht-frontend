@@ -15,22 +15,23 @@
         class="bg-yellow border m-4 p-4"
         v-for="templateScene in templateScenes"
       >
-        {{ templateScene }}
+        <small style="color: yellow">{{ templateScene._id }}</small>
+        {{ Object.keys(templateScene) }}
+        {{ templateScene.teams }}
+        <p>{{ templateScene.orderNumber }} | {{ templateScene.title }}</p>
+
+        <p>
+          <span v-for="team in templateScene.teams" :key="team.name">{{
+            team
+          }}</span>
+        </p>
+        <small>{{ templateScene.description }}</small>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// actorPerformanceScene looks like this::::
-// _id: string;
-// sceneStarted: moment.Moment;
-// sceneEnded: moment.Moment;
-// sceneId: string;
-// performanceId: string;
-// actorUserId: string;
-// teamUserId: string;
-// scene: SceneDocument;
 import { mapActions } from "pinia";
 import { useActorStore } from "../../store/actor.ts";
 
