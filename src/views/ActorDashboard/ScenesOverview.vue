@@ -32,7 +32,6 @@ export default {
   },
 
   async created() {
-    await this.getExistingScenes();
     await this.getTemplateScenes();
   },
 
@@ -45,17 +44,6 @@ export default {
       startScene: "startScene",
       toggleTaskStatus: "toggleTask",
     }),
-    async getExistingScenes() {
-      console.log("...get existing scenes");
-      const scenes = await this.getActorPerformanceScenes({
-        actorUserId: JSON.parse(localStorage.user)._id,
-        performanceId: localStorage.activePerformanceId,
-      });
-      console.log("here they are: ", scenes);
-      this.existingScenes = scenes;
-      // fetch existing scenes from the database
-      // sort based on order number
-    },
     async getTemplateScenes() {
       // get all scenes we know of and filter out the ones that exist in the existing scenes
       // sort based on order number
@@ -63,6 +51,7 @@ export default {
       console.log(scenes);
 
       this.templateScenes = scenes;
+      setTimeout(this.getTemplateScenes, 3000);
     },
     async activateTasks(tasksToStart) {
       for (const task of tasksToStart) {
