@@ -1,11 +1,17 @@
 <template>
   <div>
     <div>
-      <h1>{{ userPhoneName }}</h1>
-
+      <small>{{ userPhoneName }}</small>
+      Sul on ülesanne: {{ currentTask.description }} ({{ currentTask.duration }}
+      sek)
       <div v-if="taskIsActive">
         <div class="left">
-          <button id="startButton" class="button" @click="onClickRecord">
+          <button
+            v-if="!isFilming"
+            id="startButton"
+            class="button"
+            @click="onClickRecord"
+          >
             Lindista
           </button>
           <button
@@ -15,18 +21,15 @@
           >
             Kinnita
           </button>
-          <h2>Preview</h2>
           <video
+            v-if="!isFilming"
             id="preview"
-            width="160"
-            height="120"
+            width="600"
+            height="300"
             autoplay=""
             muted=""
           ></video>
-        </div>
-        <div class="right">
-          <h2>Salvestus</h2>
-          <video id="recording" width="160" height="120" controls=""></video>
+          <video id="recording" width="600" height="300" controls=""></video>
         </div>
       </div>
 
@@ -105,9 +108,10 @@ export default {
     onClickRecord() {
       let preview = document.getElementById("preview");
       let recording = document.getElementById("recording");
+      this.isFilming = true;
       navigator.mediaDevices
         .getUserMedia({
-          video: true,
+          video: { facingMode: "environment" },
           audio: true,
         })
         .then((stream) => {
@@ -137,6 +141,7 @@ export default {
             `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
           );
           this.showConfirmButton = true;
+          this.isFilming = false;
         })
         .catch((error) => {
           if (error.name === "NotFoundError") {

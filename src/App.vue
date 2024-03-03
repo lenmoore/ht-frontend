@@ -1,16 +1,6 @@
 <template>
   <div>
-    The goddamn git hook still doesn't work :( Doing local development now but
-    need to fix for the testing period!!!
     <NavMenu />
-    <!--        <div>-->
-
-    <!--            camera tutorial:-->
-    <!--            <a-->
-    <!--                href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Recording_a_media_element"-->
-    <!--            >here</a-->
-    <!--            >-->
-    <!--        </div>-->
 
     <RouterView class="container" />
     <footer>:)</footer>

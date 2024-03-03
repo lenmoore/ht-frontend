@@ -12,6 +12,7 @@
       </RouterLink>
     </span>
     <button
+      v-if="!groupName && (!isActor || !isAdmin)"
       style="
         height: 1rem;
         display: flex;
@@ -48,7 +49,7 @@ export default {
       } else if (this.isActor) {
         return [{ name: "dashboard", query: { group: this.groupName } }];
       } else {
-        return [{ name: "visitor", query: { group: this.groupName } }];
+        return [];
       }
     },
   },
