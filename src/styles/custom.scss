@@ -1,6 +1,17 @@
 @import "variables";
 
 #app {
-  background-color: whitesmoke;
+  background-color: $white;
   width: 100%;
+}
+
+
+//TEAMS
+
+.bg-alex {
+    background-color: #b6ffe8;
+}
+
+.bg-nothingphone {
+  background-color: lightgrey;
 }

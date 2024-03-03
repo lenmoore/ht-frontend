@@ -42,6 +42,10 @@
   background-color: $yellow;
 }
 
+.bg-white {
+  background-color: $white;
+}
+
 .bg-pink {
   color: black;
   background-color: $pink;
@@ -53,7 +57,7 @@
 
 .bg-blue {
   background-color: #535bf2;
-  color: white;
+  color: $white;
 }
 
 .border {
@@ -87,7 +91,7 @@
 
 :root {
   --color: #E11949;
-  --back: #f6f8fc;
+  --back: $white;
   --gray: #d6d6d6;
   --gray2: #bababa;
   --text: #262627;

@@ -1,31 +1,15 @@
 <template>
-  <div>
-    <div class="scenes-wrapper">
+  <div class="bg-white">
+    <div class="py-2 bg-yellow">
       <div
-        class="bg-green border m-4 p-4"
-        v-for="existingScene in existingScenes"
-      >
-        <h4>
-          {{ existingScene.orderNumber }} | {{ existingScene.scene.name }}
-        </h4>
-        <p class="bg-pink">{{ existingScene.scene.description }}</p>
-      </div>
-
-      <div
-        class="bg-yellow border m-4 p-4"
+        class="bg-white border m-4 p-2"
         v-for="templateScene in templateScenes"
       >
-        <small style="color: yellow">{{ templateScene._id }}</small>
-        {{ Object.keys(templateScene) }}
-        {{ templateScene.teams }}
-        <p>{{ templateScene.orderNumber }} | {{ templateScene.title }}</p>
-
-        <p>
-          <span v-for="team in templateScene.teams" :key="team.name">{{
-            team
-          }}</span>
-        </p>
-        <small>{{ templateScene.description }}</small>
+        <SceneBlock
+          :scene="templateScene"
+          @start="activateTasks"
+          @stop="stopTasks"
+        />
       </div>
     </div>
   </div>
@@ -34,13 +18,14 @@
 <script>
 import { mapActions } from "pinia";
 import { useActorStore } from "../../store/actor.ts";
+import SceneBlock from "./SceneBlock/SceneBlock.vue";
 
 export default {
   name: "ScenesOverview",
+  components: { SceneBlock },
 
   data() {
     return {
-      existingScenes: [],
       templateScenes: [],
       activePerformance: null,
     };
@@ -50,19 +35,23 @@ export default {
     await this.getExistingScenes();
     await this.getTemplateScenes();
   },
+
   methods: {
     ...mapActions(useActorStore, {
       getPerformances: "getPerformances",
       getPerformanceById: "getPerformanceById",
       getActorPerformanceScenes: "getActorPerformanceScenes",
       getAllScenesForActor: "getAllScenesForActor",
+      startScene: "startScene",
+      toggleTaskStatus: "toggleTask",
     }),
     async getExistingScenes() {
+      console.log("...get existing scenes");
       const scenes = await this.getActorPerformanceScenes({
         actorUserId: JSON.parse(localStorage.user)._id,
         performanceId: localStorage.activePerformanceId,
       });
-      console.log(scenes);
+      console.log("here they are: ", scenes);
       this.existingScenes = scenes;
       // fetch existing scenes from the database
       // sort based on order number
@@ -72,8 +61,40 @@ export default {
       // sort based on order number
       const scenes = await this.getAllScenesForActor();
       console.log(scenes);
+
       this.templateScenes = scenes;
+    },
+    async activateTasks(tasksToStart) {
+      for (const task of tasksToStart) {
+        await this.toggleTask({
+          taskId: task._id,
+          isActive: true,
+        });
+      }
+    },
+    async stopTasks(tasksToStop) {
+      for (const task of tasksToStop) {
+        await this.toggleTask({
+          taskId: task._id,
+          isActive: false,
+        });
+      }
+    },
+    async toggleTask(task) {
+      console.log(task);
+      return await this.toggleTaskStatus({
+        _id: task.taskId,
+        isActive: task.isActive,
+      });
     },
   },
 };
 </script>
+
+<style lang="scss">
+.scene-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+</style>

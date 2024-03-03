@@ -1,11 +1,15 @@
 <template>
-  <div>
-    <h1>
-      <span class="bg-purple">{{ actorName }}</span> dashboard: {{ groupName }}
-    </h1>
-    <div>
-      <h2>Stseenid!</h2>
+  <div style="margin-top: 2rem">
+    <div class="mx-4">
+      <span :class="`bg-${actorName} font-2rem`">{{ actorName }}</span>
+      <h1 style="padding-top: 0; margin-top: 0">
+        dashboard:
+        {{ groupName }}
+      </h1>
 
+      <h2 style="padding-bottom: 0; margin-bottom: 0">Stseenid!</h2>
+    </div>
+    <div>
       <ScenesOverview />
     </div>
     <DashboardContainer v-if="showPerformanceSelector" />

@@ -1,5 +1,8 @@
 <template>
-  <nav style="width: 100%; display: flex; justify-content: space-between">
+  <nav
+    class="bg-white"
+    style="width: 100%; display: flex; justify-content: space-between"
+  >
     <span>
       <RouterLink
         v-for="link in menuLinks"
@@ -37,7 +40,11 @@ export default {
     },
     menuLinks() {
       if (this.isAdmin) {
-        return [{ name: "games" }, { name: "performances" }];
+        return [
+          { name: "dashboard" },
+          { name: "games" },
+          { name: "performances" },
+        ];
       } else if (this.isActor) {
         return [{ name: "dashboard", query: { group: this.groupName } }];
       } else {

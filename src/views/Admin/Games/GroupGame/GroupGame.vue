@@ -24,7 +24,10 @@
                 <p>
                   <code>{{ displayFileName(task) }}</code> ({{ task.type }})
                 </p>
-                <p>Grupp: {{ teamNameById(task.teamId) }} {{ task.teamId }}</p>
+                <p>
+                  Grupp: {{ teamNameById(task.team.team_name) }}
+                  {{ task.team._id }}
+                </p>
               </div>
               <div>
                 <p>

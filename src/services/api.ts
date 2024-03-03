@@ -26,7 +26,6 @@ const instance = axios.create({
     "Content-Type": "application/json",
     Authorization: authHeader().toString(),
     "X-Refresh": refreshHeader().toString(),
-    "X-Forwarded-For": "",
   },
   baseURL: import.meta.env.VITE_API_URL,
 });

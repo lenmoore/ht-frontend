@@ -26,17 +26,25 @@ export const useAuthStore = defineStore("auth", {
         });
         console.log(response);
         if (response.data.data.accessToken) {
-          console.log("hallo??");
           const user: User = {
             ...response.data.data.user,
             email: name,
             accessToken: response.data.data.accessToken,
             refreshToken: response.data.data.refreshToken,
+            activePerformance: response.data.data.activePerformance,
           };
           console.log(user);
           localStorage.setItem("admin", user.admin.toString());
           localStorage.setItem("actor", user.actor.toString());
           localStorage.setItem("group_name", user.group_name);
+          localStorage.setItem(
+            "activePerformanceId",
+            user.activePerformance[0]?._id?.toString(),
+          );
+          localStorage.setItem(
+            "activePerformance",
+            user.activePerformance[0]?.toString(),
+          );
           TokenService.setUser(user);
 
           return user;

@@ -1,14 +1,27 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import basicSsl from "@vitejs/plugin-basic-ssl";
+import * as path from "node:path";
+import * as fs from "fs";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), basicSsl()],
+  // server: {
+  //   https: {
+  //     key: "key.pem",
+  //     cert: "cert.pem",
+  //   },
+  // },
+
   server: {
     https: {
-      key: "key.pem",
-      cert: "cert.pem",
+      key: fs.readFileSync(
+        path.resolve(__dirname, "../certificates/server.key"),
+      ),
+      cert: fs.readFileSync(
+        path.resolve(__dirname, "../certificates/server.cert"),
+      ),
     },
   },
   css: {

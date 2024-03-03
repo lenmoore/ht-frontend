@@ -115,6 +115,7 @@ export default {
       },
     },
   },
+
   methods: {
     ...mapState(useSetupStore, { userTeams: "teams" }),
     ...mapActions(useSetupStore, {

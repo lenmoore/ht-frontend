@@ -7,4 +7,5 @@ export interface User {
   actor: boolean;
   group_name: string;
   team_name: string;
+  activePerformance: any;
 }

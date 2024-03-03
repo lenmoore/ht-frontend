@@ -7,7 +7,10 @@
         v-for="performance in performances"
         :key="performance._id"
       >
-        <h4>{{ performance.title }} {{ performance.isActive }}</h4>
+        <h4>
+          {{ performance.title }}
+          <small v-if="performance.isActive" class="bg-green">Aktiivne</small>
+        </h4>
         <p>{{ performance.description }}</p>
         <p>Plaanis: {{ performanceDate(performance.date) }}</p>
 
@@ -18,7 +21,7 @@
           Lopetati: {{ performanceDate(performance.endedAt) }}
         </div>
         <button
-          v-if="performance.startedAt && !performance.endedAt"
+          v-if="performance.isActive"
           @click="stopPerformance(performance)"
         >
           Lopeta
@@ -61,6 +64,11 @@ export default {
   },
   async created() {
     this.performances = await this.getPerformances();
+    if (this.performances.find((performance) => performance.isActive)) {
+      localStorage.activePerformanceId = this.performances.find(
+        (performance) => performance.isActive,
+      )._id;
+    }
   },
   data() {
     return {
