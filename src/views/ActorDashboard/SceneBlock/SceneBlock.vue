@@ -23,7 +23,9 @@
     <div class="my-2 border" v-for="task in scene.tasks">
       <div class="task-header">
         <h4>
-          {{ scene.orderNumber }}.{{ task.orderNumber }}
+          <span :class="task.isConfirmedByTeam ? 'bg-green' : 'bg-red'"
+            >{{ scene.orderNumber }}.{{ task.orderNumber }}
+          </span>
           <small :class="`bg-${task.team && task.team.team_name}`">{{
             (task.team && task.team.team_name) || "Tundmatu tiim"
           }}</small>
