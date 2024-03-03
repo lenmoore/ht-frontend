@@ -2,9 +2,12 @@
   <div>
     <div>
       <small>{{ userPhoneName }}</small>
-      Sul on ülesanne: {{ currentTask.description }} ({{ currentTask.duration }}
-      sek)
+
       <div v-if="taskIsActive">
+        Sul on ülesanne: {{ currentTask.description }} ({{
+          currentTask.duration
+        }}
+        sek)
         <div class="left">
           <button
             v-if="!isFilming"
