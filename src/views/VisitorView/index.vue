@@ -98,6 +98,8 @@ export default {
         this.currentTask._id,
         this.displayFileName,
       );
+      alert("Video on kinnitatud!");
+      location.reload();
     },
     onClickRecord() {
       let preview = document.getElementById("preview");
