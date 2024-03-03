@@ -1,8 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import basicSsl from "@vitejs/plugin-basic-ssl";
-import * as path from "node:path";
-import * as fs from "fs";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,16 +12,16 @@ export default defineConfig({
   //   },
   // },
 
-  server: {
-    https: {
-      key: fs.readFileSync(
-        path.resolve(__dirname, "../certificates/server.key"),
-      ),
-      cert: fs.readFileSync(
-        path.resolve(__dirname, "../certificates/server.cert"),
-      ),
-    },
-  },
+  // server: {
+  //   https: {
+  //     key: fs.readFileSync(
+  //       path.resolve(__dirname, "../certificates/server.key"),
+  //     ),
+  //     cert: fs.readFileSync(
+  //       path.resolve(__dirname, "../certificates/server.cert"),
+  //     ),
+  //   },
+  // },
   css: {
     preprocessorOptions: {
       scss: {
