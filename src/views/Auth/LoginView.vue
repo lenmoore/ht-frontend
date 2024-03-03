@@ -39,8 +39,15 @@ export default {
         try {
           console.log(this.email, this.password);
           const user = await this.login(this.email, this.password);
+          console.log(user);
           if (user) {
-            router.push({ name: "dashboard" });
+            if (localStorage.admin === "true") {
+              router.push({ name: "home" });
+            } else if (localStorage.actor === "true") {
+              router.push({ name: "dashboard" });
+            } else {
+              router.push({ name: "visitor" });
+            }
           }
         } catch (error) {
           console.error(error);
