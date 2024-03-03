@@ -2,12 +2,7 @@
   <div>
     <div class="scene-wrapper border">
       <h4>Ylesanded ({{ tasks.length }})</h4>
-      <p class="p-4">
-        Tiimid:
-        <span class="m-1 bg-yellow" v-for="team in userTeams" :key="team._id">{{
-          team.team_name
-        }}</span>
-      </p>
+
       <div class="tasks-wrapper">
         <div v-for="task in tasks" :key="task._id">
           <div :class="{ wide: task.isEditing }" class="card">
@@ -22,11 +17,10 @@
             <div v-else class="closed-card">
               <div>
                 <p>
-                  <code>{{ displayFileName(task) }}</code> ({{ task.type }})
+                  <code class="bg-blue">{{ displayFileName(task) }}</code>
                 </p>
-                <p>
-                  Grupp: {{ teamNameById(task.team.team_name) }}
-                  {{ task.team._id }}
+                <p :class="`bg-${task.team && task.team.name}`">
+                  {{ task.team && task.team.name }}
                 </p>
               </div>
               <div>
@@ -98,9 +92,7 @@ export default {
     },
   },
   async created() {
-    if (!this.userTeams.length) {
-      await this.getTeams();
-    }
+    await this.getTeams();
   },
   methods: {
     ...mapState(useSetupStore, ["teams"]),
@@ -145,7 +137,7 @@ export default {
       this.tasks = this.scene.tasks;
     },
     displayFileName(task) {
-      return `${this.scene.orderNumber}_${task.orderNumber}_${task.fileName}_${this.teamNameById(task.teamId)}_${this.currentRoute}.mp4`;
+      return `${this.currentRoute}_[nr].${task.orderNumber}_${task.fileName || "[failinimi]"}.webm`;
     },
     addTask() {
       this.addingNewTask = true;
