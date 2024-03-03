@@ -100,6 +100,7 @@ export default {
       );
       alert("Video on kinnitatud!");
       location.reload();
+      this.keepCheckingForTask();
     },
     onClickRecord() {
       let preview = document.getElementById("preview");
