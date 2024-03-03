@@ -1,9 +1,6 @@
 <template>
   <div>
-    <NavMenu />
-
     <RouterView class="container" />
-    <footer>:)</footer>
   </div>
 </template>
 
@@ -23,6 +20,3 @@
   }
 }
 </style>
-<script setup lang="ts">
-import NavMenu from "./components/NavMenu.vue";
-</script>

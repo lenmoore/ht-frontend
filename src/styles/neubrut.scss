@@ -121,7 +121,6 @@
 body {
   background-color: var(--back);
   margin: 0px;
-  padding-top: 3rem;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
@@ -529,6 +528,17 @@ img, input[type="input"] {
   margin: 4px;
   box-shadow: 2px 2px black;
   cursor: pointer;
+}
+
+img.no-input {
+  width: unset !important;
+  height: unset !important;
+  border: 0 !important;
+  object-fit: fill;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: unset !important;
 }
 
 img:hover:not(:disabled), input[type="input"]:hover:not(:disabled) {

@@ -4,35 +4,59 @@
       <small>{{ userPhoneName }}</small>
 
       <div v-if="taskIsActive">
-        Sul on ülesanne: {{ currentTask.description }} ({{
-          currentTask.duration
-        }}
-        sek)
-        <div class="left">
+        <div v-if="!showConfirmButton" class="m-4 p-4 border task-wrapper">
+          Sul on ülesanne: {{ currentTask.description }} ({{
+            currentTask.duration
+          }}
+          sek)
           <button
             v-if="!isFilming"
             id="startButton"
             class="button"
+            style="z-index: 100"
             @click="onClickRecord"
           >
             Lindista
           </button>
-          <button
-            class="btn bg-green"
-            v-if="showConfirmButton"
-            @click="confirmVideoForVisitor"
-          >
-            Kinnita
-          </button>
+        </div>
+
+        <div class="video-wrapper">
           <video
-            v-if="!isFilming"
+            :class="isFilming && 'video-absolute'"
             id="preview"
-            width="600"
-            height="300"
+            width="650"
+            height="350"
             autoplay=""
             muted=""
           ></video>
-          <video id="recording" width="600" height="300" controls=""></video>
+          <div :class="isFilming && 'video-absolute'">
+            <div class="countdown">
+              <span id="time" class="time">00:00.00</span>
+            </div>
+            <img class="no-input" src="/videoframe.png" alt="" />
+          </div>
+
+          <div v-if="showConfirmButton" class="confirm-box">
+            <p class="bg-white">Kas oled videoga rahul?</p>
+            <div>
+              <button
+                v-if="!isFilming"
+                id="startButton"
+                class="button"
+                @click="onClickRecord"
+              >
+                Lindista uuesti
+              </button>
+              <button
+                class="btn bg-green"
+                v-if="showConfirmButton"
+                @click="confirmVideoForVisitor"
+              >
+                Kinnita
+              </button>
+            </div>
+          </div>
+          <!--          <video id="recording" width="10" height="10" controls=""></video>-->
         </div>
       </div>
 
@@ -40,9 +64,21 @@
         <h2>Hetkel pole sulle midagi.</h2>
       </div>
     </div>
-    <div class="bottom">
-      <pre id="log"></pre>
-    </div>
+    <small class="bottom">
+      <small id="log"></small>
+      <button
+        style="
+          height: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          align-self: end;
+        "
+        @click="logout"
+      >
+        Logout
+      </button>
+    </small>
   </div>
 </template>
 
@@ -50,7 +86,6 @@
 import { mapActions } from "pinia";
 import { useVisitorStore } from "../../store/visitor.ts";
 
-let recordingTimeMS = 5000;
 export default {
   name: "VisitorView",
 
@@ -58,7 +93,6 @@ export default {
     return {
       isFilming: false,
       showPreview: false,
-      videoLength: 5000,
       downloadButtonHref: null,
       downloadButtonDownload: null,
 
@@ -108,14 +142,23 @@ export default {
       location.reload();
       this.keepCheckingForTask();
     },
-    onClickRecord() {
+    async onClickRecord() {
       let preview = document.getElementById("preview");
       let recording = document.getElementById("recording");
+
       this.isFilming = true;
+      this.showConfirmButton = false;
       navigator.mediaDevices
         .getUserMedia({
-          video: { facingMode: "environment" },
-          audio: true,
+          video: {
+            facingMode: "environment",
+            width: {
+              min: 1280,
+            },
+            height: {
+              min: 720,
+            },
+          },
         })
         .then((stream) => {
           preview.srcObject = stream;
@@ -124,10 +167,15 @@ export default {
             preview.captureStream || preview.mozCaptureStream;
           return new Promise((resolve) => (preview.onplaying = resolve));
         })
-        .then(() =>
-          this.startRecording(preview.captureStream(), recordingTimeMS),
-        )
+        .then(() => {
+          this.startRecording(
+            preview.captureStream(),
+            this.currentTask.duration * 1000,
+          );
+        })
         .then((recordedChunks) => {
+          console.log("hello did we record?");
+
           let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
           recording.src = URL.createObjectURL(recordedBlob);
           this.downloadButtonHref = recording.src;
@@ -143,8 +191,6 @@ export default {
           this.log(
             `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
           );
-          this.showConfirmButton = true;
-          this.isFilming = false;
         })
         .catch((error) => {
           if (error.name === "NotFoundError") {
@@ -154,8 +200,44 @@ export default {
           }
         });
     },
-    startRecording(stream) {
-      const lengthInMS = this.videoLength;
+    startCountdown() {
+      // Assuming this.currentTask.duration is in seconds, convert it to milliseconds
+      let timeLeft = this.currentTask.duration * 1000; // timeLeft is in milliseconds
+
+      // Clear any existing countdowns to avoid multiple countdowns running at the same time
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+      }
+
+      // Update the DOM every millisecond
+      this.countdownInterval = setInterval(() => {
+        // Calculate minutes, seconds, and milliseconds
+        const minutes = Math.floor(timeLeft / 60000);
+        const seconds = Math.floor((timeLeft % 60000) / 1000);
+        const milliseconds = Math.floor((timeLeft % 1000) / 10); // Display two digits for milliseconds
+
+        // Format the time string
+        const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
+
+        // Update the DOM
+        document.getElementById("time").textContent = timeString;
+
+        // Decrease the time left
+        timeLeft -= 10; // Decrease by 10ms which is the smallest unit we're displaying
+
+        // Stop the countdown when it reaches zero
+        if (timeLeft < 0) {
+          clearInterval(this.countdownInterval);
+          document.getElementById("time").textContent = "00:00.00"; // Reset to zero
+        }
+      }, 10); // Update every 10 milliseconds to keep the countdown smooth
+
+      // Return the interval ID in case you need to clear it from somewhere else
+      return this.countdownInterval;
+    },
+    async startRecording(stream) {
+      const lengthInMS = this.currentTask.duration * 1000;
+      console.log(lengthInMS);
       let recorder = new MediaRecorder(stream);
       let data = [];
 
@@ -173,8 +255,12 @@ export default {
           recorder.stop();
         }
       });
+      this.startCountdown();
 
-      return Promise.all([stopped, recorded]).then(() => data);
+      await Promise.all([stopped, recorded]);
+      this.showConfirmButton = true;
+      this.isFilming = false;
+      return data;
     },
     stop(stream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -187,6 +273,56 @@ export default {
     wait(delayInMS) {
       return new Promise((resolve) => setTimeout(resolve, delayInMS));
     },
+    logout() {
+      localStorage.clear();
+      this.$router.push({ name: "login" });
+    },
   },
 };
 </script>
+
+<style lang="scss">
+.confirm-box {
+  z-index: 1;
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-absolute {
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+div.video-absolute {
+  z-index: 40;
+  border: 1px solid red;
+  width: 100%;
+  height: 100%;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  .countdown {
+    position: absolute;
+    bottom: 28px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+</style>

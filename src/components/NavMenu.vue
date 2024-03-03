@@ -12,7 +12,6 @@
       </RouterLink>
     </span>
     <button
-      v-if="!groupName && (!isActor || !isAdmin)"
       style="
         height: 1rem;
         display: flex;

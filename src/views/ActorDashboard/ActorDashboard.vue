@@ -1,5 +1,6 @@
 <template>
   <div style="margin-top: 2rem">
+    <NavMenu />
     <div class="mx-4">
       <span :class="`bg-${actorName} font-2rem`">{{ actorName }}</span>
       <h1 style="padding-top: 0; margin-top: 0">
@@ -21,10 +22,11 @@ import DashboardContainer from "./ActivatePerformanceBlock.vue";
 import { mapActions } from "pinia";
 import { useActorStore } from "../../store/actor.ts";
 import ScenesOverview from "./ScenesOverview.vue";
+import NavMenu from "../../components/NavMenu.vue";
 
 export default {
   name: "ActorDashboard",
-  components: { ScenesOverview, DashboardContainer },
+  components: { NavMenu, ScenesOverview, DashboardContainer },
 
   data() {
     return {
