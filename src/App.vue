@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="center-page">
     <RouterView class="container" />
   </div>
 </template>
@@ -18,5 +18,12 @@
   a {
     padding: 1rem;
   }
+}
+
+.center-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 </style>

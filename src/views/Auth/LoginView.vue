@@ -42,7 +42,7 @@ export default {
           console.log(user);
           if (user) {
             if (localStorage.admin === "true") {
-              router.push({ name: "home" });
+              router.push({ name: "admin-home" });
             } else if (localStorage.actor === "true") {
               router.push({ name: "dashboard" });
             } else {

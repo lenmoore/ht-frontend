@@ -3,53 +3,55 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    name: "home",
+    name: "app-home",
+    redirect: { name: "login" },
     component: () => import("../App.vue"),
-    children: [],
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("../views/Auth/LoginView.vue"),
-    children: [],
-  },
-  {
-    path: "/visitor",
-    name: "visitor",
-    component: () => import("../views/VisitorView/index.vue"),
-    children: [],
-  },
-  {
-    path: "/dashboard",
-    name: "dashboard",
-    component: () => import("../views/ActorDashboard/ActorDashboard.vue"),
-    children: [],
-  },
-  {
-    path: "/admin",
-    name: "home",
-    component: () => import("../views/Admin/index.vue"),
     children: [
       {
-        path: "games",
-        name: "games",
-        component: () => import("../views/Admin/Games/AdminGames.vue"),
+        path: "/login",
+        name: "login",
+        component: () => import("../views/Auth/LoginView.vue"),
+        children: [],
+      },
+      {
+        path: "/visitor",
+        name: "visitor",
+        component: () => import("../views/VisitorView/index.vue"),
+        children: [],
+      },
+      {
+        path: "/dashboard",
+        name: "dashboard",
+        component: () => import("../views/ActorDashboard/ActorDashboard.vue"),
+        children: [],
+      },
+      {
+        path: "/admin",
+        name: "admin-home",
+        component: () => import("../views/Admin/index.vue"),
         children: [
           {
-            path: "groups/:groupName",
-            name: "groups",
+            path: "games",
+            name: "games",
+            component: () => import("../views/Admin/Games/AdminGames.vue"),
+            children: [
+              {
+                path: "groups/:groupName",
+                name: "groups",
+                component: () =>
+                  import("../views/Admin/Games/GroupGame/GroupGame.vue"),
+                children: [],
+              },
+            ],
+          },
+          {
+            path: "performances",
+            name: "performances",
             component: () =>
-              import("../views/Admin/Games/GroupGame/GroupGame.vue"),
+              import("../views/Admin/Performances/AdminPerformances.vue"),
             children: [],
           },
         ],
-      },
-      {
-        path: "performances",
-        name: "performances",
-        component: () =>
-          import("../views/Admin/Performances/AdminPerformances.vue"),
-        children: [],
       },
     ],
   },
