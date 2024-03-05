@@ -3,60 +3,78 @@
     <OrientationWrapper>
       <small>{{ userPhoneName }}</small>
 
-      <div v-if="taskIsActive">
-        <div v-if="!showConfirmButton" class="m-4 p-4 border task-wrapper">
-          Sul on ülesanne: {{ currentTask.description }} ({{
-            currentTask.duration
-          }}
-          sek)
+      <div class="you-have-task-wrapper" v-if="taskIsActive">
+        <div
+          v-if="!showConfirmButton && !cameraOpen"
+          class="m-4 p-4 border task-wrapper"
+        >
+          <div class="row">
+            <img class="no-style-image task-icon" :src="imgSrc" alt="" />
+            <div>
+              <strong> Uus ülesanne! <br /> </strong>
+              {{ currentTask.description }} ({{ currentTask.duration }}
+              sek)
+            </div>
+          </div>
           <button
             v-if="!isFilming"
             id="startButton"
             class="button"
             style="z-index: 100"
-            @click="onClickRecord"
+            @click="onClickOpenCamera"
           >
             Lindista
           </button>
         </div>
 
-        <div class="video-wrapper">
-          <video
-            :class="isFilming && 'video-absolute'"
-            id="preview"
-            width="650"
-            height="350"
-            autoplay=""
-            muted=""
-          ></video>
-          <div :class="isFilming && 'video-absolute'">
-            <div class="countdown">
-              <span id="time" class="time">00:00.00</span>
+        <div v-if="cameraOpen" class="video-wrapper">
+          <div class="recorder-interface">
+            <div class="video-stuff">
+              <video
+                id="preview"
+                width="650"
+                height="350"
+                autoplay=""
+                loop
+                poster="/movie%20camera.png"
+                muted=""
+              ></video>
             </div>
-            <img class="no-input" src="/videoframe.png" alt="" />
-          </div>
-
-          <div v-if="showConfirmButton" class="confirm-box">
-            <p class="bg-white">Kas oled videoga rahul?</p>
-            <div>
+            <div v-if="showConfirmButton" class="confirm-box">
+              <p class="bg-white">Kas oled videoga rahul?</p>
               <button
                 v-if="!isFilming"
                 id="startButton"
                 class="button"
-                @click="onClickRecord"
+                @click="onClickOpenCamera"
               >
                 Lindista uuesti
               </button>
               <button
-                class="btn bg-green"
+                class="btn bg-green mt-4"
                 v-if="showConfirmButton"
                 @click="confirmVideoForVisitor"
               >
                 Kinnita
               </button>
             </div>
+            <div v-else-if="!showConfirmButton && cameraOpen" class="controls">
+              <small style="max-width: 100px">
+                {{ currentTask.description }}
+              </small>
+              <button
+                id="recordButton"
+                class="record-button"
+                @click="onClickRecord"
+              >
+                <span :class="isFilming ? 'square' : 'round'"> </span>
+              </button>
+
+              <div class="countdown">
+                <span id="time" class="time">00:00.00</span>
+              </div>
+            </div>
           </div>
-          <!--          <video id="recording" width="10" height="10" controls=""></video>-->
         </div>
       </div>
 
@@ -65,21 +83,21 @@
         <p>Oota järgmist ülesannet.</p>
       </div>
     </OrientationWrapper>
-    <!--    <small class="bottom">-->
-    <!--      <small id="log"></small>-->
-    <!--      <button-->
-    <!--        style="-->
-    <!--          height: 1rem;-->
-    <!--          display: flex;-->
-    <!--          align-items: center;-->
-    <!--          justify-content: center;-->
-    <!--          align-self: end;-->
-    <!--        "-->
-    <!--        @click="logout"-->
-    <!--      >-->
-    <!--        Logout-->
-    <!--      </button>-->
-    <!--    </small>-->
+    <small class="bottom">
+      <small id="log"></small>
+      <!--      <button-->
+      <!--        style="-->
+      <!--          height: 1rem;-->
+      <!--          display: flex;-->
+      <!--          align-items: center;-->
+      <!--          justify-content: center;-->
+      <!--          align-self: end;-->
+      <!--        "-->
+      <!--        @click="logout"-->
+      <!--      >-->
+      <!--        Logout-->
+      <!--      </button>-->
+    </small>
   </div>
 </template>
 
@@ -96,6 +114,7 @@ export default {
     return {
       isFilming: false,
       showPreview: false,
+      cameraOpen: false,
       downloadButtonHref: null,
       downloadButtonDownload: null,
 
@@ -115,6 +134,14 @@ export default {
   computed: {
     displayFileName() {
       return `${this.groupName}_[nr].${this.currentTask?.orderNumber}_${this.currentTask.fileName || "[failinimi]"}.webm`;
+    },
+    imgSrc() {
+      console.log(this.currentTask);
+      if (this.currentTask.mediaType === "video") {
+        return "/movie camera.png";
+      } else if (this.currentTask.mediaType === "teleprompter") {
+        return "/dictophone.png";
+      }
     },
   },
 
@@ -142,13 +169,33 @@ export default {
         this.displayFileName,
       );
       alert("Video on kinnitatud!");
+      this.taskIsActive = false;
       location.reload();
       this.keepCheckingForTask();
     },
-    async onClickRecord() {
-      let preview = document.getElementById("preview");
-      let recording = document.getElementById("recording");
+    async onClickOpenCamera() {
+      this.showConfirmButton = false;
+      this.cameraOpen = true;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment",
+            width: { min: 1280 },
+            height: { min: 720 },
+          },
+        });
+        const videoElement = document.getElementById("preview");
+        videoElement.srcObject = stream;
+      } catch (error) {
+        console.error("Error opening the camera", error);
+        this.cameraOpen = false; // Reset camera state if there is an error
+      }
+    },
 
+    async onClickRecord() {
+      console.log("clicked record");
+
+      const preview = document.getElementById("preview");
       this.isFilming = true;
       this.showConfirmButton = false;
       navigator.mediaDevices
@@ -163,25 +210,16 @@ export default {
             },
           },
         })
-        .then((stream) => {
-          preview.srcObject = stream;
-          this.downloadButtonHref = stream;
-          preview.captureStream =
-            preview.captureStream || preview.mozCaptureStream;
-          return new Promise((resolve) => (preview.onplaying = resolve));
-        })
-        .then(() => {
-          this.startRecording(
-            preview.captureStream(),
-            this.currentTask.duration * 1000,
-          );
+        .then(async () => {
+          return await this.startRecording(preview.captureStream());
         })
         .then((recordedChunks) => {
           console.log("hello did we record?");
 
+          console.log("chunks: ", recordedChunks);
           let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
-          recording.src = URL.createObjectURL(recordedBlob);
-          this.downloadButtonHref = recording.src;
+          preview.src = URL.createObjectURL(recordedBlob);
+          this.downloadButtonHref = preview.src;
           this.downloadButtonDownload = this.displayFileName;
 
           const a = document.createElement("a");
@@ -203,6 +241,7 @@ export default {
           }
         });
     },
+
     startCountdown() {
       // Assuming this.currentTask.duration is in seconds, convert it to milliseconds
       let timeLeft = this.currentTask.duration * 1000; // timeLeft is in milliseconds
@@ -223,7 +262,9 @@ export default {
         const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
 
         // Update the DOM
-        document.getElementById("time").textContent = timeString;
+        if (timeLeft > 0) {
+          document.getElementById("time").textContent = timeString;
+        }
 
         // Decrease the time left
         timeLeft -= 10; // Decrease by 10ms which is the smallest unit we're displaying
@@ -259,10 +300,12 @@ export default {
         }
       });
       this.startCountdown();
+      console.log("start countdown");
 
       await Promise.all([stopped, recorded]);
       this.showConfirmButton = true;
       this.isFilming = false;
+      console.log(data);
       return data;
     },
     stop(stream) {
@@ -285,19 +328,11 @@ export default {
 </script>
 
 <style lang="scss">
-.confirm-box {
-  z-index: 1;
-  position: absolute;
-  top: 40%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+@import "../../styles/variables.scss";
 
 .video-absolute {
   top: 0;
+  left: 0;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -305,19 +340,18 @@ export default {
 
 div.video-absolute {
   z-index: 40;
-  border: 1px solid red;
-  width: 100%;
-  height: 100%;
+  width: 650px;
+  height: 350px;
+
+  //display: flex;
+  //align-items: center;
+  //flex-direction: column;
+  //justify-content: center;
 
   img {
     width: 100%;
     height: 100%;
   }
-
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
 
   .countdown {
     position: absolute;
@@ -331,9 +365,105 @@ div.video-absolute {
 
 .centered-on-page {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  justify-content: space-around;
   flex-direction: column;
-  height: 100vh;
+  //height: 100vh;
+}
+
+.video-wrapper {
+  margin-right: 10rem;
+}
+
+.you-have-task-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  .task-wrapper {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    width: 100%;
+    box-shadow: 2px 2px 0px black;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .row {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+
+  button {
+    margin-right: 1rem;
+  }
+}
+
+.task-icon {
+  height: 16rem;
+}
+
+.recorder-interface {
+  display: flex;
+  align-items: center;
+}
+
+.confirm-box {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 50px;
+  z-index: 100;
+  height: 300px;
+}
+
+.controls {
+  position: absolute;
+  right: 50px;
+  z-index: 100;
+  height: 300px;
+  //width: 50px;
+
+  padding: 1rem;
+  background-color: $white;
+  //border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.record-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin: 0;
+
+  .square {
+    background-color: $red;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+  }
+
+  .round {
+    background-color: $red;
+    width: 34px;
+    border-radius: 50%;
+    height: 34px;
+  }
 }
 </style>

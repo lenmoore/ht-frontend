@@ -74,9 +74,11 @@ button:focus-visible {
 .font-1rem {
     font-size: 1rem;
 }
+
 .font-2rem {
     font-size: 2rem;
 }
+
 .font-3rem {
     font-size: 3rem;
 }
@@ -89,4 +91,13 @@ button:focus-visible {
     font-size: 0.75rem;
     padding-bottom: 0;
     margin-bottom: 0;
+}
+
+.no-style-image {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    height: unset;
+    width: unset;
 }

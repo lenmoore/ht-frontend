@@ -1,6 +1,13 @@
 <template>
-  <div class="center-page">
-    <RouterView class="container" />
+  <div
+    style="
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    "
+  >
+    <RouterView />
   </div>
 </template>
 
