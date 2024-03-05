@@ -37,11 +37,20 @@
                 autoplay=""
                 loop
                 poster="/movie%20camera.png"
-                muted=""
+                muted
               ></video>
+              <!--              <video-->
+              <!--                id="videoPlayback"-->
+              <!--                width="650"-->
+              <!--                height="350"-->
+              <!--                autoplay=""-->
+              <!--                loop-->
+              <!--                poster="/movie%20camera.png"-->
+              <!--                muted=""-->
+              <!--              ></video>-->
             </div>
-            <div v-if="showConfirmButton" class="confirm-box">
-              <p class="bg-white">Kas oled videoga rahul?</p>
+            <div v-if="showConfirmButton" class="confirm-box bg-white">
+              <p class="">Kas oled videoga rahul?</p>
               <button
                 v-if="!isFilming"
                 id="startButton"
@@ -222,6 +231,9 @@ export default {
           this.downloadButtonHref = preview.src;
           this.downloadButtonDownload = this.displayFileName;
 
+          // const videoPlayback = document.getElementById("videoPlayback");
+          // videoPlayback.src = this.downloadButtonHref;
+          // videoPlayback.play();
           const a = document.createElement("a");
           document.body.appendChild(a);
           a.style = "display: none";
@@ -287,7 +299,7 @@ export default {
 
       recorder.ondataavailable = (event) => data.push(event.data);
       recorder.start();
-      this.log(`${recorder.state} for ${lengthInMS / 1000} seconds…`);
+      console.log(`${recorder.state} for ${lengthInMS / 1000} seconds…`);
 
       let stopped = new Promise((resolve, reject) => {
         recorder.onstop = resolve;
