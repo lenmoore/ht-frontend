@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div>
+  <div class="centered-on-page">
+    <OrientationWrapper>
       <small>{{ userPhoneName }}</small>
 
       <div v-if="taskIsActive">
@@ -62,32 +62,35 @@
 
       <div v-else>
         <h2>Hetkel pole sulle midagi.</h2>
+        <p>Oota järgmist ülesannet.</p>
       </div>
-    </div>
-    <small class="bottom">
-      <small id="log"></small>
-      <button
-        style="
-          height: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          align-self: end;
-        "
-        @click="logout"
-      >
-        Logout
-      </button>
-    </small>
+    </OrientationWrapper>
+    <!--    <small class="bottom">-->
+    <!--      <small id="log"></small>-->
+    <!--      <button-->
+    <!--        style="-->
+    <!--          height: 1rem;-->
+    <!--          display: flex;-->
+    <!--          align-items: center;-->
+    <!--          justify-content: center;-->
+    <!--          align-self: end;-->
+    <!--        "-->
+    <!--        @click="logout"-->
+    <!--      >-->
+    <!--        Logout-->
+    <!--      </button>-->
+    <!--    </small>-->
   </div>
 </template>
 
 <script>
 import { mapActions } from "pinia";
 import { useVisitorStore } from "../../store/visitor.ts";
+import OrientationWrapper from "./OrientationWrapper.vue";
 
 export default {
   name: "VisitorView",
+  components: { OrientationWrapper },
 
   data() {
     return {
@@ -324,5 +327,13 @@ div.video-absolute {
     padding-left: 1rem;
     padding-right: 1rem;
   }
+}
+
+.centered-on-page {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100vh;
 }
 </style>
