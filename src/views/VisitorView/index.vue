@@ -144,7 +144,7 @@ export default {
 
   computed: {
     displayFileName() {
-      return `${this.groupName}_[nr].${this.currentTask?.orderNumber}_${this.currentTask.fileName || "[failinimi]"}.webm`;
+      return `${this.scene?.orderNumber || "x"}_${this.currentTask.orderNumber || "[jarjekorranr]"}_${this.currentTask.fileName || "[failinimi]"}_${this.groupName || "[tiim]"}.mp4`;
     },
     imgSrc() {
       console.log(this.currentTask);
@@ -336,6 +336,7 @@ export default {
       console.log("file to upload: ", file); // This should show the Blob details.
       const formData = new FormData();
       const filename = this.displayFileName;
+      console.log("filename----->>>>>>", filename);
       formData.append("video", file, filename); // Assuming 'file' is a Blob or File
 
       // FormData objects don't stringify well directly; they appear empty.
