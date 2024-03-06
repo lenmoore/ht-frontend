@@ -22,8 +22,8 @@
       </select>
       <label for="type">Meedia tüüp</label>
       <select id="type" v-model="task.mediaType">
-        <option value="video">video</option>
-        <option value="sound">sound</option>
+        <option value="video">heliga video</option>
+        <option value="sound">soundscape</option>
         <option value="teleprompter">teleprompter</option>
       </select>
 

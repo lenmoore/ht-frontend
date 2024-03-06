@@ -137,7 +137,10 @@ export default {
       this.tasks = this.scene.tasks;
     },
     displayFileName(task) {
-      return `${this.currentRoute}_[nr].${task.orderNumber}_${task.fileName || "[failinimi]"}.webm`;
+      const fileExtension = ["teleprompter", "sound"].includes(task.mediaType)
+        ? "mp3"
+        : "mp4";
+      return `${task.team.group_name}_${this.scene.orderNumber}-${task.orderNumber}_${task.fileName || "[failinimi]"}.${fileExtension}`;
     },
     addTask() {
       this.addingNewTask = true;
