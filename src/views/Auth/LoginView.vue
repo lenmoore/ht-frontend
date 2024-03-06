@@ -27,6 +27,7 @@ export default {
     return {
       email: "",
       password: "",
+      url: "",
     };
   },
 
@@ -39,6 +40,7 @@ export default {
         try {
           console.log(this.email, this.password);
           const user = await this.login(this.email, this.password);
+          this.url = user.url;
           console.log(user);
           if (user) {
             if (localStorage.admin === "true") {

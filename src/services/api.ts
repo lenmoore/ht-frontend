@@ -1,6 +1,6 @@
 import axios from "redaxios";
 
-function refreshHeader() {
+export function refreshHeader() {
   const isLoggedIn = localStorage.accessToken != null;
 
   if (isLoggedIn) {
@@ -10,7 +10,7 @@ function refreshHeader() {
   }
 }
 
-function authHeader() {
+export function authHeader() {
   // return auth header with jwt if user is logged in and request is to the api url
   const isLoggedIn = localStorage.accessToken != null;
 

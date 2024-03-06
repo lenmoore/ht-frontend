@@ -114,6 +114,8 @@
 import { mapActions } from "pinia";
 import { useVisitorStore } from "../../store/visitor.ts";
 import OrientationWrapper from "./OrientationWrapper.vue";
+import { authHeader, refreshHeader } from "../../services/api";
+import axios from "redaxios";
 
 export default {
   name: "VisitorView",
@@ -177,6 +179,7 @@ export default {
         this.currentTask._id,
         this.displayFileName,
       );
+
       alert("Video on kinnitatud!");
       this.taskIsActive = false;
       location.reload();
@@ -189,8 +192,13 @@ export default {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: "environment",
-            width: { min: 1280 },
-            height: { min: 720 },
+            width: {
+              min: 1920,
+            },
+            height: {
+              min: 1080,
+            },
+            frameRate: { ideal: 24, max: 24 },
           },
         });
         const videoElement = document.getElementById("preview");
@@ -212,17 +220,18 @@ export default {
           video: {
             facingMode: "environment",
             width: {
-              min: 1280,
+              min: 1920,
             },
             height: {
-              min: 720,
+              min: 1080,
             },
+            frameRate: { ideal: 24, max: 24 },
           },
         })
         .then(async () => {
           return await this.startRecording(preview.captureStream());
         })
-        .then((recordedChunks) => {
+        .then(async (recordedChunks) => {
           console.log("hello did we record?");
 
           console.log("chunks: ", recordedChunks);
@@ -244,6 +253,9 @@ export default {
           this.log(
             `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
           );
+
+          const uploadResult = await this.uploadVideo(recordedBlob);
+          console.log(uploadResult);
         })
         .catch((error) => {
           if (error.name === "NotFoundError") {
@@ -320,6 +332,38 @@ export default {
       console.log(data);
       return data;
     },
+    async uploadVideo(file) {
+      console.log("file to upload: ", file); // This should show the Blob details.
+      const formData = new FormData();
+      const filename = this.displayFileName;
+      formData.append("video", file, filename); // Assuming 'file' is a Blob or File
+
+      // FormData objects don't stringify well directly; they appear empty.
+      // This is normal and does not mean your formData is actually empty.
+
+      const instance = axios.create({
+        headers: {
+          Authorization: authHeader().toString(),
+          "X-Refresh": refreshHeader().toString(),
+        },
+        baseURL: import.meta.env.VITE_API_URL,
+      });
+
+      try {
+        const response = await instance.post(
+          "/visitor/upload-video",
+          formData,
+          {
+            headers: {},
+          },
+        );
+        console.log("Upload response:", response);
+        // Handle response, such as confirming the video upload and providing the option to re-record
+      } catch (error) {
+        console.error("Error uploading the video:", error);
+      }
+    },
+
     stop(stream) {
       stream.getTracks().forEach((track) => track.stop());
     },
