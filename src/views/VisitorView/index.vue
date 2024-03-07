@@ -169,6 +169,8 @@ export default {
           console.log("got sth? ");
           this.taskIsActive = true;
           this.currentTask = task;
+
+          window.navigator.vibrate([200, 100, 200]);
         }
       }
       setTimeout(this.keepCheckingForTask, 1000);
