@@ -171,6 +171,7 @@ export default {
           this.currentTask = task;
 
           window.navigator.vibrate([200, 100, 200]);
+          alert("Uus ülesanne!");
         }
       }
       setTimeout(this.keepCheckingForTask, 1000);
