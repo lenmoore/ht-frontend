@@ -144,7 +144,7 @@ export default {
 
   computed: {
     displayFileName() {
-      return `${this.scene?.orderNumber || "x"}_${this.groupName || "grupp"}_${this.currentTask.orderNumber || "[jarjekorranr]"}_${this.currentTask.fileName || "[failinimi]"}_${this.groupName || "[tiim]"}.mp4`;
+      return `${this.scene?.orderNumber || "x"}_${this.userPhoneName || "grupp"}_${this.currentTask.orderNumber || "[jarjekorranr]"}_${this.currentTask.fileName || "[failinimi]"}_${this.groupName || "[tiim]"}.mp4`;
     },
     imgSrc() {
       console.log(this.currentTask);
