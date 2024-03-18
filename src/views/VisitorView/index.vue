@@ -4,87 +4,25 @@
       <small>{{ userPhoneName }}</small>
 
       <div class="you-have-task-wrapper" v-if="taskIsActive">
-        <div
-          v-if="!showConfirmButton && !cameraOpen"
-          class="m-4 p-4 border task-wrapper"
-        >
-          <div class="row">
-            <img class="no-style-image task-icon" :src="imgSrc" alt="" />
-            <div>
-              <strong> Uus ülesanne! <br /> </strong>
-              {{ currentTask.description }} ({{ currentTask.duration }}
-              sek)
-            </div>
-          </div>
-          <button
-            v-if="!isFilming"
-            id="startButton"
-            class="button"
-            style="z-index: 100"
-            @click="onClickOpenCamera"
-          >
-            Lindista
-          </button>
-        </div>
+        <NewTaskNotification
+          :camera-open="cameraOpen"
+          :current-task="currentTask"
+          :img-src="imgSrc"
+          :is-filming="isFilming"
+          :on-click-open-camera="onClickOpenCamera"
+          :show-confirm-button="showConfirmButton"
+        />
 
-        <div v-if="cameraOpen" class="video-wrapper">
-          <div class="recorder-interface">
-            <div class="video-stuff">
-              <video
-                id="preview"
-                width="650"
-                height="350"
-                autoplay=""
-                loop
-                poster="/movie%20camera.png"
-                muted
-              ></video>
-              <!--              <video-->
-              <!--                id="videoPlayback"-->
-              <!--                width="650"-->
-              <!--                height="350"-->
-              <!--                autoplay=""-->
-              <!--                loop-->
-              <!--                poster="/movie%20camera.png"-->
-              <!--                muted=""-->
-              <!--              ></video>-->
-            </div>
-            <div v-if="showConfirmButton" class="confirm-box bg-white">
-              <p class="">Kas oled videoga rahul?</p>
-              <button
-                v-if="!isFilming"
-                id="startButton"
-                class="button"
-                @click="onClickOpenCamera"
-              >
-                Lindista uuesti
-              </button>
-              <button
-                class="btn bg-green mt-4"
-                v-if="showConfirmButton"
-                @click="confirmVideoForVisitor"
-              >
-                Kinnita
-              </button>
-            </div>
-            <div v-else-if="!showConfirmButton && cameraOpen" class="controls">
-              <small style="max-width: 100px">
-                {{ currentTask.description }}
-              </small>
-              <button
-                id="recordButton"
-                class="record-button"
-                @click="onClickRecord"
-              >
-                <span :class="isFilming ? 'square' : 'round'"> </span>
-              </button>
-
-              <div class="countdown">
-                <span id="time" class="time">00:00.00</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <CameraOpen
+          :camera-open="cameraOpen"
+          :confirm-video-for-visitor="confirmVideoForVisitor"
+          :current-task="currentTask"
+          :is-filming="isFilming"
+          :file-name="displayFileName"
+          :on-click-open-camera="onClickOpenCamera"
+          :on-click-record="onClickRecord"
+          :show-confirm-button="showConfirmButton"
+        />
       </div>
 
       <div v-else>
@@ -94,18 +32,6 @@
     </OrientationWrapper>
     <small class="bottom">
       <small id="log"></small>
-      <!--      <button-->
-      <!--        style="-->
-      <!--          height: 1rem;-->
-      <!--          display: flex;-->
-      <!--          align-items: center;-->
-      <!--          justify-content: center;-->
-      <!--          align-self: end;-->
-      <!--        "-->
-      <!--        @click="logout"-->
-      <!--      >-->
-      <!--        Logout-->
-      <!--      </button>-->
     </small>
   </div>
 </template>
@@ -116,10 +42,18 @@ import { useVisitorStore } from "../../store/visitor.ts";
 import OrientationWrapper from "./OrientationWrapper.vue";
 import { authHeader, refreshHeader } from "../../services/api";
 import axios from "redaxios";
+import { Vue3Lottie } from "vue3-lottie";
+import NewTaskNotification from "./NewTaskNotification.vue";
+import CameraOpen from "./CameraOpen.vue";
 
 export default {
   name: "VisitorView",
-  components: { OrientationWrapper },
+  components: {
+    CameraOpen,
+    NewTaskNotification,
+    Vue3Lottie,
+    OrientationWrapper,
+  },
 
   data() {
     return {
@@ -191,6 +125,7 @@ export default {
     async onClickOpenCamera() {
       this.showConfirmButton = false;
       this.cameraOpen = true;
+
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
@@ -458,10 +393,6 @@ div.video-absolute {
       align-items: center;
       justify-content: space-around;
     }
-  }
-
-  button {
-    margin-right: 1rem;
   }
 }
 
