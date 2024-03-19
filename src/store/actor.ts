@@ -68,10 +68,13 @@ export const useActorStore = defineStore("actor", {
     async getAllScenesForActor() {
       try {
         const response = await api.get("/actor/template-scenes");
-        if (response) {
-          console.log(response);
-        }
-        return response.data.data.scenes;
+
+        return response.data.data.scenes.map((scene: any) => ({
+          ...scene,
+          isCompleted: scene.tasks.filter(
+            (task: any) => !task.isConfirmedByTeam,
+          ).length,
+        }));
       } catch (error) {
         console.error(error);
       }

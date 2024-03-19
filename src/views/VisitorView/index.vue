@@ -1,8 +1,6 @@
 <template>
   <div class="centered-on-page">
     <OrientationWrapper>
-      <small>{{ userPhoneName }}</small>
-
       <div class="you-have-task-wrapper" v-if="taskIsActive">
         <NewTaskNotification
           :camera-open="cameraOpen"
@@ -78,7 +76,7 @@ export default {
 
   computed: {
     displayFileName() {
-      return `${this.scene?.orderNumber || "x"}_${this.userPhoneName || "grupp"}_${this.currentTask.orderNumber || "[jarjekorranr]"}_${this.currentTask.fileName || "[failinimi]"}_${this.groupName || "[tiim]"}.mp4`;
+      return `${this.currentTask?.sceneId?.orderNumber || "x"}_${this.currentTask.orderNumber || "[jarjekorranr]"}_${this.userPhoneName || "grupp"}_${this.currentTask.fileName || "[failinimi]"}_${this.groupName || "[tiim]"}.mp4`;
     },
     imgSrc() {
       console.log(this.currentTask);
@@ -138,6 +136,7 @@ export default {
             },
             frameRate: { ideal: 24, max: 24 },
           },
+          audio: true,
         });
         const videoElement = document.getElementById("preview");
         videoElement.srcObject = stream;
@@ -181,13 +180,15 @@ export default {
           // const videoPlayback = document.getElementById("videoPlayback");
           // videoPlayback.src = this.downloadButtonHref;
           // videoPlayback.play();
-          const a = document.createElement("a");
-          document.body.appendChild(a);
-          a.style = "display: none";
-          a.href = this.downloadButtonHref;
-          a.download = this.displayFileName;
-          a.click();
-          window.URL.revokeObjectURL(this.downloadButtonHref);
+
+          // DOWNLOADS VIDEO TO DEVICE
+          // const a = document.createElement("a");
+          // document.body.appendChild(a);
+          // a.style = "display: none";
+          // a.href = this.downloadButtonHref;
+          // a.download = this.displayFileName;
+          // a.click();
+          // window.URL.revokeObjectURL(this.downloadButtonHref);
           this.log(
             `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
           );

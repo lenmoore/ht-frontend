@@ -6,6 +6,7 @@
     <div class="row">
       <img class="no-style-image task-icon" :src="imgSrc" alt="" />
       <div class="column">
+        <small>{{ userPhoneName }}</small>
         <strong> Uus ülesanne! <br /> </strong>
         {{ currentTask.description }} ({{ currentTask.duration }}
         sek)
@@ -23,8 +24,16 @@
   </div>
 </template>
 <script>
+import Camera from "simple-vue-camera";
+
 export default {
   name: "NewTaskNotification",
+  components: { Camera },
+  data() {
+    return {
+      userPhoneName: JSON.parse(localStorage.user).name,
+    };
+  },
   props: {
     cameraOpen: {},
     currentTask: {},

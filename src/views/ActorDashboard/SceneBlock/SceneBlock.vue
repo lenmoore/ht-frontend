@@ -3,48 +3,62 @@
     <div class="scene-header">
       <h3>{{ scene.orderNumber }} | {{ scene.title }}</h3>
 
-      <div>{{ doneTasks }} / {{ scene.tasks.length }}</div>
+      <div :class="doneTasks === scene.tasks.length ? 'green' : 'red'">
+        {{ doneTasks }} / {{ scene.tasks.length }}
+      </div>
       <button v-if="anyTasksActive" class="btn" @click="stopScene">
         Lopeta
       </button>
     </div>
 
-    <div class="mx-4 scene-description-wrapper">
-      <div class="label">Stseeni kirjeldus</div>
-      <div class="description-box">{{ scene.description }}</div>
-    </div>
-
-    <div class="mx-4">
-      <div class="label">Stseeni staatus</div>
-      <div v-if="allTasksConfirmedByTeams">Stseen on valmis!</div>
-      <div v-else>K6ik tiimid pole veel kinnitanud.</div>
-    </div>
-
-    <div class="my-2 border" v-for="task in scene.tasks">
-      <div class="task-header">
-        <h4>
-          <span :class="task.isConfirmedByTeam ? 'bg-green' : 'bg-red'"
-            >{{ scene.orderNumber }}.{{ task.orderNumber }}
-          </span>
-          <small :class="`bg-${task.team && task.team.team_name}`">{{
-            (task.team && task.team.team_name) || "Tundmatu tiim"
-          }}</small>
-          <span class="px-2">
-            {{ task.name }}
-          </span>
-        </h4>
-
-        <button v-if="task.isActive" class="btn bg-red" @click="stopTask(task)">
-          Lopeta
-        </button>
-        <button v-else class="btn bg-green" @click="startTask(task)">
-          Käivita
-        </button>
+    <div class="row">
+      <div class="mx-4 scene-description-wrapper">
+        <div class="label">Stseeni kirjeldus</div>
+        <div class="description-box">{{ scene.description }}</div>
       </div>
 
-      <div class="mx-4 mb-4">
-        Ülesanne tiimile: {{ task.description }}
-        <div>{{ task.mediaType }} ({{ task.duration }} sek)</div>
+      <div class="mx-4">
+        <div class="label">Stseeni staatus</div>
+        <div v-if="allTasksConfirmedByTeams">Stseen on valmis!</div>
+        <div v-else>K6ik tiimid pole veel kinnitanud.</div>
+      </div>
+
+      <button @click="isOpen = !isOpen" class="font-size-huge bg-purple">
+        {{ isOpen ? "˄" : "˅" }}
+      </button>
+    </div>
+
+    <div v-if="isOpen">
+      <div class="my-2 border" v-for="task in scene.tasks">
+        <div class="task-header">
+          <h4>
+            <span :class="task.isConfirmedByTeam ? 'bg-green' : 'bg-red'"
+              >{{ scene.orderNumber }}.{{ task.orderNumber }}
+            </span>
+            <small :class="`bg-${task.team && task.team.team_name}`">{{
+              (task.team && task.team.team_name) || "Tundmatu tiim"
+            }}</small>
+            <span class="px-2">
+              {{ task.name }}
+            </span>
+          </h4>
+
+          <button
+            v-if="task.isActive"
+            class="btn bg-red"
+            @click="stopTask(task)"
+          >
+            Lopeta
+          </button>
+          <button v-else class="btn bg-green" @click="startTask(task)">
+            Käivita
+          </button>
+        </div>
+
+        <div class="mx-4 mb-4">
+          Ülesanne tiimile: {{ task.description }}
+          <div>{{ task.mediaType }} ({{ task.duration }} sek)</div>
+        </div>
       </div>
     </div>
   </div>
@@ -59,6 +73,12 @@ export default {
       type: Object,
       default: () => {},
     },
+  },
+
+  data() {
+    return {
+      isOpen: this.anyTasksActive,
+    };
   },
   emits: ["begin-scene", "start", "stop"],
   computed: {
@@ -94,5 +114,23 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.font-size-huge {
+  font-size: 2rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.green {
+  color: $green;
+}
+
+.red {
+  color: $red;
 }
 </style>
