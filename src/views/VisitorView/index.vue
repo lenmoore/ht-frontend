@@ -128,13 +128,11 @@ export default {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: "environment",
-            width: {
-              min: 1920,
-            },
-            height: {
-              min: 1080,
-            },
-            frameRate: { ideal: 24, max: 24 },
+            width: { ideal: 3840 },
+            height: { ideal: 2160 },
+            frameRate: { ideal: 30, max: 60 },
+            stabilization: true, // Note: This is not universally supported
+            focusMode: "continuous", // Request continuous focus if available
           },
           audio: true,
         });
@@ -156,14 +154,13 @@ export default {
         .getUserMedia({
           video: {
             facingMode: "environment",
-            width: {
-              min: 1920,
-            },
-            height: {
-              min: 1080,
-            },
-            frameRate: { ideal: 24, max: 24 },
+            width: { ideal: 3840 },
+            height: { ideal: 2160 },
+            frameRate: { ideal: 30, max: 60 },
+            stabilization: true, // Note: This is not universally supported
+            focusMode: "continuous", // Request continuous focus if available
           },
+          audio: true,
         })
         .then(async () => {
           return await this.startRecording(preview.captureStream());
