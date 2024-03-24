@@ -118,4 +118,14 @@ export default {
   padding: 0;
   margin: 0;
 }
+
+.video-stuff {
+  width: 100%;
+  height: auto;
+
+  video {
+    width: 100%;
+    height: auto;
+  }
+}
 </style>
