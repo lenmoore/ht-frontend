@@ -48,7 +48,16 @@ export default {
       // get all scenes we know of and filter out the ones that exist in the existing scenes
       // sort based on order number
       const scenes = await this.getAllScenesForActor();
-      console.log(scenes);
+      // sort by if scene is completed and then by order number
+      scenes.sort((a, b) => {
+        if (a.isCompleted && !b.isCompleted) {
+          return -1;
+        }
+        if (!a.isCompleted && b.isCompleted) {
+          return 1;
+        }
+        return a.orderNumber - b.orderNumber;
+      });
 
       this.templateScenes = scenes;
       setTimeout(this.getTemplateScenes, 3000);

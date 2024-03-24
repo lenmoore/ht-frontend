@@ -23,13 +23,15 @@ export const useSetupStore = defineStore("setup", {
         console.error(error);
       }
     },
-    async getAllScenes() {
+    async getAllScenes(groupName: string) {
       try {
         const response = await api.get("/admin/scenes");
         if (response) {
           console.log(response);
         }
-        return response.data.data.scenes;
+        return response.data.data.scenes.filter(
+          (scene: any) => scene.groupName === groupName,
+        );
       } catch (error) {
         console.error(error);
       }

@@ -4,12 +4,14 @@
       <button class="bg-purple" disabled>Maakler</button>
       <button class="bg-purple" disabled>Stalker</button>
       <button class="bg-purple" disabled>Korraldaja</button>
-      <button class="bg-purple" disabled>Esoteerik</button>
+      <button class="bg-purple" @click="goToGroup('esoteerik')">
+        Esoteerik
+      </button>
       <button class="bg-purple" @click="goToGroup('sakala')">Sakala</button>
     </div>
     <div class="header">
       <div class="p-4">
-        <h1>Grupi seadistus: {{ currentRoute || "-" }}</h1>
+        <h1>Aktiivne: {{ currentRoute || "-" }}</h1>
 
         <div class="scene-selector">
           <h2>Vali stseen:</h2>
@@ -85,7 +87,7 @@ export default {
 
   async created() {
     // todo add filter for which group scenes are for
-    this.scenes = await this.getAllScenes();
+    this.scenes = await this.getAllScenes(this.$route.params?.groupName);
     if (this.scenes.length) {
       this.selectedSceneId = this.scenes[0]?._id;
     }
@@ -185,5 +187,9 @@ export default {
   h2 {
     margin-right: 1rem;
   }
+}
+
+.group-overview {
+  margin-top: 4rem;
 }
 </style>

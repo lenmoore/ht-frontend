@@ -40,11 +40,7 @@ export default {
     },
     menuLinks() {
       if (this.isAdmin) {
-        return [
-          { name: "dashboard" },
-          { name: "games" },
-          { name: "performances" },
-        ];
+        return [{ name: "dashboard" }, { name: "games" }];
       } else if (this.isActor) {
         return [{ name: "dashboard", query: { group: this.groupName } }];
       } else {
