@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="scene-wrapper border">
-      <h4>Ylesanded ({{ tasks.length }})</h4>
+      <h4>
+        {{ groupName }}: <strong>{{ scene && scene.title }}</strong> ({{
+          tasks && tasks.length
+        }})
+      </h4>
 
       <div class="tasks-wrapper">
         <div v-for="task in tasks" :key="task._id">
@@ -70,29 +74,28 @@ export default {
       userTeams: [],
     };
   },
-  computed: {
-    currentRoute() {
-      return this.$route.params.groupName;
+
+  props: {
+    selectedSceneId: {
+      type: String,
+      required: true,
     },
-    selectedSceneId() {
-      return this.$route.query.scene;
+    groupName: {
+      type: String,
+      required: true,
     },
   },
 
   watch: {
     selectedSceneId: {
       immediate: true,
-      async handler(val) {
-        console.log("on first enter", val);
-        if (val) {
-          this.scene = await this.getSceneById(val);
-          this.tasks = this.scene.tasks;
-        }
+      async handler() {
+        await this.getTeams();
+        this.scene = await this.getSceneById(this.selectedSceneId);
+        console.log(this.scene);
+        this.tasks = this.scene.tasks;
       },
     },
-  },
-  async created() {
-    await this.getTeams();
   },
   methods: {
     ...mapState(useSetupStore, ["teams"]),
@@ -108,7 +111,7 @@ export default {
     },
     async getTeams() {
       this.userTeams = await this.getAllTeamsInGroup({
-        groupName: this.currentRoute,
+        groupName: this.groupName,
       });
     },
     async saveTask(task) {
@@ -140,7 +143,8 @@ export default {
       const fileExtension = ["teleprompter", "sound"].includes(task.mediaType)
         ? "mp3"
         : "mp4";
-      return `${task.team.group_name}_${this.scene.orderNumber}-${task.orderNumber}_${task.fileName || "[failinimi]"}.${fileExtension}`;
+      console.log(task);
+      return `${task.team?.group_name || "tiim"}_${this.scene.orderNumber}-${task.orderNumber}_${task.fileName || "[failinimi]"}.${fileExtension}`;
     },
     addTask() {
       this.addingNewTask = true;

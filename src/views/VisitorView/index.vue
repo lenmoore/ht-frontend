@@ -1,5 +1,5 @@
 <template>
-  <div class="centered-on-page">
+  <div :class="cameraOpen && 'visitor-wrapper'">
     <OrientationWrapper>
       <div class="you-have-task-wrapper" v-if="taskIsActive">
         <NewTaskNotification
@@ -411,61 +411,7 @@ div.video-absolute {
   height: 16rem;
 }
 
-.recorder-interface {
-  display: flex;
-  align-items: center;
-}
-
-.confirm-box {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  right: 50px;
-  z-index: 100;
-  height: 300px;
-}
-
-.controls {
-  position: absolute;
-  right: 50px;
-  z-index: 100;
-  height: 300px;
-  //width: 50px;
-
-  padding: 1rem;
-  background-color: $white;
-  //border: 2px solid black;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.record-button {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-  margin: 0;
-
-  .square {
-    background-color: $red;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-  }
-
-  .round {
-    background-color: $red;
-    width: 34px;
-    border-radius: 50%;
-    height: 34px;
-  }
+.visitor-wrapper {
+  background-color: $camera-interface-bg;
 }
 </style>

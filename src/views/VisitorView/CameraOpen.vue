@@ -32,7 +32,7 @@
         </button>
       </div>
       <div v-else-if="!showConfirmButton && cameraOpen" class="controls">
-        <small style="max-width: 100px">
+        <small class="description" style="max-width: 100px">
           {{ currentTask.description }}
         </small>
         <button id="recordButton" class="record-button" @click="onClickRecord">
@@ -72,10 +72,11 @@ export default {
 @import "../../styles/variables.scss";
 
 .video-wrapper {
-  margin-right: 10rem;
+  background-color: $camera-interface-bg;
 }
 
 .recorder-interface {
+  height: 96vh;
   display: flex;
   align-items: center;
 }
@@ -86,23 +87,45 @@ export default {
   position: absolute;
   right: 50px;
   z-index: 100;
-  height: 300px;
+  height: 100%;
 }
 
 .controls {
   position: absolute;
-  right: 50px;
+  right: 0;
   z-index: 100;
-  height: 300px;
-  //width: 50px;
+  height: 100%;
+  width: 17.5%;
 
-  padding: 1rem;
-  background-color: $white;
+  background-color: $camera-interface-bg;
   //border: 2px solid black;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
+}
+
+.video-stuff {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  right: 0;
+
+  video {
+    right: 0;
+    width: 90%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+small.description {
+  color: white;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .record-button {
@@ -117,15 +140,19 @@ export default {
 
   padding: 0;
   margin: 0;
-}
 
-.video-stuff {
-  width: 100%;
-  height: auto;
+  .square {
+    background-color: $red;
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+  }
 
-  video {
-    width: 100%;
-    height: auto;
+  .round {
+    background-color: $red;
+    width: 42px;
+    border-radius: 50%;
+    height: 42px;
   }
 }
 </style>

@@ -11,7 +11,7 @@
     </div>
     <div class="header">
       <div class="p-4">
-        <h1>Aktiivne: {{ currentRoute || "-" }}</h1>
+        <h1>{{ activeGroupName || "-" }}</h1>
 
         <div class="scene-selector">
           <h2>Vali stseen:</h2>
@@ -48,7 +48,7 @@
           <button @click="clickAdd">Lisa stseen</button>
         </div>
       </div>
-      <img alt="" src="/sakala.jpeg" />
+      <img alt="" :src="activeActorImage" />
     </div>
     <div v-if="selectedScene">
       <h3 class="p-4">
@@ -62,59 +62,53 @@
       </div>
     </div>
 
-    <RouterView />
+    <GroupGame
+      :selected-scene-id="selectedSceneId"
+      :group-name="activeGroupName"
+    />
   </div>
 </template>
 <script>
 import router from "../../../router";
 import { mapActions, mapState } from "pinia";
 import { useSetupStore } from "../../../store/setup.ts";
+import GroupGame from "./GroupGame/GroupGame.vue";
 
 export default {
   name: "AdminGames",
+  components: { GroupGame },
 
   data() {
     return {
+      activeGroupName: "sakala",
+
       addingScene: false,
       newSceneName: "",
       newSceneDescription: "",
       newSceneOrderNumber: null,
+
       selectedSceneId: null,
       selectedScene: null,
       scenes: [],
     };
   },
 
-  async created() {
-    // todo add filter for which group scenes are for
-    this.scenes = await this.getAllScenes(this.$route.params?.groupName);
-    if (this.scenes.length) {
-      this.selectedSceneId = this.scenes[0]?._id;
-    }
-  },
-
   computed: {
-    currentRoute() {
-      return this.$route.params?.groupName;
+    activeActorImage() {
+      return {
+        sakala: "/actors/sakala.jpeg",
+      }[this.activeGroupName];
     },
   },
 
   watch: {
-    selectedSceneId: {
-      immediate: true,
-      async handler(val) {
-        if (!val) {
-          if (this.scenes.length) {
-            this.selectedSceneId = this.scenes[0]?._id;
-          }
-        }
-        router.push({
-          name: "groups",
-          query: { scene: val },
-          params: { groupName: this.currentRoute || "sakala" },
-        });
-        this.selectedScene = await this.getSceneById(this.selectedSceneId);
+    activeGroupName: {
+      handler: async function (newVal) {
+        this.scenes = await this.getAllScenes(newVal);
+        this.selectedSceneId = this.scenes[0]._id;
+        this.selectedScene = this.scenes[0];
       },
+      immediate: true,
     },
   },
 
@@ -126,7 +120,8 @@ export default {
       getSceneById: "getSceneById",
     }),
     goToGroup(name) {
-      router.push({ name: "groups", params: { groupName: name } });
+      console.log("go to group ", name);
+      this.activeGroupName = name;
     },
     async clickAdd() {
       if (
