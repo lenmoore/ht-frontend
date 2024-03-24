@@ -128,8 +128,8 @@ export default {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: "environment",
-            width: { ideal: 3840 },
-            height: { ideal: 2160 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
             frameRate: { ideal: 30, max: 60 },
             stabilization: true, // Note: This is not universally supported
             focusMode: "continuous", // Request continuous focus if available
@@ -154,8 +154,8 @@ export default {
         .getUserMedia({
           video: {
             facingMode: "environment",
-            width: { ideal: 3840 },
-            height: { ideal: 2160 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
             frameRate: { ideal: 30, max: 60 },
             stabilization: true, // Note: This is not universally supported
             focusMode: "continuous", // Request continuous focus if available

@@ -2,15 +2,7 @@
   <div v-if="cameraOpen" class="video-wrapper">
     <div class="recorder-interface">
       <div class="video-stuff">
-        <video
-          id="preview"
-          width="650"
-          height="350"
-          autoplay=""
-          loop
-          poster="/movie%20camera.png"
-          muted
-        >
+        <video id="preview" autoplay="" loop poster="/movie%20camera.png" muted>
           <source type='video/mp4; codecs="avc1.64001E, mp4a.40.2"' src="" />
         </video>
       </div>
