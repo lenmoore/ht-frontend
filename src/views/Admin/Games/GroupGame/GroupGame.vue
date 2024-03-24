@@ -7,6 +7,9 @@
         }})
       </h4>
 
+      <p class="max-width-20-rem border-top border-bottom bg-yellow">
+        {{ scene && scene.description }}
+      </p>
       <div class="tasks-wrapper">
         <div v-for="task in tasks" :key="task._id">
           <div :class="{ wide: task.isEditing }" class="card">
@@ -16,6 +19,7 @@
               :user-teams="userTeams"
               :scene="scene"
               @save="saveTask"
+              @delete="deleteTask"
             />
 
             <div v-else class="closed-card">
@@ -23,9 +27,12 @@
                 <p>
                   <code class="bg-blue">{{ displayFileName(task) }}</code>
                 </p>
-                <p :class="`bg-${task.team && task.team.name}`">
+                <label for="length">
+                  {{ task.duration }} sek {{ task.mediaType }}
+                </label>
+                <span class="mx-2" :class="`bg-${task.team && task.team.name}`">
                   {{ task.team && task.team.name }}
-                </p>
+                </span>
               </div>
               <div>
                 <p>
@@ -68,7 +75,7 @@ export default {
   data() {
     return {
       tasks: [],
-      newTask: null,
+      newTask: {},
       addingNewTask: false,
       scene: null,
       userTeams: [],
@@ -96,6 +103,12 @@ export default {
         this.tasks = this.scene.tasks;
       },
     },
+    groupName: {
+      immediate: true,
+      async handler() {
+        await this.getTeams();
+      },
+    },
   },
   methods: {
     ...mapState(useSetupStore, ["teams"]),
@@ -106,6 +119,9 @@ export default {
       deleteTaskById: "deleteTaskById",
       getAllTeamsInGroup: "getAllTeamsInGroup",
     }),
+    deleteTask(task) {
+      this.deleteTaskById(task._id);
+    },
     teamNameById(id) {
       return this.userTeams.find((team) => team._id === id)?.team_name;
     },
@@ -116,8 +132,9 @@ export default {
     },
     async saveTask(task) {
       console.log(task);
+
       if (this.addingNewTask) {
-        const newTask = await this.createTask(this.newTask);
+        const newTask = await this.createTask(task);
         if (newTask) {
           this.addingNewTask = false;
           this.newTask = null;

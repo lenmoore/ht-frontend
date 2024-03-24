@@ -83,7 +83,17 @@ export const useSetupStore = defineStore("setup", {
         console.error(error);
       }
     },
-    async deleteTaskById() {},
+    async deleteTaskById(id: number) {
+      try {
+        const response = await api.delete(`/admin/tasks/${id}`);
+        if (response) {
+          console.log(response);
+          return response.data.data;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async getAllTeamsInGroup(payload: any) {
       try {
         console.log("getAllTeamsInGroup payload", payload);

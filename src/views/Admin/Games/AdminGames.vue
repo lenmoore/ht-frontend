@@ -1,18 +1,51 @@
 <template>
-  <div>
-    <div class="group-overview">
-      <button class="bg-purple" disabled>Maakler</button>
-      <button class="bg-purple" disabled>Stalker</button>
-      <button class="bg-purple" disabled>Korraldaja</button>
-      <button class="bg-purple" @click="goToGroup('esoteerik')">
-        Esoteerik
-      </button>
-      <button class="bg-purple" @click="goToGroup('sakala')">Sakala</button>
+  <div class="column">
+    <div class="image-header">
+      <div class="group-overview">
+        <button
+          class="bg-purple"
+          :class="activeGroupName === 'maakler' && 'active'"
+          disabled
+        >
+          Maakler
+        </button>
+        <button
+          class="bg-purple"
+          :class="activeGroupName === 'stalker' && 'active'"
+          disabled
+        >
+          Stalker
+        </button>
+        <button
+          class="bg-purple"
+          :class="activeGroupName === 'korraldaja' && 'active'"
+          disabled
+        >
+          Korraldaja
+        </button>
+        <button
+          class="bg-purple"
+          :class="activeGroupName === 'esoteerik' && 'active'"
+          @click="goToGroup('esoteerik')"
+        >
+          Esoteerik
+        </button>
+        <button
+          class="bg-purple"
+          :class="activeGroupName === 'sakala' && 'active'"
+          @click="goToGroup('sakala')"
+        >
+          Sakala
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <img alt="" :src="activeActorImage" />
+      <h1>{{ activeGroupName || "-" }}</h1>
     </div>
     <div class="header">
       <div class="p-4">
-        <h1>{{ activeGroupName || "-" }}</h1>
-
         <div class="scene-selector">
           <h2>Vali stseen:</h2>
           <select
@@ -48,18 +81,6 @@
           <button @click="clickAdd">Lisa stseen</button>
         </div>
       </div>
-      <img alt="" :src="activeActorImage" />
-    </div>
-    <div v-if="selectedScene">
-      <h3 class="p-4">
-        Stseen {{ selectedScene.orderNumber || "-" }}: {{ selectedScene.title }}
-      </h3>
-      <div class="bg-yellow border-top border-bottom p-4">
-        <p>Stseeni kirjeldus</p>
-        <p>
-          {{ selectedScene.description }}
-        </p>
-      </div>
     </div>
 
     <GroupGame
@@ -69,7 +90,6 @@
   </div>
 </template>
 <script>
-import router from "../../../router";
 import { mapActions, mapState } from "pinia";
 import { useSetupStore } from "../../../store/setup.ts";
 import GroupGame from "./GroupGame/GroupGame.vue";
@@ -134,7 +154,7 @@ export default {
           title: this.newSceneName,
           description: this.newSceneDescription,
           orderNumber: this.newSceneOrderNumber,
-          groupName: this.currentRoute,
+          groupName: this.activeGroupName,
           teams: [],
           tasks: [],
         });
@@ -145,11 +165,9 @@ export default {
           this.newSceneOrderNumber = null;
           console.log(result);
 
-          await router.push({
-            name: "groups",
-            query: { scene: result.scene._id },
-          });
           this.scenes.push(result.scene);
+          this.selectedSceneId = result.scene._id;
+          this.selectedScene = result.scene;
         }
       }
       this.addingScene = !this.addingScene;
@@ -165,9 +183,32 @@ export default {
 </script>
 
 <style lang="scss">
-.group-overview {
+.image-header {
   display: flex;
-  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 4rem;
+
+  h1 {
+    margin: 0;
+    padding: 0;
+  }
+
+  img {
+    height: 200px;
+    width: 200px;
+  }
+
+  .group-overview {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+
+    .active {
+      background-color: #64edfc;
+      color: black;
+    }
+  }
 }
 
 .new-scene {
@@ -182,9 +223,15 @@ export default {
   h2 {
     margin-right: 1rem;
   }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
-.group-overview {
-  margin-top: 4rem;
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
