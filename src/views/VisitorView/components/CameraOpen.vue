@@ -134,7 +134,6 @@ export default {
             // stabilization: true, // Note: This is not universally supported
             // focusMode: "continuous", // Request continuous focus if available
           },
-          audio: true,
         })
         .then(async () => {
           return await this.startRecording(preview.captureStream());
@@ -190,7 +189,6 @@ export default {
             // stabilization: true, // Note: This is not universally supported
             // focusMode: "continuous", // Request continuous focus if available
           },
-          audio: true,
         });
         const videoElement = document.getElementById("preview");
         videoElement.srcObject = stream;
