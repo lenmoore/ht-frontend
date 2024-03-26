@@ -125,13 +125,14 @@ export default {
       navigator.mediaDevices
         .getUserMedia({
           video: {
-            videoBitsPerSecond: 750000,
+            // videoBitsPerSecond: 750000,
             facingMode: "environment",
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
             frameRate: { min: 24, ideal: 24, max: 24 },
-            stabilization: true, // Note: This is not universally supported
-            focusMode: "continuous", // Request continuous focus if available
+
+            // stabilization: true, // Note: This is not universally supported
+            // focusMode: "continuous", // Request continuous focus if available
           },
           audio: true,
         })
@@ -181,13 +182,13 @@ export default {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            videoBitsPerSecond: 750000,
+            // videoBitsPerSecond: 750000,
             facingMode: "environment",
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
             frameRate: { min: 24, ideal: 24, max: 24 },
-            stabilization: true, // Note: This is not universally supported
-            focusMode: "continuous", // Request continuous focus if available
+            // stabilization: true, // Note: This is not universally supported
+            // focusMode: "continuous", // Request continuous focus if available
           },
           audio: true,
         });
