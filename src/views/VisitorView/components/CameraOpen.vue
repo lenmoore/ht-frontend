@@ -128,7 +128,7 @@ export default {
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            frameRate: { ideal: 30, max: 60 },
+            frameRate: { ideal: 24, max: 30 },
             stabilization: true, // Note: This is not universally supported
             focusMode: "continuous", // Request continuous focus if available
           },
@@ -183,7 +183,7 @@ export default {
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            frameRate: { ideal: 30, max: 60 },
+            frameRate: { ideal: 24, max: 30 },
             stabilization: true, // Note: This is not universally supported
             focusMode: "continuous", // Request continuous focus if available
           },
