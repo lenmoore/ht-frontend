@@ -125,7 +125,7 @@ export default {
       navigator.mediaDevices
         .getUserMedia({
           video: {
-            // videoBitsPerSecond: 750000,
+            videoBitsPerSecond: 1250000,
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
@@ -181,7 +181,7 @@ export default {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            // videoBitsPerSecond: 750000,
+            videoBitsPerSecond: 1250000,
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
