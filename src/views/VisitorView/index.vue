@@ -5,10 +5,16 @@
         <NewTaskNotification
           :camera-open="cameraOpen"
           :current-task="currentTask"
-          :img-src="imgSrc"
           :is-filming="isFilming"
-          :on-click-open-camera="onClickOpenCamera"
           :show-confirm-button="showConfirmButton"
+          @open-camera="onClickOpenCamera"
+          @open-recorder="onClickOpenDictaphone"
+        />
+
+        <DictaphoneOpen
+          :recorder-open="recorderOpen"
+          :current-task="currentTask"
+          :confirm-audio-for-visitor="confirmVideoForVisitor"
         />
 
         <CameraOpen
@@ -17,8 +23,8 @@
           :current-task="currentTask"
           :is-filming="isFilming"
           :file-name="displayFileName"
-          :on-click-open-camera="onClickOpenCamera"
-          :on-click-record="onClickRecord"
+          @open-camera="onClickOpenCamera"
+          @click-record="onClickRecord"
           :show-confirm-button="showConfirmButton"
         />
       </div>
@@ -41,12 +47,14 @@ import OrientationWrapper from "./OrientationWrapper.vue";
 import { authHeader, refreshHeader } from "../../services/api";
 import axios from "redaxios";
 import { Vue3Lottie } from "vue3-lottie";
-import NewTaskNotification from "./NewTaskNotification.vue";
-import CameraOpen from "./CameraOpen.vue";
+import NewTaskNotification from "./components/NewTaskNotification.vue";
+import CameraOpen from "./components/CameraOpen.vue";
+import DictaphoneOpen from "./components/DictaphoneOpen.vue";
 
 export default {
   name: "VisitorView",
   components: {
+    DictaphoneOpen,
     CameraOpen,
     NewTaskNotification,
     Vue3Lottie,
@@ -55,6 +63,7 @@ export default {
 
   data() {
     return {
+      recorderOpen: false,
       isFilming: false,
       showPreview: false,
       cameraOpen: false,
@@ -77,14 +86,6 @@ export default {
   computed: {
     displayFileName() {
       return `${this.currentTask?.sceneId?.orderNumber || "x"}_${this.currentTask.orderNumber || "[jarjekorranr]"}_${this.userPhoneName || "grupp"}_${this.currentTask.fileName || "[failinimi]"}_${this.groupName || "[tiim]"}.mp4`;
-    },
-    imgSrc() {
-      console.log(this.currentTask);
-      if (this.currentTask.mediaType === "video") {
-        return "/movie camera.png";
-      } else if (this.currentTask.mediaType === "teleprompter") {
-        return "/dictophone.png";
-      }
     },
   },
 
@@ -119,6 +120,9 @@ export default {
       this.taskIsActive = false;
       location.reload();
       this.keepCheckingForTask();
+    },
+    onClickOpenDictaphone() {
+      this.recorderOpen = true;
     },
     async onClickOpenCamera() {
       this.showConfirmButton = false;
@@ -335,39 +339,6 @@ export default {
 
 <style lang="scss">
 @import "../../styles/variables.scss";
-
-.video-absolute {
-  top: 0;
-  left: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-div.video-absolute {
-  z-index: 40;
-  width: 650px;
-  height: 350px;
-
-  //display: flex;
-  //align-items: center;
-  //flex-direction: column;
-  //justify-content: center;
-
-  img {
-    width: 100%;
-    height: 100%;
-  }
-
-  .countdown {
-    position: absolute;
-    bottom: 28px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
 
 .centered-on-page {
   display: flex;

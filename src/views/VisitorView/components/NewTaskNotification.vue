@@ -11,11 +11,20 @@
         {{ currentTask.description }} ({{ currentTask.duration }}
         sek)
         <button
-          v-if="!isFilming"
+          v-if="currentTask.mediaType === 'video' && !isFilming"
           id="startButton"
           class="button"
           style="z-index: 100"
           @click="onClickOpenCamera"
+        >
+          Lindista
+        </button>
+        <button
+          v-else
+          id="startButton"
+          class="button"
+          style="z-index: 100"
+          @click="onClickOpenDictaphone"
         >
           Lindista
         </button>
@@ -34,18 +43,34 @@ export default {
       userPhoneName: JSON.parse(localStorage.user).name,
     };
   },
+  computed: {
+    imgSrc() {
+      console.log(this.currentTask);
+      if (this.currentTask.mediaType === "video") {
+        return "/movie camera.png";
+      } else if (this.currentTask.mediaType === "sound") {
+        return "/dictaphone.png";
+      }
+    },
+  },
   props: {
     cameraOpen: {},
     currentTask: {},
-    imgSrc: {},
     isFilming: {},
-    onClickOpenCamera: {},
     showConfirmButton: {},
+  },
+  methods: {
+    onClickOpenCamera() {
+      this.$emit("open-camera");
+    },
+    onClickOpenDictaphone() {
+      this.$emit("open-recorder");
+    },
   },
 };
 </script>
 <style lang="scss">
-@import "../../styles/variables.scss";
+@import "../../../styles/variables";
 
 .task-icon {
   height: 16rem;

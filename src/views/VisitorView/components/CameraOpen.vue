@@ -2,6 +2,11 @@
   <div v-if="cameraOpen" class="video-wrapper">
     <div class="recorder-interface">
       <div class="video-stuff">
+        <div class="video-absolute">
+          <div class="countdown">
+            <span id="time" class="time">00:00.00</span>
+          </div>
+        </div>
         <video id="preview" autoplay="" loop poster="/movie%20camera.png" muted>
           <source type='video/mp4; codecs="avc1.64001E, mp4a.40.2"' src="" />
         </video>
@@ -38,10 +43,6 @@
         <button id="recordButton" class="record-button" @click="onClickRecord">
           <span :class="isFilming ? 'square' : 'round'"> </span>
         </button>
-
-        <div class="countdown">
-          <span id="time" class="time">00:00.00</span>
-        </div>
       </div>
     </div>
   </div>
@@ -62,21 +63,28 @@ export default {
     confirmVideoForVisitor: {},
     currentTask: {},
     isFilming: {},
-    onClickOpenCamera: {},
-    onClickRecord: {},
     showConfirmButton: {},
+  },
+
+  methods: {
+    onClickOpenCamera() {
+      this.$emit("open-camera");
+    },
+    onClickRecord() {
+      this.$emit("click-record");
+    },
   },
 };
 </script>
 <style lang="scss">
-@import "../../styles/variables.scss";
+@import "../../../styles/variables";
 
 .video-wrapper {
   background-color: $camera-interface-bg;
 }
 
 .recorder-interface {
-  height: 96vh;
+  height: 100vh;
   display: flex;
   align-items: center;
 }
@@ -119,6 +127,27 @@ export default {
     width: 90%;
     height: auto;
     object-fit: cover;
+  }
+}
+
+.video-absolute {
+  width: 670px;
+  height: 380px;
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+
+  background-image: url("videoframe.png");
+  background-position: center;
+
+  .countdown {
+    position: absolute;
+    bottom: 28px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 
