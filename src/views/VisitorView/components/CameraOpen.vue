@@ -1,5 +1,14 @@
 <template>
   <div class="video-wrapper">
+    <small
+      :key="item.groupId"
+      v-for="item in mediaDeviceList"
+      class="bg-yellow"
+    >
+      {{ item }} ________ <br />
+      <br />
+    </small>
+    <button @click="getMediaDeviceList">git</button>
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
@@ -57,6 +66,7 @@ export default {
   components: { Vue3Lottie },
   data() {
     return {
+      mediaDeviceList: [],
       showStartFilmingAnimation: false,
       showConfirmButton: false,
       isFilming: false,
@@ -79,6 +89,9 @@ export default {
     this.onClickOpenCamera();
   },
   methods: {
+    async getMediaDeviceList() {
+      this.mediaDeviceList = await navigator.mediaDevices.enumerateDevices();
+    },
     startCountdown() {
       // Assuming this.currentTask.duration is in seconds, convert it to milliseconds
       let timeLeft = this.currentTask.duration * 1000; // timeLeft is in milliseconds
