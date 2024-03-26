@@ -1,6 +1,5 @@
 <template>
   <div class="video-wrapper">
-    <ul id="constraints"></ul>
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
@@ -125,15 +124,16 @@ export default {
       this.showConfirmButton = false;
       navigator.mediaDevices
         .getUserMedia({
-          video: {
-            facingMode: "environment",
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
-            // frameRate: { ideal: 24, max: 24 },
-
-            // stabilization: true, // Note: This is not universally supported
-            // focusMode: "continuous", // Request continuous focus if available
-          },
+          video: true,
+          // video: {
+          //   facingMode: "environment",
+          //   width: { ideal: 1920 },
+          //   height: { ideal: 1080 },
+          //   // frameRate: { ideal: 24, max: 24 },
+          //
+          //   // stabilization: true, // Note: This is not universally supported
+          //   // focusMode: "continuous", // Request continuous focus if available
+          // },
         })
         .then(async () => {
           return await this.startRecording(preview.captureStream());
@@ -195,34 +195,24 @@ export default {
         console.error("Error opening the camera", error);
         this.cameraOpen = false; // Reset camera state if there is an error
       }
-
-      const constraintList = document.getElementById("constraints");
-      const supportedConstraints =
-        navigator.mediaDevices.getSupportedConstraints();
-
-      for (const constraint of Object.keys(supportedConstraints)) {
-        const elem = document.createElement("li");
-        elem.innerHTML = `<code>${constraint}</code>`;
-        constraintList.appendChild(elem);
-      }
     },
 
     async startRecording(stream) {
       const lengthInMS = this.currentTask.duration * 1000;
       console.log(lengthInMS);
       let options = { mimeType: 'video/webm; codecs="av01.0.05M.08"' };
-      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        console.log(`${options.mimeType} is not Supported`);
-        options = { mimeType: 'video/webm; codecs="vp9"' }; // Fallback to VP9
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-          console.log(`${options.mimeType} is not Supported`);
-          options = { mimeType: 'video/webm; codecs="vp8"' }; // Fallback to VP8
-          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            console.log(`${options.mimeType} is not Supported`);
-            options = { mimeType: "video/webm" }; // Fallback to default WebM if nothing else is supported
-          }
-        }
-      }
+      // if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      //   console.log(`${options.mimeType} is not Supported`);
+      //   options = { mimeType: 'video/webm; codecs="vp9"' }; // Fallback to VP9
+      //   if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      //     console.log(`${options.mimeType} is not Supported`);
+      //     options = { mimeType: 'video/webm; codecs="vp8"' }; // Fallback to VP8
+      //     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      //       console.log(`${options.mimeType} is not Supported`);
+      //       options = { mimeType: "video/webm" }; // Fallback to default WebM if nothing else is supported
+      //     }
+      //   }
+      // }
       let recorder = new MediaRecorder(stream, options);
       let data = [];
 
