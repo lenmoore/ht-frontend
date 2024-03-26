@@ -3,7 +3,14 @@
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
-          <div class="countdown">
+          <Vue3Lottie
+            v-if="showStartFilmingAnimation"
+            :animationData="startFilmingJSON"
+            style="width: 400px; height: 400px"
+            speed="2.5"
+          />
+
+          <div v-else class="countdown">
             <span id="time" class="time">00:00.00</span>
           </div>
         </div>
@@ -11,12 +18,6 @@
           <source type='video/mp4; codecs="avc1.64001E, mp4a.40.2"' src="" />
         </video>
       </div>
-
-      <Vue3Lottie
-        v-if="showStartFilmingAnimation"
-        animationData="/public/start_filming.json"
-        style="width: 50px; height: 50px"
-      />
 
       <div v-if="showConfirmButton" class="confirm-box bg-white">
         <p class="">Kas oled videoga rahul?</p>
@@ -51,6 +52,7 @@
 import { Vue3Lottie } from "vue3-lottie";
 import axios from "redaxios";
 import { authHeader, refreshHeader } from "../../../services/api";
+import lottieStartFilming from "../../../../public/animations/start_filming.json";
 
 export default {
   name: "CameraOpen",
@@ -72,6 +74,12 @@ export default {
     displayFileName: {
       type: String,
       default: "no file name",
+    },
+  },
+
+  computed: {
+    startFilmingJSON() {
+      return lottieStartFilming;
     },
   },
 
@@ -118,59 +126,62 @@ export default {
     },
     async onClickRecord() {
       console.log("clicked record");
+      this.showStartFilmingAnimation = true;
+      setTimeout(() => {
+        this.showStartFilmingAnimation = false;
+        const preview = document.getElementById("preview");
+        this.isFilming = true;
+        this.showConfirmButton = false;
+        navigator.mediaDevices
+          .getUserMedia({
+            video: {
+              facingMode: "environment",
+              width: { ideal: 1920 },
+              height: { ideal: 1080 },
+              frameRate: { min: 24, ideal: 24, max: 24 },
+              stabilization: true, // Note: This is not universally supported
+              focusMode: "continuous", // Request continuous focus if available
+            },
+          })
+          .then(async () => {
+            return await this.startRecording(preview.captureStream());
+          })
+          .then(async (recordedChunks) => {
+            console.log("hello did we record?");
 
-      const preview = document.getElementById("preview");
-      this.isFilming = true;
-      this.showConfirmButton = false;
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            facingMode: "environment",
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
-            frameRate: { min: 24, ideal: 24, max: 24 },
-            stabilization: true, // Note: This is not universally supported
-            focusMode: "continuous", // Request continuous focus if available
-          },
-        })
-        .then(async () => {
-          return await this.startRecording(preview.captureStream());
-        })
-        .then(async (recordedChunks) => {
-          console.log("hello did we record?");
+            console.log("chunks: ", recordedChunks);
+            let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
+            preview.src = URL.createObjectURL(recordedBlob);
+            this.downloadButtonHref = preview.src;
+            this.downloadButtonDownload = this.displayFileName;
 
-          console.log("chunks: ", recordedChunks);
-          let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
-          preview.src = URL.createObjectURL(recordedBlob);
-          this.downloadButtonHref = preview.src;
-          this.downloadButtonDownload = this.displayFileName;
+            const videoPlayback = document.getElementById("preview");
+            videoPlayback.src = this.downloadButtonHref;
+            videoPlayback.play();
 
-          const videoPlayback = document.getElementById("preview");
-          videoPlayback.src = this.downloadButtonHref;
-          videoPlayback.play();
+            // DOWNLOADS VIDEO TO DEVICE
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = this.downloadButtonHref;
+            a.download = this.displayFileName;
+            a.click();
+            window.URL.revokeObjectURL(this.downloadButtonHref);
+            console.log(
+              `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
+            );
 
-          // DOWNLOADS VIDEO TO DEVICE
-          const a = document.createElement("a");
-          document.body.appendChild(a);
-          a.style = "display: none";
-          a.href = this.downloadButtonHref;
-          a.download = this.displayFileName;
-          a.click();
-          window.URL.revokeObjectURL(this.downloadButtonHref);
-          console.log(
-            `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
-          );
-
-          const uploadResult = await this.uploadVideo(recordedBlob);
-          console.log(uploadResult);
-        })
-        .catch((error) => {
-          if (error.name === "NotFoundError") {
-            console.log("Camera or microphone not found. Can't record.");
-          } else {
-            console.log(error);
-          }
-        });
+            const uploadResult = await this.uploadVideo(recordedBlob);
+            console.log(uploadResult);
+          })
+          .catch((error) => {
+            if (error.name === "NotFoundError") {
+              console.log("Camera or microphone not found. Can't record.");
+            } else {
+              console.log(error);
+            }
+          });
+      }, 1250);
     },
     async onClickOpenCamera() {
       this.showConfirmButton = false;
