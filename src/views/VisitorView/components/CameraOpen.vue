@@ -128,6 +128,9 @@ export default {
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
+            frameRate: { min: 24, ideal: 24, max: 24 },
+            stabilization: true, // Note: This is not universally supported
+            focusMode: "continuous", // Request continuous focus if available
           },
         })
         .then(async () => {
@@ -176,11 +179,10 @@ export default {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            videoBitsPerSecond: 8000000,
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            frameRate: { ideal: 24, max: 24 },
+            frameRate: { min: 24, ideal: 24, max: 24 },
             stabilization: true, // Note: This is not universally supported
             focusMode: "continuous", // Request continuous focus if available
           },
@@ -202,11 +204,7 @@ export default {
         options = { mimeType: 'video/webm; codecs="vp9"' }; // Fallback to VP9
         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
           console.log(`${options.mimeType} is not Supported`);
-          options = { mimeType: 'video/webm; codecs="vp8"' }; // Fallback to VP8
-          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            console.log(`${options.mimeType} is not Supported`);
-            options = { mimeType: "video/webm" }; // Fallback to default WebM if nothing else is supported
-          }
+          options = { mimeType: "video/webm" }; // Fallback to default WebM if nothing else is supported
         }
       }
       let recorder = new MediaRecorder(stream, options);
