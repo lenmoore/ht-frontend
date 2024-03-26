@@ -127,9 +127,9 @@ export default {
           video: {
             videoBitsPerSecond: 2500000,
             facingMode: "environment",
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-            frameRate: { min: 15, ideal: 24 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+            frameRate: { min: 24, ideal: 24, max: 24 },
             stabilization: true, // Note: This is not universally supported
             focusMode: "continuous", // Request continuous focus if available
           },
@@ -183,9 +183,9 @@ export default {
           video: {
             videoBitsPerSecond: 2500000,
             facingMode: "environment",
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-            frameRate: { min: 15, ideal: 24 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+            frameRate: { min: 24, ideal: 24, max: 24 },
             stabilization: true, // Note: This is not universally supported
             focusMode: "continuous", // Request continuous focus if available
           },
