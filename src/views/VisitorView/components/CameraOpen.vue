@@ -124,16 +124,11 @@ export default {
       this.showConfirmButton = false;
       navigator.mediaDevices
         .getUserMedia({
-          video: true,
-          // video: {
-          //   facingMode: "environment",
-          //   width: { ideal: 1920 },
-          //   height: { ideal: 1080 },
-          //   // frameRate: { ideal: 24, max: 24 },
-          //
-          //   // stabilization: true, // Note: This is not universally supported
-          //   // focusMode: "continuous", // Request continuous focus if available
-          // },
+          video: {
+            facingMode: "environment",
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+          },
         })
         .then(async () => {
           return await this.startRecording(preview.captureStream());
@@ -185,9 +180,9 @@ export default {
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            // frameRate: { ideal: 24, max: 24 },
-            // stabilization: true, // Note: This is not universally supported
-            // focusMode: "continuous", // Request continuous focus if available
+            frameRate: { ideal: 24, max: 24 },
+            stabilization: true, // Note: This is not universally supported
+            focusMode: "continuous", // Request continuous focus if available
           },
         });
         const videoElement = document.getElementById("preview");
