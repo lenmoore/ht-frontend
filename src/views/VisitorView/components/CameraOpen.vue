@@ -1,10 +1,5 @@
 <template>
   <div class="video-wrapper">
-    <small :key="item" v-for="item in mediaDeviceList" class="bg-yellow">
-      {{ item }} ________ <br />
-      <br />
-    </small>
-    <button @click="getMediaDeviceList">git</button>
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
@@ -62,7 +57,6 @@ export default {
   components: { Vue3Lottie },
   data() {
     return {
-      mediaDeviceList: [],
       showStartFilmingAnimation: false,
       showConfirmButton: false,
       isFilming: false,
@@ -81,50 +75,46 @@ export default {
     },
   },
 
-  async created() {
+  created() {
     this.onClickOpenCamera();
-    await this.getMediaDeviceList();
   },
   methods: {
-    async getMediaDeviceList() {
-      this.mediaDeviceList = await navigator?.mediaDevices?.enumerateDevices();
-    },
     startCountdown() {
       // Assuming this.currentTask.duration is in seconds, convert it to milliseconds
-      // let timeLeft = this.currentTask.duration * 1000; // timeLeft is in milliseconds
-      //
-      // // Clear any existing countdowns to avoid multiple countdowns running at the same time
-      // if (this.countdownInterval) {
-      //   clearInterval(this.countdownInterval);
-      // }
-      //
-      // // Update the DOM every millisecond
-      // this.countdownInterval = setInterval(() => {
-      //   // Calculate minutes, seconds, and milliseconds
-      //   const minutes = Math.floor(timeLeft / 60000);
-      //   const seconds = Math.floor((timeLeft % 60000) / 1000);
-      //   const milliseconds = Math.floor((timeLeft % 1000) / 10); // Display two digits for milliseconds
-      //
-      //   // Format the time string
-      //   const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
-      //
-      //   // Update the DOM
-      //   if (timeLeft > 0) {
-      //     document.getElementById("time").textContent = timeString;
-      //   }
-      //
-      //   // Decrease the time left
-      //   timeLeft -= 10; // Decrease by 10ms which is the smallest unit we're displaying
-      //
-      //   // Stop the countdown when it reaches zero
-      //   if (timeLeft < 0) {
-      //     clearInterval(this.countdownInterval);
-      //     document.getElementById("time").textContent = "00:00.00"; // Reset to zero
-      //   }
-      // }, 10); // Update every 10 milliseconds to keep the countdown smooth
-      //
-      // // Return the interval ID in case you need to clear it from somewhere else
-      // return this.countdownInterval;
+      let timeLeft = this.currentTask.duration * 1000; // timeLeft is in milliseconds
+
+      // Clear any existing countdowns to avoid multiple countdowns running at the same time
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+      }
+
+      // Update the DOM every millisecond
+      this.countdownInterval = setInterval(() => {
+        // Calculate minutes, seconds, and milliseconds
+        const minutes = Math.floor(timeLeft / 60000);
+        const seconds = Math.floor((timeLeft % 60000) / 1000);
+        const milliseconds = Math.floor((timeLeft % 1000) / 10); // Display two digits for milliseconds
+
+        // Format the time string
+        const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
+
+        // Update the DOM
+        if (timeLeft > 0) {
+          document.getElementById("time").textContent = timeString;
+        }
+
+        // Decrease the time left
+        timeLeft -= 10; // Decrease by 10ms which is the smallest unit we're displaying
+
+        // Stop the countdown when it reaches zero
+        if (timeLeft < 0) {
+          clearInterval(this.countdownInterval);
+          document.getElementById("time").textContent = "00:00.00"; // Reset to zero
+        }
+      }, 10); // Update every 10 milliseconds to keep the countdown smooth
+
+      // Return the interval ID in case you need to clear it from somewhere else
+      return this.countdownInterval;
     },
     async onClickRecord() {
       console.log("clicked record");
@@ -135,11 +125,10 @@ export default {
       navigator.mediaDevices
         .getUserMedia({
           video: {
-            videoBitsPerSecond: 1250000,
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            frameRate: { ideal: 24, max: 24 },
+            // frameRate: { ideal: 24, max: 24 },
 
             // stabilization: true, // Note: This is not universally supported
             // focusMode: "continuous", // Request continuous focus if available
@@ -191,11 +180,10 @@ export default {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            videoBitsPerSecond: 1250000,
             facingMode: "environment",
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            frameRate: { ideal: 24, max: 24 },
+            // frameRate: { ideal: 24, max: 24 },
             // stabilization: true, // Note: This is not universally supported
             // focusMode: "continuous", // Request continuous focus if available
           },
