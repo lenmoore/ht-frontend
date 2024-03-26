@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!showConfirmButton && !cameraOpen"
+    v-if="!showConfirmButton && !cameraOpen && !recorderOpen"
     class="m-4 p-4 border task-wrapper"
   >
     <div class="row">
@@ -49,11 +49,12 @@ export default {
       if (this.currentTask.mediaType === "video") {
         return "/movie camera.png";
       } else if (this.currentTask.mediaType === "sound") {
-        return "/dictaphone.png";
+        return "/dictophone.png";
       }
     },
   },
   props: {
+    recorderOpen: {},
     cameraOpen: {},
     currentTask: {},
     isFilming: {},

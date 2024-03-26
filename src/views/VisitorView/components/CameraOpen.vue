@@ -125,7 +125,6 @@ export default {
       return this.countdownInterval;
     },
     async onClickRecord() {
-      console.log("clicked record");
       this.showStartFilmingAnimation = true;
       setTimeout(() => {
         this.showStartFilmingAnimation = false;
@@ -147,9 +146,6 @@ export default {
             return await this.startRecording(preview.captureStream());
           })
           .then(async (recordedChunks) => {
-            console.log("hello did we record?");
-
-            console.log("chunks: ", recordedChunks);
             let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
             preview.src = URL.createObjectURL(recordedBlob);
             this.downloadButtonHref = preview.src;
@@ -239,11 +235,7 @@ export default {
       console.log("file to upload: ", file); // This should show the Blob details.
       const formData = new FormData();
       const filename = this.displayFileName;
-      console.log("filename----->>>>>>", filename);
       formData.append("video", file, filename); // Assuming 'file' is a Blob or File
-
-      // FormData objects don't stringify well directly; they appear empty.
-      // This is normal and does not mean your formData is actually empty.
 
       const instance = axios.create({
         headers: {

@@ -4,6 +4,7 @@
       <div class="you-have-task-wrapper" v-if="taskIsActive">
         <NewTaskNotification
           :camera-open="cameraOpen"
+          :recorder-open="recorderOpen"
           :current-task="currentTask"
           :show-confirm-button="showConfirmButton"
           @open-camera="cameraOpen = true"
@@ -18,8 +19,10 @@
           @confirm="confirmVideoForVisitor"
         />
         <DictaphoneOpen
+          ref="recorder"
           v-if="recorderOpen"
           :current-task="currentTask"
+          :display-file-name="displayFileName"
           @confirm="confirmVideoForVisitor"
         />
       </div>
