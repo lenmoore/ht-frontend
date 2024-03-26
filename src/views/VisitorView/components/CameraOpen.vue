@@ -198,15 +198,6 @@ export default {
     async startRecording(stream) {
       const lengthInMS = this.currentTask.duration * 1000;
       console.log(lengthInMS);
-      // let options = { mimeType: 'video/webm; codecs="av01.0.05M.08"' };
-      // if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-      //   console.log(`${options.mimeType} is not Supported`);
-      //   options = { mimeType: 'video/webm; codecs="vp9"' }; // Fallback to VP9
-      //   if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-      //     console.log(`${options.mimeType} is not Supported`);
-      //     options = { mimeType: "video/webm" }; // Fallback to default WebM if nothing else is supported
-      //   }
-      // }
       let recorder = new MediaRecorder(stream);
       let data = [];
 
@@ -333,7 +324,7 @@ export default {
   display: flex;
   justify-content: center;
 
-  background-image: url("videoframe.png");
+  background-image: url("https://haihtuv.ee/videoframe.png");
   background-position: center;
 
   .countdown {
