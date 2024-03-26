@@ -1,14 +1,5 @@
 <template>
-  <div
-    style="
-      height: 100%;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-    "
-  >
-    <RouterView />
-  </div>
+  <RouterView />
 </template>
 
 <style lang="scss">

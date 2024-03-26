@@ -168,27 +168,7 @@
   margin-bottom: 1.5rem;
 }
 
-
-.two-part-form {
-  display: flex !important;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: start;
-  width: 100%;
-
-  .form-part {
-
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    align-items: end;
-
-    input, textarea {
-      min-width: 25rem !important;
-    }
-  }
-}
-
+ 
 .max-width-20-rem {
   max-width: 20rem;
 }

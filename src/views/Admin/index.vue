@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavMenu />
-    <RouterView />
+    <RouterView style="padding-bottom: 10rem" />
   </div>
 </template>
 <script setup lang="ts">

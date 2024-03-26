@@ -1,43 +1,48 @@
 <template>
-  <div v-if="task.isEditing" class="two-part-form">
-    <div class="form-part">
-      <label for="orderNumber">Järjekorranumber (naitlejale)</label>
-      <input id="orderNumber" v-model="task.orderNumber" type="text" />
+  <div>
+    <div v-if="task.isEditing" class="two-part-form">
+      <div class="form-part">
+        <label for="orderNumber">Järjekorranumber (naitlejale)</label>
+        <input id="orderNumber" v-model="task.orderNumber" type="text" />
 
-      <label for="filename"
-        >Faili nimi:
-        <code style="width: 70%">{{ displayFileName(task) }}</code></label
-      >
-      <input id="filename" v-model="task.fileName" type="text" />
-
-      <label for="visitorName">Tiim (publik=värv=meie)</label>
-      <select id="visitorName" v-model="task.visitorName">
-        <option
-          v-for="team in userTeams"
-          :key="team._id"
-          :value="team.team_name"
+        <label for="filename"
+          >Faili nimi:
+          <code style="width: 70%">{{ displayFileName(task) }}</code></label
         >
-          {{ team.name }}
-        </option>
-      </select>
-      <label for="type">Meedia tüüp</label>
-      <select id="type" v-model="task.mediaType">
-        <option value="video">heliga video</option>
-        <option value="sound">soundscape</option>
-        <option value="teleprompter">teleprompter</option>
-      </select>
+        <input id="filename" v-model="task.fileName" type="text" />
 
-      <label for="length">Klipi pikkus (sekundites)</label>
-      <input id="length" v-model="task.duration" type="number" />
-    </div>
+        <label for="visitorName">Tiim (publik=värv=meie)</label>
 
-    <div class="form-part">
-      <label for="title">Pealkiri (naitlejale)</label>
-      <textarea v-model="task.name"></textarea>
+        <select id="visitorName" v-model="task.visitorName">
+          <option
+            v-for="team in userTeams"
+            :key="team._id"
+            :value="team.team_name"
+          >
+            {{ team.name }}
+          </option>
+        </select>
+        <label for="type">Meedia tüüp</label>
+        <select id="type" v-model="task.mediaType">
+          <option value="video">heliga video</option>
+          <option value="sound">soundscape</option>
+          <option value="teleprompter">teleprompter</option>
+        </select>
 
-      <label for="orderNumber">Kirjeldus (publikule)</label>
-      <textarea v-model="task.description"></textarea>
-      <button class="bg-red" @click.prevent="saveTask(task)">Salvesta</button>
+        <label for="length">Klipi pikkus (sekundites)</label>
+        <input id="length" v-model="task.duration" type="number" />
+      </div>
+      <div class="form-part">
+        <label for="title">Pealkiri (naitlejale)</label>
+        <textarea v-model="task.name"></textarea>
+
+        <label for="orderNumber">Kirjeldus (publikule)</label>
+        <textarea v-model="task.description"></textarea>
+        <button class="bg-red" @click.prevent="saveTask(task)">Salvesta</button>
+        <button class="mt-4 bg-orange" @click.prevent="deleteTask(task)">
+          Kustuta
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +90,24 @@ export default {
       console.log("Salvestan", task);
       this.$emit("save", task);
     },
+    deleteTask(task: any) {
+      this.$emit("delete", task);
+    },
   },
 };
 </script>
+
+<style lang="scss">
+.two-part-form {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 1rem 0;
+  flex-direction: column;
+
+  .form-part {
+    display: flex;
+    flex-direction: column;
+  }
+}
+</style>

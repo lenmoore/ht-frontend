@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: 2rem">
+  <div style="margin-top: 2rem; margin-bottom: 20rem">
     <NavMenu />
     <div class="mx-4">
       <span :class="`bg-${actorName} font-2rem`">{{ actorName }}</span>
@@ -13,12 +13,9 @@
     <div>
       <ScenesOverview />
     </div>
-    <DashboardContainer v-if="showPerformanceSelector" />
-    <button v-else @click="showPerformanceSelector = true">Vali etendus</button>
   </div>
 </template>
 <script lang="ts">
-import DashboardContainer from "./ActivatePerformanceBlock.vue";
 import { mapActions } from "pinia";
 import { useActorStore } from "../../store/actor.ts";
 import ScenesOverview from "./ScenesOverview.vue";
@@ -26,7 +23,7 @@ import NavMenu from "../../components/NavMenu.vue";
 
 export default {
   name: "ActorDashboard",
-  components: { NavMenu, ScenesOverview, DashboardContainer },
+  components: { NavMenu, ScenesOverview },
 
   data() {
     return {
