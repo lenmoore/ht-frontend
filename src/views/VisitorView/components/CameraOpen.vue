@@ -1,5 +1,5 @@
 <template>
-  <div v-if="cameraOpen" class="video-wrapper">
+  <div class="video-wrapper">
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
@@ -31,7 +31,7 @@
         <button
           class="btn bg-green mt-4"
           v-if="showConfirmButton"
-          @click="confirmVideoForVisitor"
+          @click="$emit('confirm')"
         >
           Kinnita
         </button>
@@ -49,6 +49,8 @@
 </template>
 <script>
 import { Vue3Lottie } from "vue3-lottie";
+import axios from "redaxios";
+import { authHeader, refreshHeader } from "../../../services/api";
 
 export default {
   name: "CameraOpen",
@@ -56,22 +58,221 @@ export default {
   data() {
     return {
       showStartFilmingAnimation: false,
+      showConfirmButton: false,
+      isFilming: false,
+      showPreview: false,
+      downloadButtonHref: null,
+      downloadButtonDownload: null,
+      cameraOpen: false,
     };
   },
   props: {
-    cameraOpen: {},
     confirmVideoForVisitor: {},
     currentTask: {},
-    isFilming: {},
-    showConfirmButton: {},
+    displayFileName: {
+      type: String,
+      default: "no file name",
+    },
   },
 
+  created() {
+    this.onClickOpenCamera();
+  },
   methods: {
-    onClickOpenCamera() {
-      this.$emit("open-camera");
+    startCountdown() {
+      // Assuming this.currentTask.duration is in seconds, convert it to milliseconds
+      let timeLeft = this.currentTask.duration * 1000; // timeLeft is in milliseconds
+
+      // Clear any existing countdowns to avoid multiple countdowns running at the same time
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+      }
+
+      // Update the DOM every millisecond
+      this.countdownInterval = setInterval(() => {
+        // Calculate minutes, seconds, and milliseconds
+        const minutes = Math.floor(timeLeft / 60000);
+        const seconds = Math.floor((timeLeft % 60000) / 1000);
+        const milliseconds = Math.floor((timeLeft % 1000) / 10); // Display two digits for milliseconds
+
+        // Format the time string
+        const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
+
+        // Update the DOM
+        if (timeLeft > 0) {
+          document.getElementById("time").textContent = timeString;
+        }
+
+        // Decrease the time left
+        timeLeft -= 10; // Decrease by 10ms which is the smallest unit we're displaying
+
+        // Stop the countdown when it reaches zero
+        if (timeLeft < 0) {
+          clearInterval(this.countdownInterval);
+          document.getElementById("time").textContent = "00:00.00"; // Reset to zero
+        }
+      }, 10); // Update every 10 milliseconds to keep the countdown smooth
+
+      // Return the interval ID in case you need to clear it from somewhere else
+      return this.countdownInterval;
     },
-    onClickRecord() {
-      this.$emit("click-record");
+    async onClickRecord() {
+      console.log("clicked record");
+
+      const preview = document.getElementById("preview");
+      this.isFilming = true;
+      this.showConfirmButton = false;
+      navigator.mediaDevices
+        .getUserMedia({
+          video: {
+            facingMode: "environment",
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+            frameRate: { ideal: 30, max: 60 },
+            stabilization: true, // Note: This is not universally supported
+            focusMode: "continuous", // Request continuous focus if available
+          },
+          audio: true,
+        })
+        .then(async () => {
+          return await this.startRecording(preview.captureStream());
+        })
+        .then(async (recordedChunks) => {
+          console.log("hello did we record?");
+
+          console.log("chunks: ", recordedChunks);
+          let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
+          preview.src = URL.createObjectURL(recordedBlob);
+          this.downloadButtonHref = preview.src;
+          this.downloadButtonDownload = this.displayFileName;
+
+          const videoPlayback = document.getElementById("preview");
+          videoPlayback.src = this.downloadButtonHref;
+          videoPlayback.play();
+
+          // DOWNLOADS VIDEO TO DEVICE
+          const a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
+          a.href = this.downloadButtonHref;
+          a.download = this.displayFileName;
+          a.click();
+          window.URL.revokeObjectURL(this.downloadButtonHref);
+          console.log(
+            `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
+          );
+
+          const uploadResult = await this.uploadVideo(recordedBlob);
+          console.log(uploadResult);
+        })
+        .catch((error) => {
+          if (error.name === "NotFoundError") {
+            console.log("Camera or microphone not found. Can't record.");
+          } else {
+            console.log(error);
+          }
+        });
+    },
+    async onClickOpenCamera() {
+      this.showConfirmButton = false;
+      this.cameraOpen = true;
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment",
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+            frameRate: { ideal: 30, max: 60 },
+            stabilization: true, // Note: This is not universally supported
+            focusMode: "continuous", // Request continuous focus if available
+          },
+          audio: true,
+        });
+        const videoElement = document.getElementById("preview");
+        videoElement.srcObject = stream;
+      } catch (error) {
+        console.error("Error opening the camera", error);
+        this.cameraOpen = false; // Reset camera state if there is an error
+      }
+    },
+
+    async startRecording(stream) {
+      const lengthInMS = this.currentTask.duration * 1000;
+      console.log(lengthInMS);
+      let options = { mimeType: 'video/webm; codecs="av01.0.05M.08"' };
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        console.log(`${options.mimeType} is not Supported`);
+        options = { mimeType: 'video/webm; codecs="vp9"' }; // Fallback to VP9
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+          console.log(`${options.mimeType} is not Supported`);
+          options = { mimeType: 'video/webm; codecs="vp8"' }; // Fallback to VP8
+          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            console.log(`${options.mimeType} is not Supported`);
+            options = { mimeType: "video/webm" }; // Fallback to default WebM if nothing else is supported
+          }
+        }
+      }
+      let recorder = new MediaRecorder(stream, options);
+      let data = [];
+
+      recorder.ondataavailable = (event) => data.push(event.data);
+      recorder.start();
+      console.log(`${recorder.state} for ${lengthInMS / 1000} seconds…`);
+
+      let stopped = new Promise((resolve, reject) => {
+        recorder.onstop = resolve;
+        recorder.onerror = (event) => reject(event.name);
+      });
+
+      let recorded = this.wait(lengthInMS).then(() => {
+        if (recorder.state === "recording") {
+          recorder.stop();
+        }
+      });
+      this.startCountdown();
+      console.log("start countdown");
+
+      await Promise.all([stopped, recorded]);
+      this.showConfirmButton = true;
+      this.isFilming = false;
+      console.log(data);
+      return data;
+    },
+    async uploadVideo(file) {
+      console.log("file to upload: ", file); // This should show the Blob details.
+      const formData = new FormData();
+      const filename = this.displayFileName;
+      console.log("filename----->>>>>>", filename);
+      formData.append("video", file, filename); // Assuming 'file' is a Blob or File
+
+      // FormData objects don't stringify well directly; they appear empty.
+      // This is normal and does not mean your formData is actually empty.
+
+      const instance = axios.create({
+        headers: {
+          Authorization: authHeader().toString(),
+          "X-Refresh": refreshHeader().toString(),
+        },
+        baseURL: import.meta.env.VITE_API_URL,
+      });
+
+      try {
+        const response = await instance.post(
+          "/visitor/upload-video",
+          formData,
+          {
+            headers: {},
+          },
+        );
+        console.log("Upload response:", response);
+        // Handle response, such as confirming the video upload and providing the option to re-record
+      } catch (error) {
+        console.error("Error uploading the video:", error);
+      }
+    },
+    wait(delayInMS) {
+      return new Promise((resolve) => setTimeout(resolve, delayInMS));
     },
   },
 };
