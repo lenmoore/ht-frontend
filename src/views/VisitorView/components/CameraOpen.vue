@@ -1,10 +1,6 @@
 <template>
   <div class="video-wrapper">
-    <small
-      :key="item.groupId"
-      v-for="item in mediaDeviceList"
-      class="bg-yellow"
-    >
+    <small :key="item" v-for="item in mediaDeviceList" class="bg-yellow">
       {{ item }} ________ <br />
       <br />
     </small>
@@ -91,7 +87,7 @@ export default {
   },
   methods: {
     async getMediaDeviceList() {
-      this.mediaDeviceList = await navigator.mediaDevices.enumerateDevices();
+      this.mediaDeviceList = await navigator?.mediaDevices?.enumerateDevices();
     },
     startCountdown() {
       // Assuming this.currentTask.duration is in seconds, convert it to milliseconds
@@ -128,7 +124,7 @@ export default {
       // }, 10); // Update every 10 milliseconds to keep the countdown smooth
       //
       // // Return the interval ID in case you need to clear it from somewhere else
-      return this.countdownInterval;
+      // return this.countdownInterval;
     },
     async onClickRecord() {
       console.log("clicked record");
