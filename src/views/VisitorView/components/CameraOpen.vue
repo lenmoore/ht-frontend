@@ -1,5 +1,6 @@
 <template>
   <div class="video-wrapper">
+    <ul id="constraints"></ul>
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
@@ -193,6 +194,16 @@ export default {
       } catch (error) {
         console.error("Error opening the camera", error);
         this.cameraOpen = false; // Reset camera state if there is an error
+      }
+
+      const constraintList = document.getElementById("constraints");
+      const supportedConstraints =
+        navigator.mediaDevices.getSupportedConstraints();
+
+      for (const constraint of Object.keys(supportedConstraints)) {
+        const elem = document.createElement("li");
+        elem.innerHTML = `<code>${constraint}</code>`;
+        constraintList.appendChild(elem);
       }
     },
 
