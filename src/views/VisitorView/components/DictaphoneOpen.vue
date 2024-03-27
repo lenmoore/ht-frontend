@@ -150,24 +150,33 @@ export default {
     },
 
     async startRecording(stream) {
-      this.showRecordingAnimation = true; // Ensure animation is visible
       const lengthInMS = this.currentTask.duration * 1000;
-      let recorder = new MediaRecorder(stream);
+      let recorder = new MediaRecorder(stream, { mimeType: "audio/webm" }); // Ensure correct MIME type
       let data = [];
 
-      recorder.ondataavailable = (event) => data.push(event.data);
-      recorder.start();
-      this.startCountdown(); // Start countdown as recording starts
+      return new Promise((resolve, reject) => {
+        recorder.ondataavailable = (event) => data.push(event.data);
+        recorder.onerror = (event) => reject(event.error);
 
-      await this.wait(lengthInMS); // Wait for the duration of the recording
-      if (recorder.state === "recording") {
-        recorder.stop();
-      }
+        recorder.onstart = () => {
+          // Wait for the duration of the recording, then stop
+          setTimeout(() => {
+            if (recorder.state === "recording") {
+              recorder.stop();
+            }
+          }, lengthInMS);
+        };
 
-      this.isRecording = false;
-      this.showConfirmButton = true; // Show confirm button after recording stops
-      this.showRecordingAnimation = false; // Hide animation once recording is done
-      return data; // Return the recorded chunks
+        recorder.onstop = () => {
+          resolve(data);
+          this.isRecording = false;
+          this.showConfirmButton = true;
+          this.showRecordingAnimation = false;
+        };
+
+        recorder.start();
+        this.startCountdown(); // Assuming this is working as intended
+      });
     },
 
     startCountdown() {

@@ -77,7 +77,13 @@ export default {
 
   computed: {
     displayFileName() {
-      return `${this.currentTask?.sceneId?.orderNumber || "x"}_${this.currentTask.orderNumber || "[jarjekorranr]"}_${this.userPhoneName || "grupp"}_${this.currentTask.fileName || "[failinimi]"}_${this.groupName || "[tiim]"}.mp4`;
+      return `${this.currentTask?.sceneId?.orderNumber || "x"}_${
+        this.currentTask.orderNumber || "[jarjekorranr]"
+      }_${this.userPhoneName || "grupp"}_${
+        this.currentTask.fileName || "[failinimi]"
+      }_${
+        this.groupName || "[tiim]"
+      }.${this.currentTask.fileType === "video" ? "mp4" : "mp4"}`;
     },
   },
 
