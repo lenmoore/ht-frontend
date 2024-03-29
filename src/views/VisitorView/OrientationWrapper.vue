@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <slot v-if="isLandscape"></slot>
     <div v-else class="please-turn-phone-wrapper">
       Palun keera telefoni!

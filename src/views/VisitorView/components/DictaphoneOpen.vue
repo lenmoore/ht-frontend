@@ -23,7 +23,7 @@
         </video>
       </div>
 
-      <div v-if="showConfirmButton" class="confirm-box bg-white">
+      <div v-if="showConfirmButton" class="dictaphone-confirm-box bg-white">
         <p class="">Kas oled lindistusega rahul?</p>
         <button
           v-if="!isRecording"
@@ -31,7 +31,7 @@
           class="button"
           @click="onClickOpenRecorder"
         >
-          Lindista uuesti
+          Tee uus lindistus
         </button>
         <button
           class="btn bg-green mt-4"
@@ -150,24 +150,33 @@ export default {
     },
 
     async startRecording(stream) {
-      this.showRecordingAnimation = true; // Ensure animation is visible
       const lengthInMS = this.currentTask.duration * 1000;
-      let recorder = new MediaRecorder(stream);
+      let recorder = new MediaRecorder(stream, { mimeType: "audio/webm" }); // Ensure correct MIME type
       let data = [];
 
-      recorder.ondataavailable = (event) => data.push(event.data);
-      recorder.start();
-      this.startCountdown(); // Start countdown as recording starts
+      return new Promise((resolve, reject) => {
+        recorder.ondataavailable = (event) => data.push(event.data);
+        recorder.onerror = (event) => reject(event.error);
 
-      await this.wait(lengthInMS); // Wait for the duration of the recording
-      if (recorder.state === "recording") {
-        recorder.stop();
-      }
+        recorder.onstart = () => {
+          // Wait for the duration of the recording, then stop
+          setTimeout(() => {
+            if (recorder.state === "recording") {
+              recorder.stop();
+            }
+          }, lengthInMS);
+        };
 
-      this.isRecording = false;
-      this.showConfirmButton = true; // Show confirm button after recording stops
-      this.showRecordingAnimation = false; // Hide animation once recording is done
-      return data; // Return the recorded chunks
+        recorder.onstop = () => {
+          resolve(data);
+          this.isRecording = false;
+          this.showConfirmButton = true;
+          this.showRecordingAnimation = false;
+        };
+
+        recorder.start();
+        this.startCountdown(); // Assuming this is working as intended
+      });
     },
 
     startCountdown() {
@@ -244,14 +253,36 @@ export default {
 </script>
 
 <style lang="scss">
+.dictaphone-wrapper {
+  //border: 4px solid fuchsia;
+  width: 100%;
+  height: 100%;
+}
+
 .dictaphone-interface {
+  //border: 4px solid green;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  width: 100%;
+  height: 100%;
 
   .dictaphone-stuff {
+    //border: 4px solid blue;
     display: flex;
     left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.dictaphone-confirm-box {
+  //border: 4px solid red;
+
+  button#startButton {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
   }
 }
 </style>
