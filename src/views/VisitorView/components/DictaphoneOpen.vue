@@ -23,7 +23,7 @@
         </video>
       </div>
 
-      <div v-if="showConfirmButton" class="confirm-box bg-white">
+      <div v-if="showConfirmButton" class="dictaphone-confirm-box bg-white">
         <p class="">Kas oled lindistusega rahul?</p>
         <button
           v-if="!isRecording"
@@ -31,7 +31,7 @@
           class="button"
           @click="onClickOpenRecorder"
         >
-          Lindista uuesti
+          Tee uus lindistus
         </button>
         <button
           class="btn bg-green mt-4"
@@ -253,14 +253,36 @@ export default {
 </script>
 
 <style lang="scss">
+.dictaphone-wrapper {
+  //border: 4px solid fuchsia;
+  width: 100%;
+  height: 100%;
+}
+
 .dictaphone-interface {
+  //border: 4px solid green;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  width: 100%;
+  height: 100%;
 
   .dictaphone-stuff {
+    //border: 4px solid blue;
     display: flex;
     left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.dictaphone-confirm-box {
+  //border: 4px solid red;
+
+  button#startButton {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
   }
 }
 </style>

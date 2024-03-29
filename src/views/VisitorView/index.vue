@@ -1,5 +1,5 @@
 <template>
-  <div :class="cameraOpen && 'visitor-wrapper'">
+  <div style="height: 100%" :class="cameraOpen && 'visitor-wrapper'">
     <OrientationWrapper>
       <div class="you-have-task-wrapper" v-if="taskIsActive">
         <NewTaskNotification
@@ -80,7 +80,7 @@ export default {
       return `${this.currentTask?.sceneId?.orderNumber || "x"}_${
         this.currentTask.orderNumber || "[jarjekorranr]"
       }_${this.userPhoneName || "grupp"}_${
-        this.currentTask.fileName || "[failinimi]"
+        this.currentTask.fileName.replace(" ", "_") || "[failinimi]"
       }_${
         this.groupName || "[tiim]"
       }.${this.currentTask.fileType === "video" ? "mp4" : "mp4"}`;
@@ -158,6 +158,7 @@ export default {
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
+  height: 100%;
 
   .task-wrapper {
     background-color: #f0f0f0;
