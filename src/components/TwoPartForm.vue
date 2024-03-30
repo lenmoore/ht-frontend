@@ -7,7 +7,7 @@
 
         <label for="filename"
           >Faili nimi:
-          <code style="width: 70%">{{ displayFileName(task) }}</code></label
+          <code style="width: 70%">{{ displayFileName }}</code></label
         >
         <input id="filename" v-model="task.fileName" type="text" />
 
@@ -70,6 +70,7 @@ export default {
   data() {
     return {
       task: this.givenTask,
+      groupName: localStorage.group_name,
     };
   },
 
@@ -79,12 +80,18 @@ export default {
         (team) => team.team_name === this.task.visitorName,
       );
     },
+    displayFileName() {
+      return `${this.scene?.orderNumber || "x"}_${
+        this.task.orderNumber || "[jarjekorranr]"
+      }_${this.team || "grupp"}_${
+        this.task.fileName.replace(" ", "_") || "[failinimi]"
+      }_${
+        this.groupName || "[tiim]"
+      }.${this.task.fileType === "video" ? "mp4" : "mp4"}`;
+    },
   },
 
   methods: {
-    displayFileName(task: any) {
-      return `${this.scene.orderNumber}_${task.orderNumber || "[jarjekorranr]"}_${task.fileName || "[failinimi]"}_${task.visitorName || "[tiim]"}_midagiveel.mp4`;
-    },
     saveTask(task: any) {
       task.sceneId = this.scene._id;
       console.log("Salvestan", task);

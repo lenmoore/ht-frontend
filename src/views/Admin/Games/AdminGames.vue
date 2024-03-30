@@ -2,41 +2,7 @@
   <div class="column">
     <div class="image-header">
       <div class="group-overview">
-        <button
-          class="bg-purple"
-          :class="activeGroupName === 'maakler' && 'active'"
-          disabled
-        >
-          Maakler
-        </button>
-        <button
-          class="bg-purple"
-          :class="activeGroupName === 'stalker' && 'active'"
-          disabled
-        >
-          Stalker
-        </button>
-        <button
-          class="bg-purple"
-          :class="activeGroupName === 'korraldaja' && 'active'"
-          disabled
-        >
-          Korraldaja
-        </button>
-        <button
-          class="bg-purple"
-          :class="activeGroupName === 'esoteerik' && 'active'"
-          @click="goToGroup('esoteerik')"
-        >
-          Esoteerik
-        </button>
-        <button
-          class="bg-purple"
-          :class="activeGroupName === 'sakala' && 'active'"
-          @click="goToGroup('sakala')"
-        >
-          Sakala
-        </button>
+        <GroupSelector @go-to-group="goToGroup" />
       </div>
     </div>
 
@@ -93,10 +59,11 @@
 import { mapActions, mapState } from "pinia";
 import { useSetupStore } from "../../../store/setup.ts";
 import GroupGame from "./GroupGame/GroupGame.vue";
+import GroupSelector from "../../../components/GroupSelector.vue";
 
 export default {
   name: "AdminGames",
-  components: { GroupGame },
+  components: { GroupSelector, GroupGame },
 
   data() {
     return {
@@ -203,11 +170,6 @@ export default {
     display: flex;
     align-items: flex-end;
     flex-wrap: wrap;
-
-    .active {
-      background-color: #64edfc;
-      color: black;
-    }
   }
 }
 
