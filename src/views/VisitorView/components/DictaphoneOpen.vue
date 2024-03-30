@@ -2,21 +2,48 @@
   <div class="dictaphone-wrapper">
     <div class="dictaphone-interface">
       <div class="dictaphone-stuff">
-        <Vue3Lottie
-          v-if="showRecordingAnimation"
-          :animationData="startRecordingJSON"
-          style="width: 400px; height: 400px"
-        />
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: space-around;
+          "
+        >
+          <Vue3Lottie
+            v-if="showRecordingAnimation"
+            :animationData="startRecordingJSON"
+            style="width: 300px; height: 300px"
+          />
 
-        <div class="countdown">
-          <span id="time" class="time">00:00.00</span>
+          <div class="countdown">
+            <span id="time" class="time">00:00.00</span>
+          </div>
+        </div>
+        <div class="task-description">
+          <strong> Sinu ülesanne: </strong> <br />
+          <span class="large">
+            {{ currentTask.description }}
+          </span>
+        </div>
+        <div
+          v-if="!showConfirmButton && recorderOpen"
+          class="dictaphone-controls"
+        >
+          <button
+            id="recordButton"
+            class="record-button"
+            @click="onClickRecord"
+          >
+            <span :class="isRecording ? 'square' : 'round'"> </span>
+          </button>
         </div>
         <video
           id="preview"
           autoplay=""
           loop
           poster="/dictophone.png"
-          style="height: 300px; width: 500px"
+          style="height: 300px; width: 200px"
           muted
         >
           <source type="audio/mp3" src="" />
@@ -39,15 +66,6 @@
           @click="$emit('confirm')"
         >
           Kinnita
-        </button>
-      </div>
-
-      <div v-else-if="!showConfirmButton && recorderOpen" class="controls">
-        <small class="description" style="max-width: 100px">
-          {{ currentTask.description }}
-        </small>
-        <button id="recordButton" class="record-button" @click="onClickRecord">
-          <span :class="isRecording ? 'square' : 'round'"> </span>
         </button>
       </div>
     </div>
@@ -270,6 +288,8 @@ export default {
   .dictaphone-stuff {
     //border: 4px solid blue;
     display: flex;
+    align-items: center;
+    justify-content: space-around;
     left: 0;
     width: 100%;
     height: 100%;
@@ -283,6 +303,18 @@ export default {
     height: 100px;
     width: 100px;
     border-radius: 50%;
+  }
+}
+
+.dictaphone-controls {
+  background: transparent;
+}
+
+.task-description {
+  max-width: 40%;
+
+  .large {
+    font-size: 2rem;
   }
 }
 </style>

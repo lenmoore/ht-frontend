@@ -157,11 +157,11 @@ export default {
       this.tasks = this.scene.tasks;
     },
     displayFileName(task) {
-      const fileExtension = ["teleprompter", "sound"].includes(task.mediaType)
-        ? "mp3"
-        : "mp4";
-      console.log(task);
-      return `${task.team?.group_name || "tiim"}_${this.scene.orderNumber}-${task.orderNumber}_${task.fileName || "[failinimi]"}.${fileExtension}`;
+      return `${this.scene.orderNumber || "x"}_${
+        task.orderNumber || "[jarjekorranr]"
+      }_${this.team || "grupp"}_${
+        task.fileName.replace(" ", "_") || "[failinimi]"
+      }_${this.groupName || "[tiim]"}.mp4`;
     },
     addTask() {
       this.addingNewTask = true;

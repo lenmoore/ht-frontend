@@ -331,6 +331,10 @@ export default {
   background-position: center;
 
   .countdown {
+    #time {
+      font-size: 2rem;
+    }
+
     position: absolute;
     bottom: 28px;
     color: white;
