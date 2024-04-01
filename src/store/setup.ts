@@ -133,6 +133,17 @@ export const useSetupStore = defineStore("setup", {
         console.error(error);
       }
     },
+    async unconfirmAllTasks() {
+      try {
+        const response = await api.get("/admin/tasks/unconfirm-all");
+        if (response) {
+          console.log(response);
+          return response.data.data;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async getPerformances() {
       try {
         const response = await api.get("/admin/performances");

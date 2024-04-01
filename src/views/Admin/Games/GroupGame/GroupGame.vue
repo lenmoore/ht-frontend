@@ -12,7 +12,11 @@
       </p>
       <div class="tasks-wrapper">
         <div v-for="task in tasks" :key="task._id">
-          <div :class="{ wide: task.isEditing }" class="card">
+          <div
+            :class="{ wide: task.isEditing }"
+            style="padding-left: 0; padding-right: 0"
+            class="card py-4"
+          >
             <TwoPartForm
               v-if="task.isEditing"
               :given-task="task"
@@ -23,29 +27,29 @@
             />
 
             <div v-else class="closed-card">
-              <div>
-                <p>
+              <p>
+                <small>
                   <code class="bg-blue">{{ displayFileName(task) }}</code>
-                </p>
-                <label for="length">
-                  {{ task.duration }} sek {{ task.mediaType }}
-                </label>
-                <span class="mx-2" :class="`bg-${task.team && task.team.name}`">
-                  {{ task.team && task.team.name }}
-                </span>
-              </div>
-              <div>
-                <p>
-                  <strong>"{{ task.name }}"</strong>:
-                  {{ task.description }}
-                </p>
-                <button
-                  class="bg-red"
-                  @click.prevent="task.isEditing = !task.isEditing"
-                >
-                  Muuda
-                </button>
-              </div>
+                </small>
+              </p>
+              <label for="length">
+                {{ task.duration }} sek {{ task.mediaType }}
+              </label>
+              <span class="mx-2" :class="`bg-${task.team && task.team.name}`">
+                {{ task.team && task.team.name }}
+              </span>
+              <p>
+                <strong>{{ task.name }}</strong>
+              </p>
+              <p>
+                {{ task.description }}
+              </p>
+              <button
+                class="bg-red"
+                @click.prevent="task.isEditing = !task.isEditing"
+              >
+                Muuda
+              </button>
             </div>
           </div>
         </div>
@@ -181,32 +185,21 @@ export default {
 </script>
 
 <style lang="scss">
-.scene-wrapper {
-  text-align: left;
-}
-
-.wide {
-  width: 90% !important;
-}
-
+.scene-wrapper,
 .tasks-wrapper {
-  padding: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
+  text-align: left;
+  width: 100%;
+}
 
-  .card {
-    width: 90%;
-  }
+.card {
+  width: 100%;
 }
 
 .closed-card {
+  width: 100%;
+  flex-direction: column;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  div {
-    width: 50%;
-  }
 }
 </style>

@@ -4,16 +4,21 @@
     <div v-else class="please-turn-phone-wrapper">
       Palun keera telefoni!
 
-      <p>
-        Ma panen siia yhe animatsiooni hiljem ka, mis seda telefoni keeramist
-        kujutab
-      </p>
+      <Vue3Lottie
+        :animationData="turnPhoneJSON"
+        style="width: 400px; height: 400px"
+        speed="0.5"
+      />
     </div>
   </div>
 </template>
 <script>
+import { Vue3Lottie } from "vue3-lottie";
+import turnPhone from "../../../public/animations/turn-phone.json";
+
 export default {
   name: "OrientationWrapper",
+  components: { Vue3Lottie },
   data() {
     return {
       isLandscape: false,
@@ -23,6 +28,11 @@ export default {
     window.addEventListener("orientationchange", this.checkOrientation);
     this.checkOrientation();
   },
+  computed: {
+    turnPhoneJSON() {
+      return turnPhone;
+    },
+  },
   methods: {
     checkOrientation() {
       this.isLandscape =
@@ -31,3 +41,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.please-turn-phone-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  background-color: #2c2525;
+  height: 100%;
+}
+</style>

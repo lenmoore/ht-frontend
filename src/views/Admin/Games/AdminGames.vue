@@ -1,5 +1,5 @@
 <template>
-  <div class="column">
+  <div>
     <div class="image-header">
       <div class="group-overview">
         <GroupSelector @go-to-group="goToGroup" />

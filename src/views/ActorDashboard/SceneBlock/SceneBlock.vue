@@ -1,13 +1,27 @@
 <template>
   <div>
+    <h3 style="padding-bottom: 0; margin-bottom: 0">
+      {{ scene.orderNumber }} | {{ scene.title }}
+    </h3>
     <div class="scene-header">
-      <h3>{{ scene.orderNumber }} | {{ scene.title }}</h3>
-
-      <div :class="doneTasks === scene.tasks.length ? 'green' : 'red'">
+      <h2 :class="doneTasks === scene.tasks.length ? 'green' : 'red'">
         {{ doneTasks }} / {{ scene.tasks.length }}
-      </div>
-      <button v-if="anyTasksActive" class="btn" @click="stopScene">
-        Lopeta
+      </h2>
+      <button
+        :disabled="loading"
+        v-if="anyTasksActive"
+        class="btn"
+        @click.prevent="stopScene"
+      >
+        Lõpeta kõik
+      </button>
+      <button
+        :disabled="loading"
+        v-else
+        class="btn bg-green"
+        @click.prevent="startAllTasksInScene"
+      >
+        Käivita kõik
       </button>
     </div>
 
@@ -32,25 +46,38 @@
       <div class="my-2 border" v-for="task in scene.tasks">
         <div class="task-header">
           <h4>
-            <span :class="task.isConfirmedByTeam ? 'bg-green' : 'bg-red'"
+            <small
+              class="rounded p-1"
+              :class="task.isConfirmedByTeam ? 'bg-green' : 'bg-red'"
               >{{ scene.orderNumber }}.{{ task.orderNumber }}
-            </span>
-            <small :class="`bg-${task.team && task.team.team_name}`">{{
-              (task.team && task.team.team_name) || "Tundmatu tiim"
-            }}</small>
-            <span class="px-2">
+            </small>
+            <small
+              :class="`m-1 rounded p-1 bg-${task.team && task.team.team_name}`"
+              >{{
+                (task.team && task.team.team_name) || "Tundmatu tiim"
+              }}</small
+            >
+            <span class="px-2"
+              ><br />
+              <small>Näitleja ülesanne: <br /></small>
               {{ task.name }}
             </span>
           </h4>
 
           <button
+            :disabled="loading"
             v-if="task.isActive"
             class="btn bg-red"
-            @click="stopTask(task)"
+            @click.prevent="stopTask(task)"
           >
-            Lopeta
+            Lõpeta
           </button>
-          <button v-else class="btn bg-green" @click="startTask(task)">
+          <button
+            :disabled="loading"
+            v-else
+            class="btn bg-green"
+            @click.prevent="startTask(task)"
+          >
             Käivita
           </button>
         </div>
@@ -72,6 +99,10 @@ export default {
     scene: {
       type: Object,
       default: () => {},
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -96,6 +127,12 @@ export default {
     stopScene() {
       this.scene.isActive = false;
       this.$emit("stop", this.scene.tasks);
+    },
+    startAllTasksInScene() {
+      this.scene.isActive = true;
+      this.scene.tasks.forEach((task) => {
+        this.startTask(task);
+      });
     },
     stopTask(task) {
       task.isActive = false;

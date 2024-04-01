@@ -7,6 +7,7 @@
         v-for="templateScene in templateScenes"
       >
         <SceneBlock
+          :loading="loading"
           :scene="templateScene"
           @start="activateTasks"
           @stop="stopTasks"
@@ -31,6 +32,7 @@ export default {
     return {
       templateScenes: [],
       activePerformance: null,
+      loading: false,
     };
   },
 
@@ -67,27 +69,34 @@ export default {
       this.$forceUpdate();
     },
     async activateTasks(tasksToStart) {
+      this.loading = true;
       for (const task of tasksToStart) {
         await this.toggleTask({
           taskId: task._id,
           isActive: true,
         });
       }
+      this.loading = false;
     },
     async stopTasks(tasksToStop) {
+      this.loading = true;
       for (const task of tasksToStop) {
         await this.toggleTask({
           taskId: task._id,
           isActive: false,
         });
       }
+      this.loading = false;
     },
     async toggleTask(task) {
       console.log(task);
-      return await this.toggleTaskStatus({
+      this.loading = true;
+      await this.toggleTaskStatus({
         _id: task.taskId,
         isActive: task.isActive,
       });
+
+      this.loading = false;
     },
   },
 };
