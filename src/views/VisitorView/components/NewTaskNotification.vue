@@ -8,8 +8,10 @@
       <div class="column">
         <small>{{ userPhoneName }}</small>
         <strong> Uus ülesanne! <br /> </strong>
-        {{ currentTask.description }} ({{ currentTask.duration }}
-        sek)
+        <div class="task-desc">
+          {{ currentTask.description }} ({{ currentTask.duration }}
+          sek)
+        </div>
         <button
           v-if="currentTask.mediaType === 'video' && !isFilming"
           id="startButton"
@@ -75,6 +77,11 @@ export default {
 
 .task-icon {
   height: 16rem;
+}
+
+.task-desc {
+  text-wrap: normal;
+  width: 60%;
 }
 
 .column {

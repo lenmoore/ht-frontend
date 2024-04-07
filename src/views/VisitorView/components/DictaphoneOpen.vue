@@ -6,52 +6,67 @@
           style="
             display: flex;
             align-items: center;
-            flex-direction: column;
             justify-content: space-around;
           "
         >
-          <Vue3Lottie
-            v-if="showRecordingAnimation"
-            :animationData="startRecordingJSON"
-            style="width: 300px; height: 300px"
-          />
+          <video
+            id="preview"
+            autoplay=""
+            loop
+            poster="/dictophone.png"
+            style="height: 300px; width: 200px"
+            muted
+          >
+            <source type="audio/mp3" src="" />
+          </video>
+          <div class="task-description">
+            <strong> Sinu ülesanne: </strong> <br />
+            <span class="large">
+              {{ currentTask.description }}
+            </span>
+          </div>
+          <div
+            style="
+              width: 300px;
+              display: flex;
+              justify-content: center;
+              align-content: center;
+              flex-direction: column;
+            "
+          >
+            <div style="display: flex; justify-content: center">
+              <button
+                v-if="!showConfirmButton && recorderOpen"
+                id="recordButton"
+                class="record-button"
+                @click="onClickRecord"
+              >
+                <span :class="isRecording ? 'square' : 'round'"> </span>
+              </button>
+            </div>
+            <Vue3Lottie
+              v-if="showRecordingAnimation"
+              :animationData="startRecordingJSON"
+              style="width: 300px; height: 300px"
+            />
 
-          <div class="countdown">
-            <span id="time" class="time">00:00.00</span>
+            <div
+              v-if="!showConfirmButton"
+              class="countdown"
+              style="text-align: center; width: 100%"
+            >
+              <span
+                id="time"
+                class="time"
+                style="text-align: center; width: 100%"
+                >00:00.00</span
+              >
+            </div>
           </div>
         </div>
-        <div class="task-description">
-          <strong> Sinu ülesanne: </strong> <br />
-          <span class="large">
-            {{ currentTask.description }}
-          </span>
-        </div>
-        <div
-          v-if="!showConfirmButton && recorderOpen"
-          class="dictaphone-controls"
-        >
-          <button
-            id="recordButton"
-            class="record-button"
-            @click="onClickRecord"
-          >
-            <span :class="isRecording ? 'square' : 'round'"> </span>
-          </button>
-        </div>
-        <video
-          id="preview"
-          autoplay=""
-          loop
-          poster="/dictophone.png"
-          style="height: 300px; width: 200px"
-          muted
-        >
-          <source type="audio/mp3" src="" />
-        </video>
       </div>
 
       <div v-if="showConfirmButton" class="dictaphone-confirm-box bg-white">
-        <p class="">Kas oled lindistusega rahul?</p>
         <button
           v-if="!isRecording"
           id="startButton"
@@ -61,11 +76,12 @@
           Tee uus lindistus
         </button>
         <button
+          id="confirmButton"
           class="btn bg-green mt-4"
           v-if="showConfirmButton"
           @click="$emit('confirm')"
         >
-          Kinnita
+          Kinnita lindistus
         </button>
       </div>
     </div>
@@ -156,7 +172,7 @@ export default {
         a.style = "display: none";
         a.href = this.downloadButtonHref;
         a.download = this.displayFileName;
-        a.click();
+        // a.click();
         window.URL.revokeObjectURL(this.downloadButtonHref);
 
         await this.uploadRecording(recordedBlob); // Assuming you want to upload immediately after recording
@@ -277,6 +293,10 @@ export default {
   height: 100%;
 }
 
+#time {
+  font-size: 2rem;
+}
+
 .dictaphone-interface {
   //border: 4px solid green;
   display: flex;
@@ -299,10 +319,19 @@ export default {
 .dictaphone-confirm-box {
   //border: 4px solid red;
 
+  display: flex;
+  margin-right: 1rem;
+
   button#startButton {
     height: 100px;
     width: 100px;
     border-radius: 50%;
+    margin-right: 1rem;
+  }
+
+  button#confirmButton {
+    height: 100px;
+    width: 100px;
   }
 }
 
@@ -314,7 +343,7 @@ export default {
   max-width: 40%;
 
   .large {
-    font-size: 2rem;
+    font-size: 1rem;
   }
 }
 </style>
