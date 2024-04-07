@@ -153,23 +153,31 @@ export default {
   margin-right: 10rem;
 }
 
+.visitor-wrapper {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .you-have-task-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
   height: 100%;
+  width: 100vw;
 
   .task-wrapper {
     background-color: #f0f0f0;
     border-radius: 4px;
-    width: 100%;
     box-shadow: 2px 2px 0px black;
     padding: 1rem;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    justify-content: center;
 
     .row {
       display: flex;

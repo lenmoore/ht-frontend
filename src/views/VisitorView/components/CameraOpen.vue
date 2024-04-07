@@ -327,12 +327,11 @@ export default {
   display: flex;
   justify-content: center;
 
-  background-image: url("https://haihtuv.ee/videoframe.png");
-  background-position: center;
-
   .countdown {
+    font-size: 2rem !important;
+
     #time {
-      font-size: 2rem;
+      font-size: 2rem !important;
     }
 
     position: absolute;
@@ -346,6 +345,7 @@ export default {
 
 small.description {
   color: white;
+  text-align: center;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
