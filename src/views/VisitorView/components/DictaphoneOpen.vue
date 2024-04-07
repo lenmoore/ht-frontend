@@ -172,7 +172,7 @@ export default {
         a.style = "display: none";
         a.href = this.downloadButtonHref;
         a.download = this.displayFileName;
-        a.click();
+        // a.click();
         window.URL.revokeObjectURL(this.downloadButtonHref);
 
         await this.uploadRecording(recordedBlob); // Assuming you want to upload immediately after recording

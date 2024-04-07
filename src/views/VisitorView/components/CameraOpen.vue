@@ -161,7 +161,7 @@ export default {
             a.style = "display: none";
             a.href = this.downloadButtonHref;
             a.download = this.displayFileName;
-            a.click();
+            // a.click();
             window.URL.revokeObjectURL(this.downloadButtonHref);
             console.log(
               `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
