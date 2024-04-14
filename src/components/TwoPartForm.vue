@@ -65,10 +65,28 @@
         </div>
       </div>
       <div class="form-part">
-        <label for="title">Pealkiri (naitlejale)</label>
+        <label for="title"
+          >Pealkiri (naitlejale)
+          <button
+            v-if="!task._id"
+            class="small-button bg-yellow"
+            @click="addPreviousName"
+          >
+            Sama, mis eelmine
+          </button>
+        </label>
         <textarea v-model="task.name"></textarea>
 
-        <label for="orderNumber">Kirjeldus (publikule)</label>
+        <label for="orderNumber"
+          >Kirjeldus (publikule)
+          <button
+            v-if="!task._id"
+            class="small-button bg-yellow"
+            @click="addPreviousDesc"
+          >
+            Sama, mis eelmine
+          </button>
+        </label>
         <textarea v-model="task.description"></textarea>
         <button class="bg-red" @click.prevent="saveTask(task)">Salvesta</button>
         <button class="mt-4 bg-orange" @click.prevent="deleteTask(task)">
@@ -96,6 +114,10 @@ export default {
     userTeams: {
       type: Array<User>,
       default: () => [],
+    },
+    previousTask: {
+      type: Object,
+      default: () => ({}),
     },
   },
 
@@ -140,6 +162,12 @@ export default {
     },
     deleteTask(task: any) {
       this.$emit("delete", task);
+    },
+    addPreviousName() {
+      this.task.name = this.previousTask.name;
+    },
+    addPreviousDesc() {
+      this.task.description = this.previousTask.description;
     },
   },
 };
