@@ -181,6 +181,9 @@ export default {
             const uploadResult = await this.uploadVideo(recordedBlob);
             console.log(uploadResult);
 
+            this.wait(1000).then(() => {
+              this.showConfirmButton = true;
+            });
             if (uploadResult) {
               const videoPlayback = document.getElementById("previewSrc");
               // get url from env
