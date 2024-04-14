@@ -134,6 +134,7 @@ export default {
   },
   methods: {
     async onClickOpenRecorder() {
+      this.showPreview = false;
       this.showConfirmButton = false;
       this.recorderOpen = true;
 
