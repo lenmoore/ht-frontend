@@ -196,6 +196,7 @@ export default {
           })
           .then(async (recordedChunks) => {
             this.showPreview = true; // Ensure this is set to true to display the video element
+
             let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
             const url = URL.createObjectURL(recordedBlob);
 
@@ -218,8 +219,7 @@ export default {
             this.downloadButtonDownload = this.displayFileName; // Set the download filename
 
             // Optionally handle upload
-            const uploadResult = await this.uploadVideo(recordedBlob);
-            console.log(uploadResult);
+            await this.uploadVideo(recordedBlob);
           })
 
           .catch((error) => {
