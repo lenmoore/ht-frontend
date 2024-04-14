@@ -11,16 +11,22 @@
           />
 
           <div v-else class="countdown">
-            <span id="time" class="time">00:00.00</span>
+            <span v-if="!showConfirmButton" id="time" class="time"
+              >00:00.00</span
+            >
           </div>
         </div>
         <video id="preview" autoplay="" loop poster="/movie%20camera.png" muted>
-          <source type='video/mp4; codecs="avc1.64001E, mp4a.40.2"' src="" />
+          <source
+            id="previewSrc"
+            type='video/mp4; codecs="avc1.64001E, mp4a.40.2"'
+            src=""
+          />
         </video>
       </div>
 
-      <div v-if="showConfirmButton" class="confirm-box bg-white">
-        <p class="">Kas oled videoga rahul?</p>
+      <div v-if="showConfirmButton" class="confirm-box">
+        <p class="bg-white">Kas oled videoga rahul?</p>
         <button
           v-if="!isFilming"
           id="startButton"
@@ -31,6 +37,7 @@
         </button>
         <button
           class="btn bg-green mt-4"
+          id="confirmButton"
           v-if="showConfirmButton"
           @click="$emit('confirm')"
         >
@@ -41,7 +48,12 @@
         <small class="description" style="max-width: 100px">
           {{ currentTask.description }}
         </small>
-        <button id="recordButton" class="record-button" @click="onClickRecord">
+        <button
+          v-if="!isFilming"
+          id="recordButton"
+          class="record-button"
+          @click="onClickRecord"
+        >
           <span :class="isFilming ? 'square' : 'round'"> </span>
         </button>
       </div>
@@ -151,24 +163,20 @@ export default {
             this.downloadButtonHref = preview.src;
             this.downloadButtonDownload = this.displayFileName;
 
-            const videoPlayback = document.getElementById("preview");
-            videoPlayback.src = this.downloadButtonHref;
-            videoPlayback.play();
-
-            // DOWNLOADS VIDEO TO DEVICE
-            const a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            a.href = this.downloadButtonHref;
-            a.download = this.displayFileName;
-            // a.click();
-            window.URL.revokeObjectURL(this.downloadButtonHref);
-            console.log(
-              `Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`,
-            );
-
             const uploadResult = await this.uploadVideo(recordedBlob);
             console.log(uploadResult);
+
+            if (uploadResult) {
+              const videoPlayback = document.getElementById("previewSrc");
+              // get url from env
+              const apiURLFromEnv = import.meta.env.VITE_API_URL;
+              // const apiURLFromEnv = "https://haihtuv.ee/api";
+              preview.src =
+                apiURLFromEnv.replace("api", "videod/") + this.displayFileName;
+              videoPlayback.src = preview.src;
+              console.log(preview.src);
+              preview.play();
+            }
           })
           .catch((error) => {
             if (error.name === "NotFoundError") {
@@ -255,6 +263,7 @@ export default {
         );
         console.log("Upload response:", response);
         // Handle response, such as confirming the video upload and providing the option to re-record
+        return response;
       } catch (error) {
         console.error("Error uploading the video:", error);
       }
@@ -282,9 +291,23 @@ export default {
   display: flex;
   flex-direction: column;
   position: absolute;
+  justify-content: center;
+  align-items: center;
   right: 50px;
   z-index: 100;
   height: 100%;
+  width: 30%;
+
+  #startButton {
+    border-radius: 50%;
+    height: 6rem;
+    width: 6rem;
+  }
+
+  #confirmButton {
+    height: 4rem;
+    margin-top: 4rem;
+  }
 }
 
 .controls {
@@ -294,7 +317,6 @@ export default {
   height: 100%;
   width: 17.5%;
 
-  background-color: $camera-interface-bg;
   //border: 2px solid black;
   display: flex;
   flex-direction: column;

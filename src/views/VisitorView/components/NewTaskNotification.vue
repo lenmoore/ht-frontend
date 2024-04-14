@@ -19,7 +19,7 @@
           style="z-index: 100"
           @click="onClickOpenCamera"
         >
-          Lindista
+          Alusta
         </button>
         <button
           v-else
@@ -28,7 +28,7 @@
           style="z-index: 100"
           @click="onClickOpenDictaphone"
         >
-          Lindista
+          Alusta
         </button>
       </div>
     </div>

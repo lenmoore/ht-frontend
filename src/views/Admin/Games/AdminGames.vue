@@ -84,6 +84,10 @@ export default {
     activeActorImage() {
       return {
         sakala: "/actors/sakala.jpeg",
+        maakler: "/actors/teder.png",
+        esoteerik: "/actors/reinold.png",
+        korraldaja: "/actors/kapper.png",
+        stalker: "/actors/podersoo.png",
       }[this.activeGroupName];
     },
   },
