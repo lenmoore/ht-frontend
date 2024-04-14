@@ -8,7 +8,7 @@
 
     <div>
       <img alt="" :src="activeActorImage" />
-      <h1>{{ activeGroupName || "-" }}</h1>
+      <h1>{{ activeGroupDisplayName || "-" }}</h1>
     </div>
     <div class="header">
       <div class="p-4">
@@ -50,6 +50,7 @@
     </div>
 
     <GroupGame
+      v-if="selectedScene"
       :selected-scene-id="selectedSceneId"
       :group-name="activeGroupName"
     />
@@ -67,7 +68,7 @@ export default {
 
   data() {
     return {
-      activeGroupName: "sakala",
+      activeGroupName: "",
 
       addingScene: false,
       newSceneName: "",
@@ -90,13 +91,22 @@ export default {
         stalker: "/actors/podersoo.png",
       }[this.activeGroupName];
     },
+    activeGroupDisplayName() {
+      return {
+        sakala: "Sakala",
+        maakler: "Arendaja",
+        esoteerik: "Poodnik",
+        korraldaja: "Päästja",
+        stalker: "Kauboi",
+      }[this.activeGroupName];
+    },
   },
 
   watch: {
     activeGroupName: {
       handler: async function (newVal) {
         this.scenes = await this.getAllScenes(newVal);
-        this.selectedSceneId = this.scenes[0]._id;
+        this.selectedSceneId = this.scenes[0]?._id;
         this.selectedScene = this.scenes[0];
       },
       immediate: true,
@@ -111,6 +121,9 @@ export default {
       getSceneById: "getSceneById",
     }),
     goToGroup(name) {
+      this.scenes = [];
+      this.selectedScene = null;
+
       console.log("go to group ", name);
       this.activeGroupName = name;
     },

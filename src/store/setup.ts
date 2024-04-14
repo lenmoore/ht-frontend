@@ -24,6 +24,7 @@ export const useSetupStore = defineStore("setup", {
       }
     },
     async getAllScenes(groupName: string) {
+      console.log(groupName);
       try {
         const response = await api.get("/admin/scenes");
         if (response) {

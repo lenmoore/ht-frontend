@@ -203,6 +203,8 @@ textarea {
   resize: none;
   color: var(--text);
   box-shadow: 2px 2px 0px black;
+  height: 10rem;
+  font-size: 0.875rem;
 }
 
 input[type="text"], input[type="search"], input[type="email"], input[type="number"], input[type="password"], input[type="tel"], input[type="url"] {
@@ -385,7 +387,6 @@ select:focus {
 }
 
 label {
-  font-size: 0.75rem;
   margin-top: 1rem;
 }
 
