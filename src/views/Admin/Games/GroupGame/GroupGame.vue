@@ -161,11 +161,13 @@ export default {
       this.tasks = this.scene.tasks;
     },
     displayFileName(task) {
-      return `${this.scene.orderNumber || "x"}_${
-        task.orderNumber || "[jarjekorranr]"
-      }_${this.team || "grupp"}_${
-        task.fileName.replace(" ", "_") || "[failinimi]"
-      }_${this.groupName || "[tiim]"}.mp4`;
+      const groupName = this.groupName;
+      const sceneOrderNumber = this.scene.orderNumber;
+      const taskOrderNumber = task.orderNumber;
+      const fileName = task.fileName.replace(" ", "_");
+      const team = task.team?.team_name;
+      const fileType = task.fileType === "video" ? "mp4" : "mp3";
+      return `${groupName}_${sceneOrderNumber}_${taskOrderNumber}_${fileName}_${team}.${fileType}`;
     },
     addTask() {
       this.addingNewTask = true;

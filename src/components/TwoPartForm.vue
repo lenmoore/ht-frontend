@@ -11,7 +11,7 @@
         >
         <input id="filename" v-model="task.fileName" type="text" />
 
-        <label for="visitorName">Tiim (publik=värv=meie)</label>
+        <label for="visitorName">Telefon</label>
 
         <select id="visitorName" v-model="task.visitorName">
           <option
@@ -81,13 +81,13 @@ export default {
       );
     },
     displayFileName() {
-      return `${this.scene?.orderNumber || "x"}_${
-        this.task.orderNumber || "[jarjekorranr]"
-      }_${this.team || "grupp"}_${
-        this.task.fileName.replace(" ", "_") || "[failinimi]"
-      }_${
-        this.groupName || "[tiim]"
-      }.${this.task.fileType === "video" ? "mp4" : "mp4"}`;
+      const groupName = this.groupName;
+      const sceneOrderNumber = this.scene.orderNumber;
+      const taskOrderNumber = this.task.orderNumber;
+      const fileName = this.task.fileName.replace(" ", "_");
+      const team = this.team?.team_name;
+      const fileType = this.task.fileType === "video" ? "mp4" : "mp3";
+      return `${groupName}_${sceneOrderNumber}_${taskOrderNumber}_${fileName}_${team}.${fileType}`;
     },
   },
 

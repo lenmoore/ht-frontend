@@ -77,13 +77,14 @@ export default {
 
   computed: {
     displayFileName() {
-      return `${this.currentTask?.sceneId?.orderNumber || "x"}_${
-        this.currentTask.orderNumber || "[jarjekorranr]"
-      }_${this.userPhoneName || "grupp"}_${
-        this.currentTask.fileName.replace(" ", "_") || "[failinimi]"
-      }_${
-        this.groupName || "[tiim]"
-      }.${this.currentTask.fileType === "video" ? "mp4" : "mp4"}`;
+      console.log(this.currentTask);
+      const groupName = this.groupName;
+      const sceneOrderNumber = this.currentTask?.sceneId?.orderNumber;
+      const taskOrderNumber = this.currentTask.orderNumber;
+      const fileName = this.currentTask.fileName.replace(" ", "_");
+      const team = this.userPhoneName;
+      const fileType = this.currentTask.mediaType === "video" ? "mp4" : "mp3";
+      return `${groupName}_${sceneOrderNumber}_${taskOrderNumber}_${fileName}_${team}.${fileType}`;
     },
   },
 
