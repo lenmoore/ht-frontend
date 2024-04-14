@@ -16,7 +16,22 @@
             >
           </div>
         </div>
-        <video id="preview" autoplay="" loop poster="/movie%20camera.png" muted>
+        <video
+          v-if="showConfirmButton"
+          controls
+          autoplay
+          loop
+          id="videoPlaybackPreview"
+          :src="`https://haihtuv.ee/videod/${displayFileName}`"
+        ></video>
+        <video
+          v-else
+          id="preview"
+          autoplay=""
+          loop
+          poster="/movie%20camera.png"
+          muted
+        >
           <source
             id="previewSrc"
             type='video/mp4; codecs="avc1.64001E, mp4a.40.2"'
