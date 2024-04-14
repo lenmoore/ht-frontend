@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white">
-    <GroupSelector />
+    <GroupSelector v-if="!loggedInAsActor" />
     <div class="py-2 bg-yellow">
       <div
         class="bg-white border m-4 p-2"
@@ -33,6 +33,7 @@ export default {
       templateScenes: [],
       activePerformance: null,
       loading: false,
+      loggedInAsActor: localStorage.actor === "true",
     };
   },
 
