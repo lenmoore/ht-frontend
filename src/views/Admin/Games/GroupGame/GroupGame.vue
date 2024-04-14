@@ -61,12 +61,13 @@
           </div>
         </div>
       </div>
-      <div class="p-4 m-4 border" v-if="addingNewTask">
+      <div class="card p-4 m-4 border" v-if="addingNewTask">
         <p>Uus</p>
         <TwoPartForm
           :user-teams="userTeams"
           :given-task="newTask"
           :scene="scene"
+          :previous-task="tasks[tasks.length - 1]"
           @save="saveTask"
         />
       </div>
