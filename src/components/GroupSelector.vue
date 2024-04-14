@@ -3,30 +3,30 @@
     <button
       class="bg-purple"
       :class="activeGroupName === 'maakler' && 'active'"
-      disabled
+      @click="goToGroup('maakler')"
     >
-      Maakler
+      Arendaja
     </button>
     <button
       class="bg-purple"
       :class="activeGroupName === 'stalker' && 'active'"
       @click="goToGroup('stalker')"
     >
-      Stalker
+      Kauboi
     </button>
     <button
       class="bg-purple"
       :class="activeGroupName === 'korraldaja' && 'active'"
-      disabled
+      @click="goToGroup('korraldaja')"
     >
-      Korraldaja
+      Päästja
     </button>
     <button
       class="bg-purple"
       :class="activeGroupName === 'esoteerik' && 'active'"
       @click="goToGroup('esoteerik')"
     >
-      Esoteerik
+      Poodnik
     </button>
     <!--    <button-->
     <!--      class="bg-purple"-->
@@ -43,12 +43,13 @@ export default {
 
   data() {
     return {
-      activeGroupName: localStorage.getItem("group_name") || "stalker",
+      activeGroupName: localStorage.getItem("group_name") || "",
     };
   },
 
   methods: {
     goToGroup(group) {
+      console.log(group);
       localStorage.setItem("group_name", group);
       this.activeGroupName = localStorage.getItem("group_name");
       this.$emit("go-to-group", group);

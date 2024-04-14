@@ -33,3 +33,23 @@
   background-color: lightgrey;
 }
 
+.radio-row {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.small-button {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.radio-button {
+  display: flex;
+  align-items: flex-end;
+  margin-right: 2rem;
+
+  input {
+    margin-right: 0.5rem;
+  }
+}

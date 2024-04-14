@@ -10,12 +10,11 @@
       <p class="max-width-20-rem border-top border-bottom bg-yellow">
         {{ scene && scene.description }}
       </p>
-      <div class="tasks-wrapper">
-        <div v-for="task in tasks" :key="task._id">
+      <div v-if="tasks.length" class="tasks-wrapper">
+        <div class="card py-4" v-for="task in tasks" :key="task._id">
           <div
             :class="{ wide: task.isEditing }"
             style="padding-left: 0; padding-right: 0"
-            class="card py-4"
           >
             <TwoPartForm
               v-if="task.isEditing"
@@ -28,20 +27,28 @@
 
             <div v-else class="closed-card">
               <p>
-                <small>
+                <label>
+                  <label>Faili nimi: </label>
                   <code class="bg-blue">{{ displayFileName(task) }}</code>
-                </small>
+                  <br />
+                  <label for="length">
+                    {{ task.duration }} sek {{ task.mediaType }}
+                  </label>
+
+                  <span
+                    class="mx-2"
+                    :class="`bg-${task.team && task.team.name}`"
+                  >
+                    {{ task.team && task.team.name }}
+                  </span>
+                </label>
               </p>
-              <label for="length">
-                {{ task.duration }} sek {{ task.mediaType }}
-              </label>
-              <span class="mx-2" :class="`bg-${task.team && task.team.name}`">
-                {{ task.team && task.team.name }}
-              </span>
               <p>
+                <label>Nimi näitlejale: </label>
                 <strong>{{ task.name }}</strong>
               </p>
               <p>
+                <label>Ülesanne publikule:</label>
                 {{ task.description }}
               </p>
               <button
@@ -161,12 +168,13 @@ export default {
       this.tasks = this.scene.tasks;
     },
     displayFileName(task) {
+      console.log(task.mediaType);
       const groupName = this.groupName;
       const sceneOrderNumber = this.scene.orderNumber;
       const taskOrderNumber = task.orderNumber;
       const fileName = task.fileName.replace(" ", "_");
       const team = task.team?.team_name;
-      const fileType = task.fileType === "video" ? "mp4" : "mp3";
+      const fileType = task.mediaType === "video" ? "mp4" : "mp3";
       return `${groupName}_${sceneOrderNumber}_${taskOrderNumber}_${fileName}_${team}.${fileType}`;
     },
     addTask() {
@@ -187,14 +195,8 @@ export default {
 </script>
 
 <style lang="scss">
-.scene-wrapper,
-.tasks-wrapper {
-  text-align: left;
-  width: 100%;
-}
-
 .card {
-  width: 100%;
+  width: 90%;
 }
 
 .closed-card {
@@ -203,5 +205,20 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.scene-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tasks-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 </style>

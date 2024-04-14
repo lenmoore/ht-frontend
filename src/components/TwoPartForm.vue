@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="form-wrapper">
     <div v-if="task.isEditing" class="two-part-form">
+      <h4>{{ displayFileName }}</h4>
       <div class="form-part">
         <label for="orderNumber">Järjekorranumber (naitlejale)</label>
         <input id="orderNumber" v-model="task.orderNumber" type="text" />
@@ -12,25 +13,56 @@
         <input id="filename" v-model="task.fileName" type="text" />
 
         <label for="visitorName">Telefon</label>
+        <div class="radio-row">
+          <span v-for="team in userTeams" :key="team._id" class="radio-button">
+            <input
+              type="radio"
+              :id="team._id"
+              v-model="task.visitorName"
+              :value="team.team_name"
+            />
+            <label
+              :class="`bg-${team.team_name}`"
+              style="font-size: 1rem"
+              :for="team._id"
+            >
+              {{ team.team_name }}
+            </label>
+          </span>
+        </div>
 
-        <select id="visitorName" v-model="task.visitorName">
-          <option
-            v-for="team in userTeams"
-            :key="team._id"
-            :value="team.team_name"
+        <br />
+
+        <div class="radio-row">
+          <label for="type" style="margin-right: 2rem">Meedia tüüp</label>
+          <span class="radio-button">
+            <input type="radio" v-model="task.mediaType" value="video" /> Video
+          </span>
+
+          <span class="radio-button">
+            <input type="radio" v-model="task.mediaType" value="sound" /> Heli
+          </span>
+        </div>
+
+        <br />
+
+        <div class="buttons-row">
+          <label for="length">Klipi pikkus </label>
+          <button
+            v-for="durationOption in durationOptions"
+            class="bg-blue small-button"
+            @click="autofillDurationOption(durationOption)"
           >
-            {{ team.name }}
-          </option>
-        </select>
-        <label for="type">Meedia tüüp</label>
-        <select id="type" v-model="task.mediaType">
-          <option value="video">heliga video</option>
-          <option value="sound">soundscape</option>
-          <option value="teleprompter">teleprompter</option>
-        </select>
-
-        <label for="length">Klipi pikkus (sekundites)</label>
-        <input id="length" v-model="task.duration" type="number" />
+            {{ durationOption }}
+          </button>
+          <input
+            style="margin-left: 2rem"
+            id="length"
+            v-model="task.duration"
+            type="number"
+          />
+          sek
+        </div>
       </div>
       <div class="form-part">
         <label for="title">Pealkiri (naitlejale)</label>
@@ -80,18 +112,27 @@ export default {
         (team) => team.team_name === this.task.visitorName,
       );
     },
+    mediaType() {
+      return this.task.mediaType;
+    },
     displayFileName() {
       const groupName = this.groupName;
       const sceneOrderNumber = this.scene.orderNumber;
       const taskOrderNumber = this.task.orderNumber;
       const fileName = this.task.fileName.replace(" ", "_");
       const team = this.team?.team_name;
-      const fileType = this.task.fileType === "video" ? "mp4" : "mp3";
+      const fileType = this.mediaType === "video" ? "mp4" : "mp3";
       return `${groupName}_${sceneOrderNumber}_${taskOrderNumber}_${fileName}_${team}.${fileType}`;
+    },
+    durationOptions() {
+      return [5, 7, 10, 15];
     },
   },
 
   methods: {
+    autofillDurationOption(duration: number | string) {
+      this.task.duration = duration;
+    },
     saveTask(task: any) {
       task.sceneId = this.scene._id;
       console.log("Salvestan", task);
@@ -105,10 +146,18 @@ export default {
 </script>
 
 <style lang="scss">
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+
 .two-part-form {
   display: flex;
   justify-content: space-around;
-  width: 100%;
+  width: 80%;
   margin: 1rem 0;
   flex-direction: column;
 
