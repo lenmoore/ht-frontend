@@ -151,11 +151,11 @@ export default {
   align-items: center;
   justify-content: center;
 
-  background-color: $back !important;
+  background-color: $back;
   color: white;
 
   * {
-    background-color: $back !important;
+    background-color: $back;
     color: white;
   }
 }
