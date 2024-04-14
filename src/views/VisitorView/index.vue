@@ -153,11 +153,6 @@ export default {
 
   background-color: $back;
   color: white;
-
-  * {
-    background-color: $back;
-    color: white;
-  }
 }
 
 .you-have-task-wrapper {
