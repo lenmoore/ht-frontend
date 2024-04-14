@@ -96,8 +96,6 @@ export default {
       if (!this.taskIsActive) {
         const task = await this.checkTaskForVisitor(this.teamId);
         if (task) {
-          console.log(task);
-          console.log("got sth? ");
           this.taskIsActive = true;
           this.currentTask = task;
 
@@ -114,25 +112,19 @@ export default {
         this.displayFileName,
       );
 
-      alert("Video on kinnitatud!");
+      alert("Kinnitatud!");
       this.taskIsActive = false;
+      this.currentTask = null;
+      this.$forceUpdate();
       location.reload();
-      this.keepCheckingForTask();
+      // this.keepCheckingForTask();
     },
     onClickOpenDictaphone() {
       this.recorderOpen = true;
     },
-
     log(msg) {
       let logElement = document.getElementById("log");
       logElement.innerHTML += `${msg}\n`;
-    },
-    wait(delayInMS) {
-      return new Promise((resolve) => setTimeout(resolve, delayInMS));
-    },
-    logout() {
-      localStorage.clear();
-      this.$router.push({ name: "login" });
     },
   },
 };
@@ -158,6 +150,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background-color: $back !important;
+  color: white;
+
+  * {
+    background-color: $back !important;
+    color: white;
+  }
 }
 
 .you-have-task-wrapper {
@@ -190,9 +190,5 @@ export default {
 
 .task-icon {
   height: 16rem;
-}
-
-.visitor-wrapper {
-  background-color: $camera-interface-bg;
 }
 </style>

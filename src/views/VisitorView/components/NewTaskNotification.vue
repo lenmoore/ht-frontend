@@ -50,7 +50,7 @@ export default {
       console.log(this.currentTask);
       if (this.currentTask.mediaType === "video") {
         return "/movie camera.png";
-      } else if (this.currentTask.mediaType === "sound") {
+      } else {
         return "/dictophone.png";
       }
     },
