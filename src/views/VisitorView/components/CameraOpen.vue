@@ -363,6 +363,7 @@ export default {
   z-index: 2;
   display: flex;
   justify-content: center;
+  background-color: transparent !important;
 
   .countdown {
     font-size: 2rem !important;
