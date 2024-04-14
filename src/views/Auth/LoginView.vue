@@ -38,14 +38,13 @@ export default {
     async clickLogin() {
       if (this.email.length && this.password.length) {
         try {
-          console.log(this.email, this.password);
           const user = await this.login(this.email, this.password);
           this.url = user.url;
           console.log(user);
           if (user) {
             if (localStorage.admin === "true") {
               router.push({ name: "admin-home" });
-            } else if (localStorage.actor === "true") {
+            } else if (localStorage.actor) {
               router.push({ name: "dashboard" });
             } else {
               router.push({ name: "visitor" });
