@@ -66,22 +66,29 @@
         </div>
       </div>
 
-      <div v-if="showConfirmButton" class="dictaphone-confirm-box bg-white">
+      <div v-if="showConfirmButton" class="confirm-box">
+        <audio
+          controls
+          autoplay
+          loop
+          :src="`https://haihtuv.ee/videod/${displayFileName}`"
+        ></audio>
+        <p class="bg-white">Kas oled lindistusega rahul?</p>
         <button
           v-if="!isRecording"
           id="startButton"
           class="button"
           @click="onClickOpenRecorder"
         >
-          Tee uus lindistus
+          Lindista uuesti
         </button>
         <button
-          id="confirmButton"
           class="btn bg-green mt-4"
+          id="confirmButton"
           v-if="showConfirmButton"
           @click="$emit('confirm')"
         >
-          Kinnita lindistus
+          Kinnita
         </button>
       </div>
     </div>

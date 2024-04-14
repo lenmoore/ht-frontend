@@ -11,9 +11,9 @@
           />
 
           <div v-else class="countdown">
-            <span v-if="!showConfirmButton" id="time" class="time"
-              >00:00.00</span
-            >
+            <span v-if="!showConfirmButton" id="time" class="time">
+              00:00.00
+            </span>
           </div>
         </div>
         <video
