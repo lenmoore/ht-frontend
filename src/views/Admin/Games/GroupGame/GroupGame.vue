@@ -2,7 +2,8 @@
   <div>
     <div class="scene-wrapper border">
       <h4>
-        {{ groupName }}: <strong>{{ scene && scene.title }}</strong> ({{
+        {{ activeGroupDisplayName }}:
+        <strong>{{ scene && scene.title }}</strong> ({{
           tasks && tasks.length
         }})
       </h4>
@@ -102,6 +103,18 @@ export default {
     groupName: {
       type: String,
       required: true,
+    },
+  },
+
+  computed: {
+    activeGroupDisplayName() {
+      return {
+        sakala: "Sakala",
+        maakler: "Arendaja",
+        esoteerik: "Poodnik",
+        korraldaja: "Päästja",
+        stalker: "Kauboi",
+      }[this.groupName];
     },
   },
 
