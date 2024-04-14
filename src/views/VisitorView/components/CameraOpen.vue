@@ -1,5 +1,25 @@
 <template>
   <div class="video-wrapper">
+    <div
+      v-if="showLoader"
+      style="
+        background-color: rgba(0, 0, 0, 0.5);
+        width: 100vw;
+        height: 100vh;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+      class="loader-wrapper"
+    >
+      <Vue3Lottie
+        style="width: 400px; height: 300px"
+        id="loader"
+        :speed="1"
+        :animationData="loadingJSON"
+      />
+    </div>
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
@@ -7,7 +27,7 @@
             v-if="showStartFilmingAnimation"
             :animationData="startFilmingJSON"
             style="width: 400px; height: 400px"
-            speed="2.5"
+            :speed="2.5"
           />
 
           <div v-else class="countdown">
@@ -16,32 +36,25 @@
             </span>
           </div>
         </div>
-        <video
-          v-if="showConfirmButton"
-          controls
-          autoplay
-          loop
-          id="videoPlaybackPreview"
-          :src="`https://haihtuv.ee/videod/${displayFileName}`"
-        ></video>
-        <video
-          v-else
-          id="preview"
-          autoplay=""
-          loop
-          poster="/movie%20camera.png"
-          muted
-        >
+        <video id="preview" autoplay="" loop poster="/movie%20camera.png" muted>
           <source
             id="previewSrc"
             type='video/mp4; codecs="avc1.64001E, mp4a.40.2"'
             src=""
           />
         </video>
+        <video
+          v-if="showPreview"
+          id="videoPreviewClip"
+          controls
+          autoplay
+          loop
+          style="margin-left: 20rem"
+        ></video>
       </div>
 
       <div v-if="showConfirmButton" class="confirm-box">
-        <p class="bg-white">Kas oled videoga rahul?</p>
+        <p class="confirm-happy">Kas oled videoga rahul?</p>
         <button
           v-if="!isFilming"
           id="startButton"
@@ -80,6 +93,7 @@ import { Vue3Lottie } from "vue3-lottie";
 import axios from "redaxios";
 import { authHeader, refreshHeader } from "../../../services/api";
 import lottieStartFilming from "../../../../public/animations/start_filming.json";
+import lottieLoading from "../../../../public/animations/loading.json";
 
 export default {
   name: "CameraOpen",
@@ -93,6 +107,8 @@ export default {
       downloadButtonHref: null,
       downloadButtonDownload: null,
       cameraOpen: false,
+
+      showLoader: false,
     };
   },
   props: {
@@ -107,6 +123,9 @@ export default {
   computed: {
     startFilmingJSON() {
       return lottieStartFilming;
+    },
+    loadingJSON() {
+      return lottieLoading;
     },
   },
 
@@ -142,7 +161,7 @@ export default {
         timeLeft -= 10; // Decrease by 10ms which is the smallest unit we're displaying
 
         // Stop the countdown when it reaches zero
-        if (timeLeft < 0) {
+        if (timeLeft <= 0) {
           clearInterval(this.countdownInterval);
           document.getElementById("time").textContent = "00:00.00"; // Reset to zero
         }
@@ -152,7 +171,10 @@ export default {
       return this.countdownInterval;
     },
     async onClickRecord() {
+      this.showLoader = false;
+      this.showPreview = false;
       this.showStartFilmingAnimation = true;
+
       setTimeout(() => {
         this.showStartFilmingAnimation = false;
         const preview = document.getElementById("preview");
@@ -173,29 +195,33 @@ export default {
             return await this.startRecording(preview.captureStream());
           })
           .then(async (recordedChunks) => {
+            this.showPreview = true; // Ensure this is set to true to display the video element
             let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
-            preview.src = URL.createObjectURL(recordedBlob);
-            this.downloadButtonHref = preview.src;
-            this.downloadButtonDownload = this.displayFileName;
+            const url = URL.createObjectURL(recordedBlob);
 
+            this.showLoader = true;
+            await this.wait(1000);
+            this.$forceUpdate();
+
+            const videoPlayback = document.getElementById("videoPreviewClip");
+            videoPlayback.addEventListener("error", (e) => {
+              console.error("Error playing video:", e);
+            });
+
+            videoPlayback.src = url; // Assign the Blob URL directly
+            videoPlayback.load(); // Important: Load the new source
+            this.showLoader = false;
+
+            videoPlayback.play(); // Attempt to play the video
+
+            this.downloadButtonHref = url; // Ensure the download link uses the Blob URL
+            this.downloadButtonDownload = this.displayFileName; // Set the download filename
+
+            // Optionally handle upload
             const uploadResult = await this.uploadVideo(recordedBlob);
             console.log(uploadResult);
-
-            this.wait(1000).then(() => {
-              this.showConfirmButton = true;
-            });
-            if (uploadResult) {
-              const videoPlayback = document.getElementById("previewSrc");
-              // get url from env
-              const apiURLFromEnv = import.meta.env.VITE_API_URL;
-              // const apiURLFromEnv = "https://haihtuv.ee/api";
-              preview.src =
-                apiURLFromEnv.replace("api", "videod/") + this.displayFileName;
-              videoPlayback.src = preview.src;
-              console.log(preview.src);
-              preview.play();
-            }
           })
+
           .catch((error) => {
             if (error.name === "NotFoundError") {
               console.log("Camera or microphone not found. Can't record.");
@@ -206,6 +232,7 @@ export default {
       }, 1250);
     },
     async onClickOpenCamera() {
+      this.showPreview = false;
       this.showConfirmButton = false;
       this.cameraOpen = true;
 
@@ -315,6 +342,11 @@ export default {
   z-index: 100;
   height: 100%;
   width: 30%;
+
+  .confirm-happy {
+    background-color: $back;
+    color: white;
+  }
 
   #startButton {
     border-radius: 50%;
