@@ -9,16 +9,15 @@
             justify-content: space-around;
           "
         >
-          <video
+          <audio
             id="preview"
-            autoplay=""
+            autoplay
             loop
-            poster="/dictophone.png"
             style="height: 300px; width: 200px"
             muted
           >
             <source type="audio/mp3" src="" />
-          </video>
+          </audio>
           <div class="task-description">
             <strong> Sinu ülesanne: </strong> <br />
             <span class="large">
@@ -66,12 +65,13 @@
         </div>
       </div>
 
-      <div v-if="showConfirmButton" class="confirm-box">
+      <div v-if="showPreview" class="confirm-box">
         <audio
+          id="audioPlayback"
           controls
           autoplay
           loop
-          :src="`https://haihtuv.ee/videod/${displayFileName}`"
+          :src="audioSrc"
         ></audio>
         <p class="bg-white">Kas oled lindistusega rahul?</p>
         <button
@@ -112,6 +112,7 @@ export default {
       downloadButtonHref: null,
       downloadButtonDownload: null,
       recorderOpen: false,
+      audioSrc: "",
     };
   },
   props: {
@@ -164,22 +165,28 @@ export default {
         const recordedChunks = await this.startRecording(
           preview.srcObject || stream,
         );
+
+        this.showPreview = true;
+
         let recordedBlob = new Blob(recordedChunks, { type: "audio/mp3" });
-        preview.src = URL.createObjectURL(recordedBlob);
-        this.downloadButtonHref = preview.src;
-        this.downloadButtonDownload = this.displayFileName;
+        const url = URL.createObjectURL(recordedBlob);
+        preview.src = url;
+        this.audioSrc = url; // It's good practice to manage this with Vue's reactive data properties.
+
+        this.showLoader = true;
+        await this.wait(1000);
+        this.$forceUpdate();
 
         // Handle post-recording actions like playback and download
-        const videoPlayback = document.getElementById("preview");
-        videoPlayback.src = this.downloadButtonHref;
-        videoPlayback.play();
+        const audioPlayback = document.getElementById("audioPlayback");
+        audioPlayback.src = url; // Assign the Blob URL directly
+        audioPlayback.load(); // Important: Load the new source
+        this.showLoader = false;
 
-        const a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style = "display: none";
-        a.href = this.downloadButtonHref;
-        a.download = this.displayFileName;
-        // a.click();
+        audioPlayback.play(); // Attempt to play the audio
+
+        this.downloadButtonHref = preview.src;
+        this.downloadButtonDownload = this.displayFileName;
         window.URL.revokeObjectURL(this.downloadButtonHref);
 
         await this.uploadRecording(recordedBlob); // Assuming you want to upload immediately after recording
