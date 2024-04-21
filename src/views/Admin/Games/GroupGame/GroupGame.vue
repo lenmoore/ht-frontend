@@ -125,7 +125,10 @@ export default {
         await this.getTeams();
         this.scene = await this.getSceneById(this.selectedSceneId);
         console.log(this.scene);
-        this.tasks = this.scene.tasks;
+        this.tasks = this.scene.tasks.map((task) => ({
+          ...task,
+          visitorName: task.team.name,
+        }));
       },
     },
     groupName: {

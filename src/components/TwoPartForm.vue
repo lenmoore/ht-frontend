@@ -11,7 +11,6 @@
           <code style="width: 70%">{{ displayFileName }}</code></label
         >
         <input id="filename" v-model="task.fileName" type="text" />
-
         <label for="visitorName">Telefon</label>
         <div class="radio-row">
           <span v-for="team in userTeams" :key="team._id" class="radio-button">
