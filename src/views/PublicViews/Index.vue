@@ -96,11 +96,11 @@ export default {
     },
     locationImage() {
       return {
-        paljassaare: "public/locations/paljassaare_kohtumispaik.jpeg",
-        ylemiste: "public/locations/ylemiste_kohtumispaik.jpeg",
-        vineeri: "public/locations/vineeri_kohtumispaik.jpeg",
-        maarjamae: "public/locations/maarjamagi_kohtumispaik.jpeg",
-        ht: "public/locations/HT_Taust.png",
+        paljassaare: "/locations/paljassaare_kohtumispaik.jpeg",
+        ylemiste: "/locations/ylemiste_kohtumispaik.jpeg",
+        vineeri: "/locations/vineeri_kohtumispaik.jpeg",
+        maarjamae: "/locations/maarjamagi_kohtumispaik.jpeg",
+        ht: "/locations/HT_Taust.png",
       };
     },
     locationMapLink() {
