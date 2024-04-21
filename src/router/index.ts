@@ -37,6 +37,11 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      {
+        path: "/testpublik",
+        name: "test-audience",
+        component: () => import("../views/PublicViews/Index.vue"),
+      },
     ],
   },
 ];

@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h2>Otsid testpubliku registreerimislehte?</h2>
+    <a href="/testpublik">Testetenduste nimekirja</a>
     <h1>Logi sisse</h1>
 
     <form @submit.prevent="clickLogin">
