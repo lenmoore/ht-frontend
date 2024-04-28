@@ -92,8 +92,8 @@
 import { Vue3Lottie } from "vue3-lottie";
 import axios from "redaxios";
 import { authHeader, refreshHeader } from "../../../services/api";
-import lottieStartFilming from "../../../../public/animations/start_filming.json";
-import lottieLoading from "../../../../public/animations/loading.json";
+import lottieStartFilming from "../../../assets/animations/start_filming.json";
+import lottieLoading from "../../../assets/animations/loading.json";
 
 export default {
   name: "CameraOpen",
@@ -137,10 +137,7 @@ export default {
       // Assuming this.currentTask.duration is in seconds, convert it to milliseconds
       let timeLeft = this.currentTask.duration * 1000; // timeLeft is in milliseconds
 
-      // Clear any existing countdowns to avoid multiple countdowns running at the same time
-      if (this.countdownInterval) {
-        clearInterval(this.countdownInterval);
-      }
+      clearInterval(this.countdownInterval);
 
       // Update the DOM every millisecond
       this.countdownInterval = setInterval(() => {
@@ -220,6 +217,7 @@ export default {
 
             // Optionally handle upload
             await this.uploadVideo(recordedBlob);
+            recordedBlob = null;
           })
 
           .catch((error) => {

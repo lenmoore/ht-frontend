@@ -14,7 +14,7 @@
 </template>
 <script>
 import { Vue3Lottie } from "vue3-lottie";
-import turnPhone from "../../../public/animations/turn-phone.json";
+import turnPhone from "../../assets/animations/turn-phone.json";
 
 export default {
   name: "OrientationWrapper",
