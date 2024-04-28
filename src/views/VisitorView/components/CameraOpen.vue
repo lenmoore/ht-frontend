@@ -169,6 +169,9 @@ export default {
       return this.countdownInterval;
     },
     async onClickRecord() {
+      const timeComponent = document.getElementById("time");
+      clearInterval(this.countdownInterval);
+      timeComponent.textContent = "00:00.00"; // Reset to zero
       this.showLoader = false;
       this.showPreview = false;
       this.showStartFilmingAnimation = true;
