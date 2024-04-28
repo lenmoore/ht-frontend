@@ -96,7 +96,7 @@
 </template>
 <script>
 import { Vue3Lottie } from "vue3-lottie";
-import lottieRecordAnimation from "../../../../public/animations/recording.json";
+import lottieRecordAnimation from "../../../assets/animations/recording.json";
 import axios from "redaxios";
 import { authHeader, refreshHeader } from "../../../services/api";
 
