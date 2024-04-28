@@ -217,7 +217,7 @@ export default {
             this.downloadButtonDownload = this.displayFileName; // Set the download filename
 
             // Optionally handle upload
-            await this.uploadVideo(recordedBlob);
+            this.uploadVideo(recordedBlob);
             recordedBlob = null;
           })
 
@@ -283,7 +283,7 @@ export default {
       console.log(data);
       return data;
     },
-    async uploadVideo(file) {
+    uploadVideo(file) {
       // console.log("file to upload: ", file); // This should show the Blob details.
       const formData = new FormData();
       const filename = this.displayFileName;
@@ -298,13 +298,9 @@ export default {
       });
 
       try {
-        const response = await instance.post(
-          "/visitor/upload-video",
-          formData,
-          {
-            headers: {},
-          },
-        );
+        const response = instance.post("/visitor/upload-video", formData, {
+          headers: {},
+        });
         console.log("Upload response:", response);
         // Handle response, such as confirming the video upload and providing the option to re-record
         return response;

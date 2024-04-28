@@ -100,8 +100,6 @@ export default {
           if (task) {
             this.taskIsActive = true;
             this.currentTask = task;
-
-            alert("Uus ülesanne!");
           }
         }
       }
@@ -117,9 +115,9 @@ export default {
       alert("Kinnitatud!");
       this.taskIsActive = false;
       this.currentTask = null;
+      this.recorderOpen = false;
+      this.cameraOpen = false;
       this.$forceUpdate();
-      location.reload();
-      // this.keepCheckingForTask();
     },
     onClickOpenDictaphone() {
       this.recorderOpen = true;
