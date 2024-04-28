@@ -148,19 +148,20 @@ export default {
 
         // Format the time string
         const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
+        const timeComponent = document.getElementById("time");
 
         // Update the DOM
-        if (timeLeft > 0) {
-          document.getElementById("time").textContent = timeString;
+        if (timeLeft > 0 && timeComponent) {
+          timeComponent.textContent = timeString;
         }
 
         // Decrease the time left
         timeLeft -= 10; // Decrease by 10ms which is the smallest unit we're displaying
 
         // Stop the countdown when it reaches zero
-        if (timeLeft <= 0) {
+        if (timeLeft <= 0 && timeComponent) {
           clearInterval(this.countdownInterval);
-          document.getElementById("time").textContent = "00:00.00"; // Reset to zero
+          timeComponent.textContent = "00:00.00"; // Reset to zero
         }
       }, 10); // Update every 10 milliseconds to keep the countdown smooth
 
@@ -283,7 +284,7 @@ export default {
       return data;
     },
     async uploadVideo(file) {
-      console.log("file to upload: ", file); // This should show the Blob details.
+      // console.log("file to upload: ", file); // This should show the Blob details.
       const formData = new FormData();
       const filename = this.displayFileName;
       formData.append("video", file, filename); // Assuming 'file' is a Blob or File

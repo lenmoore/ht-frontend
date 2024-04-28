@@ -95,13 +95,14 @@ export default {
     }),
     async keepCheckingForTask() {
       if (!this.taskIsActive) {
-        const task = await this.checkTaskForVisitor(this.teamId);
-        if (task) {
-          this.taskIsActive = true;
-          this.currentTask = task;
+        if (this.teamId) {
+          const task = await this.checkTaskForVisitor(this.teamId);
+          if (task) {
+            this.taskIsActive = true;
+            this.currentTask = task;
 
-          window.navigator.vibrate([200, 100, 200]);
-          alert("Uus ülesanne!");
+            alert("Uus ülesanne!");
+          }
         }
       }
       setTimeout(this.keepCheckingForTask, 1000);
