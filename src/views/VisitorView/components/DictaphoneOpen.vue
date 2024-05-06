@@ -73,7 +73,7 @@
           loop
           :src="audioSrc"
         ></audio>
-        <p class="bg-white">Kas oled lindistusega rahul?</p>
+        <p class="confirm-happy">Kas oled lindistusega rahul?</p>
         <button
           v-if="!isRecording"
           id="startButton"
@@ -151,6 +151,9 @@ export default {
       }
     },
     async onClickRecord() {
+      const timeComponent = document.getElementById("time");
+      clearInterval(this.countdownInterval);
+      timeComponent.textContent = "00:00.00"; // Reset to zero
       this.showRecordingAnimation = true; // Animation starts
       const preview = document.getElementById("preview");
       this.isRecording = true;
@@ -266,7 +269,7 @@ export default {
       return this.countdownInterval;
     },
     async uploadRecording(file) {
-      this.showRecordingAnimation = true;
+      this.showLoader = true;
       console.log("file to upload: ", file); // This should show the Blob details.
       const formData = new FormData();
       const filename = this.displayFileName;
@@ -310,6 +313,20 @@ export default {
 
 #time {
   font-size: 2rem;
+}
+
+.confirm-box {
+  width: 80%;
+}
+
+.confirm-happy {
+  font-size: 2rem;
+  color: white;
+  border-radius: 0.25rem;
+}
+
+#audioPlayback {
+  width: 100%;
 }
 
 .dictaphone-interface {

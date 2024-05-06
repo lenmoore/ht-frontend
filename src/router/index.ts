@@ -1,5 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
+//@ts-ignore
+const visitorLoginGuard = (to: any, from: any, next: any) => {
+  if (
+    localStorage.getItem("user") &&
+    localStorage.getItem("admin") === "false" &&
+    localStorage.getItem("actor") === "false"
+  ) {
+    next({ name: "visitor" });
+  } else {
+    next();
+  }
+};
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -10,6 +22,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "/login",
         name: "login",
+        beforeEnter: visitorLoginGuard,
         component: () => import("../views/Auth/LoginView.vue"),
         children: [],
       },

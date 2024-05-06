@@ -3,7 +3,7 @@
     <div
       v-if="showLoader"
       style="
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: #333;
         width: 100vw;
         height: 100vh;
         z-index: 1000;
@@ -14,7 +14,7 @@
       class="loader-wrapper"
     >
       <Vue3Lottie
-        style="width: 400px; height: 300px"
+        style="width: 400px; height: 300px; background-color: #333"
         id="loader"
         :speed="1"
         :animationData="loadingJSON"
@@ -23,12 +23,23 @@
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
-          <Vue3Lottie
+          <div
             v-if="showStartFilmingAnimation"
-            :animationData="startFilmingJSON"
-            style="width: 400px; height: 400px"
-            :speed="2.5"
-          />
+            style="
+              background: radial-gradient(
+                rgba(59, 56, 56, 0.65),
+                rgba(59, 56, 56, 0.35)
+              );
+              width: 100%;
+            "
+            class="lottie-wrapper"
+          >
+            <Vue3Lottie
+              :animationData="startFilmingJSON"
+              style="width: 300px; height: 300px; padding: 4rem"
+              :speed="3"
+            />
+          </div>
 
           <div v-else class="countdown">
             <span v-if="!showConfirmButton" id="time" class="time">
@@ -231,7 +242,7 @@ export default {
               console.log(error);
             }
           });
-      }, 1250);
+      }, 1000);
     },
     async onClickOpenCamera() {
       this.showPreview = false;
@@ -455,7 +466,7 @@ small.description {
 }
 
 video {
-  border: 4px solid black;
+  border: 4px solid #1a1919;
   border-radius: 1rem;
 }
 </style>
