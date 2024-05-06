@@ -335,14 +335,17 @@ export default {
   flex-direction: column;
   position: absolute;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   right: 50px;
   z-index: 100;
   height: 100%;
-  width: 30%;
+  width: 40%;
 
   .confirm-happy {
-    background-color: $back;
+    background-color: black;
+    padding: 0.5rem;
+    text-align: right;
+    font-size: 1.5rem;
     color: white;
   }
 
@@ -354,7 +357,8 @@ export default {
 
   #confirmButton {
     height: 4rem;
-    margin-top: 4rem;
+    width: 6rem;
+    margin-top: 2rem;
   }
 }
 
@@ -397,6 +401,7 @@ export default {
   display: flex;
   justify-content: center;
   background-color: transparent !important;
+  margin-right: -1.5rem;
 
   .countdown {
     font-size: 2rem !important;
@@ -447,5 +452,10 @@ small.description {
     border-radius: 50%;
     height: 42px;
   }
+}
+
+video {
+  border: 4px solid black;
+  border-radius: 1rem;
 }
 </style>

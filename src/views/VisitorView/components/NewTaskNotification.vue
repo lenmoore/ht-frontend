@@ -19,7 +19,7 @@
           style="z-index: 100"
           @click="onClickOpenCamera"
         >
-          Alusta
+          Ava kaamera
         </button>
         <button
           v-else
@@ -28,7 +28,7 @@
           style="z-index: 100"
           @click="onClickOpenDictaphone"
         >
-          Alusta
+          Ava diktofon
         </button>
       </div>
     </div>
