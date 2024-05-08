@@ -27,7 +27,13 @@
           <div class="card location-card">
             <div class="card-header">
               <img :src="card.image" alt="" />
-              <a :href="card.mapLink" target="_blank"
+              <a
+                v-if="date.date === '24. mai 2024'"
+                href="https://vatteater.ee/lavastused/haihtuv-tallinn/"
+                target="_blank"
+                >Asukohtade info</a
+              >
+              <a v-else :href="card.mapLink" target="_blank"
                 >Vaata täpset asukohta kaardil</a
               >
             </div>
@@ -117,56 +123,6 @@ export default {
     locationTests() {
       return [
         {
-          date: "7. mai 2024",
-          tests: [
-            {
-              name: "I Paljassaare publikutest",
-              time: "13:00",
-              desc: this.locationDescription["paljassaare"],
-              mapLink: this.locationMapLink["paljassaare"],
-              link: "https://forms.gle/eEm14ebdfqDrCr5j7",
-              distance: this.locationDistance["paljassaare"],
-              meetingPlace: this.locationMeetingPlace["paljassaare"],
-              image: this.locationImage["paljassaare"],
-            },
-            {
-              name: "I Ülemiste publikutest",
-              time: "18:00",
-              desc: this.locationDescription["ylemiste"],
-              mapLink: this.locationMapLink["ylemiste"],
-              link: "https://forms.gle/Rq7t5CDBKtARAdjm9",
-              distance: this.locationDistance["ylemiste"],
-              meetingPlace: this.locationMeetingPlace["ylemiste"],
-              image: this.locationImage["ylemiste"],
-            },
-          ],
-        },
-        {
-          date: "8. mai 2024",
-          tests: [
-            {
-              name: "I Maarjamäe publikutest",
-              time: "13:00",
-              desc: this.locationDescription["maarjamae"],
-              mapLink: this.locationMapLink["maarjamae"],
-              link: "https://forms.gle/wmUASfpjNW2DeTDfA",
-              distance: this.locationDistance["maarjamae"],
-              meetingPlace: this.locationMeetingPlace["maarjamae"],
-              image: this.locationImage["maarjamae"],
-            },
-            {
-              name: "I Vineeri publikutest",
-              time: "18:00",
-              desc: this.locationDescription["vineeri"],
-              link: "https://forms.gle/4pv5WEUmaDuXRa3j6",
-              distance: this.locationDistance["vineeri"],
-              mapLink: this.locationMapLink["vineeri"],
-              meetingPlace: this.locationMeetingPlace["vineeri"],
-              image: this.locationImage["vineeri"],
-            },
-          ],
-        },
-        {
           date: "20. mai 2024",
           tests: [
             {
@@ -223,7 +179,6 @@ export default {
               name: "Publikutest kõikides lokatsioonides",
               time: "19:00",
               desc: "Rännak lokatsioonis kestab sõltumatult läbitavast teekonnast orienteeruvalt 1 tund. Vaheaeg on 45 min, mille jooksul tuleb jõuda Sakala 3 Teatrimajja – sinna liikumiseks palume valida enda eelistatud liikumisviis. Soovitame soojalt Tallinna ühistransporti! Teine vaatus leiab aset Sakala 3 Teatrimajas, kus kohtuvad kõik neli rännakugruppi, et vaadata teekonnal loodud filme.",
-              link: "https://forms.gle/RCEgyB46Hidi8Qyn8",
               distance: "Vastavalt valitud asukohale.",
               meetingPlace: "Vastavalt valitud asukohale.",
               image: this.locationImage["ht"],
