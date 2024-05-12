@@ -49,7 +49,6 @@
                 </div>
                 <div class="desc">{{ card.desc }}</div>
               </div>
-
               <div
                 style="
                   width: 100%;
