@@ -178,6 +178,7 @@ export default {
             {
               name: "Publikutest kõikides lokatsioonides",
               time: "19:00",
+              link: "https://forms.gle/RCEgyB46Hidi8Qyn8",
               desc: "Rännak lokatsioonis kestab sõltumatult läbitavast teekonnast orienteeruvalt 1 tund. Vaheaeg on 45 min, mille jooksul tuleb jõuda Sakala 3 Teatrimajja – sinna liikumiseks palume valida enda eelistatud liikumisviis. Soovitame soojalt Tallinna ühistransporti! Teine vaatus leiab aset Sakala 3 Teatrimajas, kus kohtuvad kõik neli rännakugruppi, et vaadata teekonnal loodud filme.",
               distance: "Vastavalt valitud asukohale.",
               meetingPlace: "Vastavalt valitud asukohale.",
