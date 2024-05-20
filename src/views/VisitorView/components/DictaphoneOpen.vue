@@ -66,13 +66,6 @@
       </div>
 
       <div v-if="showPreview" class="confirm-box">
-        <audio
-          id="audioPlayback"
-          controls
-          autoplay
-          loop
-          :src="audioSrc"
-        ></audio>
         <p class="confirm-happy">Kas oled lindistusega rahul?</p>
         <button
           v-if="!isRecording"
@@ -180,14 +173,14 @@ export default {
         this.showLoader = true;
         await this.wait(1000);
         this.$forceUpdate();
-
-        // Handle post-recording actions like playback and download
-        const audioPlayback = document.getElementById("audioPlayback");
-        audioPlayback.src = url; // Assign the Blob URL directly
-        audioPlayback.load(); // Important: Load the new source
-        this.showLoader = false;
-
-        audioPlayback.play(); // Attempt to play the audio
+        //
+        // // Handle post-recording actions like playback and download
+        // const audioPlayback = document.getElementById("audioPlayback");
+        // audioPlayback.src = url; // Assign the Blob URL directly
+        // audioPlayback.load(); // Important: Load the new source
+        // this.showLoader = false;
+        //
+        // audioPlayback.play(); // Attempt to play the audio
 
         this.downloadButtonHref = preview.src;
         this.downloadButtonDownload = this.displayFileName;
