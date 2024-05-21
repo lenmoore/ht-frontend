@@ -144,6 +144,7 @@ export default {
       }
     },
     async onClickRecord() {
+      screen.orientation.lock("landscape-primary");
       const timeComponent = document.getElementById("time");
       clearInterval(this.countdownInterval);
       timeComponent.textContent = "00:00.00"; // Reset to zero
@@ -173,14 +174,6 @@ export default {
         this.showLoader = true;
         await this.wait(1000);
         this.$forceUpdate();
-        //
-        // // Handle post-recording actions like playback and download
-        // const audioPlayback = document.getElementById("audioPlayback");
-        // audioPlayback.src = url; // Assign the Blob URL directly
-        // audioPlayback.load(); // Important: Load the new source
-        // this.showLoader = false;
-        //
-        // audioPlayback.play(); // Attempt to play the audio
 
         this.downloadButtonHref = preview.src;
         this.downloadButtonDownload = this.displayFileName;
