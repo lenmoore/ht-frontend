@@ -244,7 +244,11 @@ export default {
           });
       }, 1000);
     },
+    lockOrientation() {
+      screen.orientation.lock("landscape-primary");
+    },
     async onClickOpenCamera() {
+      this.lockOrientation();
       this.showPreview = false;
       this.showConfirmButton = false;
       this.cameraOpen = true;
