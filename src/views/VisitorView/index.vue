@@ -1,37 +1,35 @@
 <template>
   <div style="height: 100%" :class="cameraOpen && 'visitor-wrapper'">
-    <OrientationWrapper>
-      <div class="you-have-task-wrapper" v-if="taskIsActive">
-        <NewTaskNotification
-          :camera-open="cameraOpen"
-          :recorder-open="recorderOpen"
-          :current-task="currentTask"
-          :show-confirm-button="showConfirmButton"
-          @open-camera="cameraOpen = true"
-          @open-recorder="onClickOpenDictaphone"
-        />
+    <div class="you-have-task-wrapper" v-if="taskIsActive">
+      <NewTaskNotification
+        :camera-open="cameraOpen"
+        :recorder-open="recorderOpen"
+        :current-task="currentTask"
+        :show-confirm-button="showConfirmButton"
+        @open-camera="cameraOpen = true"
+        @open-recorder="onClickOpenDictaphone"
+      />
 
-        <CameraOpen
-          ref="camera"
-          v-if="cameraOpen"
-          :current-task="currentTask"
-          :display-file-name="displayFileName"
-          @confirm="confirmVideoForVisitor"
-        />
-        <DictaphoneOpen
-          ref="recorder"
-          v-if="recorderOpen"
-          :current-task="currentTask"
-          :display-file-name="displayFileName"
-          @confirm="confirmVideoForVisitor"
-        />
-      </div>
+      <CameraOpen
+        ref="camera"
+        v-if="cameraOpen"
+        :current-task="currentTask"
+        :display-file-name="displayFileName"
+        @confirm="confirmVideoForVisitor"
+      />
+      <DictaphoneOpen
+        ref="recorder"
+        v-if="recorderOpen"
+        :current-task="currentTask"
+        :display-file-name="displayFileName"
+        @confirm="confirmVideoForVisitor"
+      />
+    </div>
 
-      <div v-else>
-        <h2>Hetkel pole sulle midagi.</h2>
-        <p>Oota järgmist ülesannet.</p>
-      </div>
-    </OrientationWrapper>
+    <div v-else>
+      <h2>Hetkel pole sulle midagi.</h2>
+      <p>Oota järgmist ülesannet.</p>
+    </div>
     <small class="bottom">
       <small id="log"></small>
     </small>
