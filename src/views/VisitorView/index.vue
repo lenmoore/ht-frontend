@@ -2,6 +2,7 @@
   <div style="height: 100%" :class="cameraOpen && 'visitor-wrapper'">
     <div class="you-have-task-wrapper" v-if="taskIsActive">
       <NewTaskNotification
+        v-if="!cameraOpen && !recorderOpen"
         :camera-open="cameraOpen"
         :recorder-open="recorderOpen"
         :current-task="currentTask"
@@ -44,6 +45,7 @@ import { Vue3Lottie } from "vue3-lottie";
 import NewTaskNotification from "./components/NewTaskNotification.vue";
 import CameraOpen from "./components/CameraOpen.vue";
 import DictaphoneOpen from "./components/DictaphoneOpen.vue";
+import dictaphoneOpen from "./components/DictaphoneOpen.vue";
 
 export default {
   name: "VisitorView",
@@ -74,6 +76,9 @@ export default {
   },
 
   computed: {
+    dictaphoneOpen() {
+      return dictaphoneOpen;
+    },
     displayFileName() {
       console.log(this.currentTask);
       const groupName = this.groupName;
