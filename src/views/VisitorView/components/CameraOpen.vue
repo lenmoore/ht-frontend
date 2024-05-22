@@ -246,7 +246,7 @@ export default {
       }, 1000);
     },
     async lockOrientation() {
-      await screen.orientation.lock("landscape-primary");
+      await screen.orientation.lock("landscape");
     },
     async onClickOpenCamera() {
       this.lockOrientation();
