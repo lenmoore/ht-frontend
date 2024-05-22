@@ -110,10 +110,13 @@ export default {
   },
   created() {
     this.onClickOpenCamera();
-    window.addEventListener("orientationchange", this.lockOrientation);
+    window.addEventListener("orientationchange", this.handleOrientationChange);
   },
   beforeDestroy() {
-    window.removeEventListener("orientationchange", this.lockOrientation);
+    window.removeEventListener(
+      "orientationchange",
+      this.handleOrientationChange,
+    );
   },
   methods: {
     startCountdown() {
@@ -192,10 +195,17 @@ export default {
       }, 1000);
     },
     async lockOrientation() {
-      try {
-        await screen.orientation.lock("landscape");
-      } catch (error) {
-        console.error("Orientation lock failed:", error);
+      if (screen.orientation && screen.orientation.lock) {
+        try {
+          await screen.orientation.lock("landscape");
+        } catch (error) {
+          console.error("Orientation lock failed:", error);
+        }
+      }
+    },
+    handleOrientationChange() {
+      if (window.orientation !== 90 && window.orientation !== -90) {
+        this.lockOrientation();
       }
     },
     async onClickOpenCamera() {
@@ -265,6 +275,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss">
 @import "../../../styles/variables";
 
