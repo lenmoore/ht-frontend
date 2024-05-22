@@ -108,14 +108,6 @@ export default {
   },
   created() {
     this.onClickOpenCamera();
-    window.addEventListener("orientationchange", this.handleOrientationChange);
-    this.lockOrientation(); // Ensure we attempt to lock the orientation on load
-  },
-  beforeDestroy() {
-    window.removeEventListener(
-      "orientationchange",
-      this.handleOrientationChange,
-    );
   },
   methods: {
     startCountdown() {
@@ -155,8 +147,8 @@ export default {
           .getUserMedia({
             video: {
               facingMode: "environment",
-              width: { ideal: 1920 },
-              height: { ideal: 1080 },
+              width: { ideal: 1920, min: 1920, max: 1920 },
+              height: { ideal: 1080, min: 1080, max: 1080 },
               frameRate: { min: 24, ideal: 24, max: 24 },
             },
           })
@@ -193,28 +185,8 @@ export default {
           });
       }, 1000);
     },
-    async lockOrientation() {
-      if (screen.orientation && screen.orientation.lock) {
-        try {
-          await screen.orientation.lock("landscape");
-        } catch (error) {
-          console.error("Orientation lock failed:", error);
-        }
-      }
-    },
-    handleOrientationChange() {
-      const orientation = screen.orientation || {};
-      const angle = orientation.angle || window.orientation;
-      if (angle === 90 || angle === -90) {
-        this.lockOrientation();
-      } else {
-        console.warn(
-          "Device is not in landscape mode. Please rotate to landscape.",
-        );
-      }
-    },
+
     async onClickOpenCamera() {
-      await this.lockOrientation();
       this.showPreview = false;
       this.showConfirmButton = false;
       this.cameraOpen = true;
