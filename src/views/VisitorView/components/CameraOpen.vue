@@ -207,7 +207,6 @@ export default {
       }
     },
     async startRecording(stream) {
-      await this.lockOrientation();
       const lengthInMS = this.currentTask.duration * 1000;
       let recorder = new MediaRecorder(stream);
       let data = [];
