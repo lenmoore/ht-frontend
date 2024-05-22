@@ -1,5 +1,5 @@
 <template>
-  <div class="video-wrapper">
+  <OrientationWrapper class="video-wrapper">
     <div
       v-if="showLoader"
       style="
@@ -97,7 +97,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </OrientationWrapper>
 </template>
 <script>
 import { Vue3Lottie } from "vue3-lottie";
@@ -105,10 +105,11 @@ import axios from "redaxios";
 import { authHeader, refreshHeader } from "../../../services/api";
 import lottieStartFilming from "../../../assets/animations/start_filming.json";
 import lottieLoading from "../../../assets/animations/loading.json";
+import OrientationWrapper from "../OrientationWrapper.vue";
 
 export default {
   name: "CameraOpen",
-  components: { Vue3Lottie },
+  components: { OrientationWrapper, Vue3Lottie },
   data() {
     return {
       showStartFilmingAnimation: false,
@@ -244,8 +245,8 @@ export default {
           });
       }, 1000);
     },
-    lockOrientation() {
-      screen.orientation.lock("landscape-primary");
+    async lockOrientation() {
+      await screen.orientation.lock("landscape-primary");
     },
     async onClickOpenCamera() {
       this.lockOrientation();
