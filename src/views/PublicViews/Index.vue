@@ -122,31 +122,6 @@ export default {
     locationTests() {
       return [
         {
-          date: "20. mai 2024",
-          tests: [
-            {
-              name: "II Paljassaare publikutest",
-              time: "13:00",
-              desc: this.locationDescription["paljassaare"],
-              link: "https://forms.gle/nXWEPPaeeXjVrzVQ9",
-              distance: this.locationDistance["paljassaare"],
-              meetingPlace: this.locationMeetingPlace["paljassaare"],
-              mapLink: this.locationMapLink["paljassaare"],
-              image: this.locationImage["paljassaare"],
-            },
-            {
-              name: "II Vineeri publikutest",
-              time: "18:00",
-              desc: this.locationDescription["vineeri"],
-              link: "https://forms.gle/CJBwuavZQButm8FP8",
-              mapLink: this.locationMapLink["vineeri"],
-              distance: this.locationDistance["vineeri"],
-              meetingPlace: this.locationMeetingPlace["vineeri"],
-              image: this.locationImage["vineeri"],
-            },
-          ],
-        },
-        {
           date: "22. mai 2024",
           tests: [
             {
