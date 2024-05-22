@@ -214,7 +214,7 @@ export default {
       }
     },
     async onClickOpenCamera() {
-      this.lockOrientation();
+      await this.lockOrientation();
       this.showPreview = false;
       this.showConfirmButton = false;
       this.cameraOpen = true;
@@ -235,6 +235,7 @@ export default {
       }
     },
     async startRecording(stream) {
+      await this.lockOrientation();
       const lengthInMS = this.currentTask.duration * 1000;
       let recorder = new MediaRecorder(stream);
       let data = [];
