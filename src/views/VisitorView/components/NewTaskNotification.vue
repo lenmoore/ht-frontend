@@ -3,7 +3,7 @@
     v-if="!showConfirmButton && !cameraOpen && !recorderOpen"
     class="m-4 p-4 border task-wrapper"
   >
-    <div class="row">
+    <OrientationWrapper class="row">
       <img class="no-style-image task-icon" :src="imgSrc" alt="" />
       <div class="column">
         <small>{{ userPhoneName }}</small>
@@ -31,15 +31,16 @@
           Ava diktofon
         </button>
       </div>
-    </div>
+    </OrientationWrapper>
   </div>
 </template>
 <script>
 import Camera from "simple-vue-camera";
+import OrientationWrapper from "../OrientationWrapper.vue";
 
 export default {
   name: "NewTaskNotification",
-  components: { Camera },
+  components: { OrientationWrapper, Camera },
   data() {
     return {
       userPhoneName: JSON.parse(localStorage.user).name,

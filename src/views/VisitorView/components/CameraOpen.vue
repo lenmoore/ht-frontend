@@ -18,7 +18,6 @@
               :speed="3"
             />
           </div>
-
           <div v-else class="countdown">
             <span v-if="!showConfirmButton" id="time" class="time">
               00:00.00
@@ -35,7 +34,6 @@
           style="margin-left: 20rem"
         ></video>
       </div>
-
       <div v-if="showConfirmButton" class="confirm-box">
         <p class="confirm-happy">Kas oled videoga rahul?</p>
         <button
@@ -111,6 +109,7 @@ export default {
   created() {
     this.onClickOpenCamera();
     window.addEventListener("orientationchange", this.handleOrientationChange);
+    this.lockOrientation(); // Ensure we attempt to lock the orientation on load
   },
   beforeDestroy() {
     window.removeEventListener(
@@ -204,8 +203,14 @@ export default {
       }
     },
     handleOrientationChange() {
-      if (window.orientation !== 90 && window.orientation !== -90) {
+      const orientation = screen.orientation || {};
+      const angle = orientation.angle || window.orientation;
+      if (angle === 90 || angle === -90) {
         this.lockOrientation();
+      } else {
+        console.warn(
+          "Device is not in landscape mode. Please rotate to landscape.",
+        );
       }
     },
     async onClickOpenCamera() {
