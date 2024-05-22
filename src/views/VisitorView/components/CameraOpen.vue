@@ -1,18 +1,6 @@
 <template>
   <div class="video-wrapper">
-    <div
-      v-if="showLoader"
-      style="
-        background-color: #333;
-        width: 100vw;
-        height: 100vh;
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      "
-      class="loader-wrapper"
-    >
+    <div v-if="showLoader" class="loader-wrapper">
       <Vue3Lottie
         style="width: 400px; height: 300px; background-color: #333"
         id="loader"
@@ -23,17 +11,7 @@
     <div class="recorder-interface">
       <div class="video-stuff">
         <div class="video-absolute">
-          <div
-            v-if="showStartFilmingAnimation"
-            style="
-              background: radial-gradient(
-                rgba(59, 56, 56, 0.65),
-                rgba(59, 56, 56, 0.35)
-              );
-              width: 100%;
-            "
-            class="lottie-wrapper"
-          >
+          <div v-if="showStartFilmingAnimation" class="lottie-wrapper">
             <Vue3Lottie
               :animationData="startFilmingJSON"
               style="width: 300px; height: 300px; padding: 4rem"
@@ -47,13 +25,7 @@
             </span>
           </div>
         </div>
-        <video id="preview" autoplay="" loop poster="/movie%20camera.png" muted>
-          <source
-            id="previewSrc"
-            type='video/mp4; codecs="avc1.64001E, mp4a.40.2"'
-            src=""
-          />
-        </video>
+        <video id="preview" autoplay loop muted playsinline></video>
         <video
           v-if="showPreview"
           id="videoPreviewClip"
@@ -84,9 +56,7 @@
         </button>
       </div>
       <div v-else-if="!showConfirmButton && cameraOpen" class="controls">
-        <small class="description" style="max-width: 100px">
-          {{ currentTask.description }}
-        </small>
+        <small class="description">{{ currentTask.description }}</small>
         <button
           v-if="!isFilming"
           id="recordButton"
@@ -140,6 +110,10 @@ export default {
   },
   created() {
     this.onClickOpenCamera();
+    window.addEventListener("orientationchange", this.lockOrientation);
+  },
+  beforeDestroy() {
+    window.removeEventListener("orientationchange", this.lockOrientation);
   },
   methods: {
     startCountdown() {
@@ -184,7 +158,8 @@ export default {
               frameRate: { min: 24, ideal: 24, max: 24 },
             },
           })
-          .then(async () => {
+          .then(async (stream) => {
+            preview.srcObject = stream;
             return await this.startRecording(preview.captureStream());
           })
           .then(async (recordedChunks) => {
@@ -217,7 +192,11 @@ export default {
       }, 1000);
     },
     async lockOrientation() {
-      await screen.orientation.lock("landscape");
+      try {
+        await screen.orientation.lock("landscape");
+      } catch (error) {
+        console.error("Orientation lock failed:", error);
+      }
     },
     async onClickOpenCamera() {
       this.lockOrientation();
@@ -286,12 +265,21 @@ export default {
   },
 };
 </script>
-
 <style lang="scss">
 @import "../../../styles/variables";
 
 .video-wrapper {
   background-color: $camera-interface-bg;
+}
+
+.loader-wrapper {
+  background-color: #333;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .recorder-interface {
@@ -338,8 +326,6 @@ export default {
   z-index: 100;
   height: 100%;
   width: 17.5%;
-
-  //border: 2px solid black;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -349,7 +335,6 @@ export default {
 .video-stuff {
   width: 100%;
   height: auto;
-
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -401,11 +386,9 @@ small.description {
   height: 60px;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.5);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
   margin: 0;
 
