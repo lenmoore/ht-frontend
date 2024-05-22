@@ -1,5 +1,8 @@
 <template>
-  <div style="height: 100%" :class="cameraOpen && 'visitor-wrapper'">
+  <OrientationWrapper
+    style="height: 100%"
+    :class="cameraOpen && 'visitor-wrapper'"
+  >
     <div class="you-have-task-wrapper" v-if="taskIsActive">
       <NewTaskNotification
         v-if="!cameraOpen && !recorderOpen"
@@ -34,7 +37,7 @@
     <small class="bottom">
       <small id="log"></small>
     </small>
-  </div>
+  </OrientationWrapper>
 </template>
 
 <script>
