@@ -1,5 +1,5 @@
 <template>
-  <OrientationWrapper class="video-wrapper">
+  <div class="video-wrapper">
     <div
       v-if="showLoader"
       style="
@@ -97,19 +97,19 @@
         </button>
       </div>
     </div>
-  </OrientationWrapper>
+  </div>
 </template>
+
 <script>
 import { Vue3Lottie } from "vue3-lottie";
 import axios from "redaxios";
 import { authHeader, refreshHeader } from "../../../services/api";
 import lottieStartFilming from "../../../assets/animations/start_filming.json";
 import lottieLoading from "../../../assets/animations/loading.json";
-import OrientationWrapper from "../OrientationWrapper.vue";
 
 export default {
   name: "CameraOpen",
-  components: { OrientationWrapper, Vue3Lottie },
+  components: { Vue3Lottie },
   data() {
     return {
       showStartFilmingAnimation: false,
@@ -119,7 +119,6 @@ export default {
       downloadButtonHref: null,
       downloadButtonDownload: null,
       cameraOpen: false,
-
       showLoader: false,
     };
   },
@@ -131,7 +130,6 @@ export default {
       default: "no file name",
     },
   },
-
   computed: {
     startFilmingJSON() {
       return lottieStartFilming;
@@ -140,50 +138,34 @@ export default {
       return lottieLoading;
     },
   },
-
   created() {
     this.onClickOpenCamera();
   },
   methods: {
     startCountdown() {
-      // Assuming this.currentTask.duration is in seconds, convert it to milliseconds
-      let timeLeft = this.currentTask.duration * 1000; // timeLeft is in milliseconds
-
+      let timeLeft = this.currentTask.duration * 1000;
       clearInterval(this.countdownInterval);
-
-      // Update the DOM every millisecond
       this.countdownInterval = setInterval(() => {
-        // Calculate minutes, seconds, and milliseconds
         const minutes = Math.floor(timeLeft / 60000);
         const seconds = Math.floor((timeLeft % 60000) / 1000);
-        const milliseconds = Math.floor((timeLeft % 1000) / 10); // Display two digits for milliseconds
-
-        // Format the time string
+        const milliseconds = Math.floor((timeLeft % 1000) / 10);
         const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
         const timeComponent = document.getElementById("time");
-
-        // Update the DOM
         if (timeLeft > 0 && timeComponent) {
           timeComponent.textContent = timeString;
         }
-
-        // Decrease the time left
-        timeLeft -= 10; // Decrease by 10ms which is the smallest unit we're displaying
-
-        // Stop the countdown when it reaches zero
+        timeLeft -= 10;
         if (timeLeft <= 0 && timeComponent) {
           clearInterval(this.countdownInterval);
-          timeComponent.textContent = "00:00.00"; // Reset to zero
+          timeComponent.textContent = "00:00.00";
         }
-      }, 10); // Update every 10 milliseconds to keep the countdown smooth
-
-      // Return the interval ID in case you need to clear it from somewhere else
+      }, 10);
       return this.countdownInterval;
     },
     async onClickRecord() {
       const timeComponent = document.getElementById("time");
       clearInterval(this.countdownInterval);
-      timeComponent.textContent = "00:00.00"; // Reset to zero
+      timeComponent.textContent = "00:00.00";
       this.showLoader = false;
       this.showPreview = false;
       this.showStartFilmingAnimation = true;
@@ -200,42 +182,31 @@ export default {
               width: { ideal: 1920 },
               height: { ideal: 1080 },
               frameRate: { min: 24, ideal: 24, max: 24 },
-              stabilization: true, // Note: This is not universally supported
-              focusMode: "continuous", // Request continuous focus if available
             },
           })
           .then(async () => {
             return await this.startRecording(preview.captureStream());
           })
           .then(async (recordedChunks) => {
-            this.showPreview = true; // Ensure this is set to true to display the video element
-
+            this.showPreview = true;
             let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
             const url = URL.createObjectURL(recordedBlob);
-
             this.showLoader = true;
             await this.wait(1000);
             this.$forceUpdate();
-
             const videoPlayback = document.getElementById("videoPreviewClip");
             videoPlayback.addEventListener("error", (e) => {
               console.error("Error playing video:", e);
             });
-
-            videoPlayback.src = url; // Assign the Blob URL directly
-            videoPlayback.load(); // Important: Load the new source
+            videoPlayback.src = url;
+            videoPlayback.load();
             this.showLoader = false;
-
-            videoPlayback.play(); // Attempt to play the video
-
-            this.downloadButtonHref = url; // Ensure the download link uses the Blob URL
-            this.downloadButtonDownload = this.displayFileName; // Set the download filename
-
-            // Optionally handle upload
+            videoPlayback.play();
+            this.downloadButtonHref = url;
+            this.downloadButtonDownload = this.displayFileName;
             this.uploadVideo(recordedBlob);
             recordedBlob = null;
           })
-
           .catch((error) => {
             if (error.name === "NotFoundError") {
               console.log("Camera or microphone not found. Can't record.");
@@ -253,7 +224,6 @@ export default {
       this.showPreview = false;
       this.showConfirmButton = false;
       this.cameraOpen = true;
-
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
@@ -261,53 +231,40 @@ export default {
             width: { ideal: 1920 },
             height: { ideal: 1080 },
             frameRate: { min: 24, ideal: 24, max: 24 },
-            stabilization: true, // Note: This is not universally supported
-            focusMode: "continuous", // Request continuous focus if available
           },
         });
         const videoElement = document.getElementById("preview");
         videoElement.srcObject = stream;
       } catch (error) {
         console.error("Error opening the camera", error);
-        this.cameraOpen = false; // Reset camera state if there is an error
+        this.cameraOpen = false;
       }
     },
-
     async startRecording(stream) {
       const lengthInMS = this.currentTask.duration * 1000;
-      console.log(lengthInMS);
       let recorder = new MediaRecorder(stream);
       let data = [];
-
       recorder.ondataavailable = (event) => data.push(event.data);
       recorder.start();
-      console.log(`${recorder.state} for ${lengthInMS / 1000} seconds…`);
-
       let stopped = new Promise((resolve, reject) => {
         recorder.onstop = resolve;
         recorder.onerror = (event) => reject(event.name);
       });
-
       let recorded = this.wait(lengthInMS).then(() => {
         if (recorder.state === "recording") {
           recorder.stop();
         }
       });
       this.startCountdown();
-      console.log("start countdown");
-
       await Promise.all([stopped, recorded]);
       this.showConfirmButton = true;
       this.isFilming = false;
-      console.log(data);
       return data;
     },
     uploadVideo(file) {
-      // console.log("file to upload: ", file); // This should show the Blob details.
       const formData = new FormData();
       const filename = this.displayFileName;
-      formData.append("video", file, filename); // Assuming 'file' is a Blob or File
-
+      formData.append("video", file, filename);
       const instance = axios.create({
         headers: {
           Authorization: authHeader().toString(),
@@ -315,13 +272,9 @@ export default {
         },
         baseURL: import.meta.env.VITE_API_URL,
       });
-
       try {
-        const response = instance.post("/visitor/upload-video", formData, {
-          headers: {},
-        });
+        const response = instance.post("/visitor/upload-video", formData);
         console.log("Upload response:", response);
-        // Handle response, such as confirming the video upload and providing the option to re-record
         return response;
       } catch (error) {
         console.error("Error uploading the video:", error);
@@ -333,6 +286,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss">
 @import "../../../styles/variables";
 
