@@ -118,7 +118,6 @@ export default {
         this.displayFileName,
       );
 
-      alert("Kinnitatud!");
       this.taskIsActive = false;
       this.currentTask = null;
       this.recorderOpen = false;
