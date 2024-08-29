@@ -9,7 +9,7 @@ import { createI18n } from "vue-i18n";
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 const app = createApp(App);
-
+import translations from "./translations.json";
 // Create the Pinia store
 const pinia = createPinia();
 const i18n = createI18n({
@@ -23,6 +23,9 @@ const i18n = createI18n({
             "Ava kaamera": "Open the camera",
             "sek": "sec",
             "Uus ülesanne!": "New task!",
+            "Kinnita": "Confirm",
+            "Lindista uuesti": "Record again",
+            ...translations,
         },
     }
 })

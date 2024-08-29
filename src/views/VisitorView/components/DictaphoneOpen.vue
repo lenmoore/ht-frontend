@@ -73,7 +73,7 @@
           class="button"
           @click="onClickOpenRecorder"
         >
-          Lindista uuesti
+            {{ $t('Lindista uuesti') }}
         </button>
         <button
           class="btn bg-green mt-4"
@@ -81,7 +81,7 @@
           v-if="showConfirmButton"
           @click="$emit('confirm')"
         >
-          Kinnita
+            {{ $t('Kinnita') }}
         </button>
       </div>
     </div>

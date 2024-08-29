@@ -42,7 +42,7 @@
           class="button"
           @click="onClickOpenCamera"
         >
-          Lindista uuesti
+            {{ $t('Lindista uuesti') }}
         </button>
         <button
           class="btn bg-green mt-4"
@@ -50,7 +50,7 @@
           v-if="showConfirmButton"
           @click="$emit('confirm')"
         >
-          Kinnita
+            {{ $('Kinnita') }}
         </button>
       </div>
       <div v-else-if="!showConfirmButton && cameraOpen" class="controls">
