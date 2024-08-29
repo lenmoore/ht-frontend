@@ -30,9 +30,9 @@
       />
     </div>
 
-    <div v-else>
-      <h2>Hetkel pole sulle midagi.</h2>
-      <p>Oota järgmist ülesannet.</p>
+    <div v-else class="nothing-wrapper">
+      <h2>{{ $t('Hetkel pole sulle ülesandeid.') }}</h2>
+      <p>{{ $t('Oota järgmist ülesannet.') }}</p>
     </div>
     <small class="bottom">
       <small id="log"></small>
@@ -190,5 +190,13 @@ export default {
 
 .task-icon {
   height: 16rem;
+}
+
+.nothing-wrapper {
+    display: flex;
+    align-items: center;justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
 }
 </style>
