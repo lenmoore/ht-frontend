@@ -35,7 +35,7 @@
         ></video>
       </div>
       <div v-if="showConfirmButton" class="confirm-box">
-        <p class="confirm-happy">Kas oled videoga rahul?</p>
+        <p class="confirm-happy">{{ $t('Kas oled videoga rahul?') }}</p>
         <button
           v-if="!isFilming"
           id="startButton"
@@ -50,11 +50,11 @@
           v-if="showConfirmButton"
           @click="$emit('confirm')"
         >
-            {{ $('Kinnita') }}
+            {{ $t('Kinnita') }}
         </button>
       </div>
       <div v-else-if="!showConfirmButton && cameraOpen" class="controls">
-        <small class="description">{{ currentTask.description }}</small>
+        <small class="description">{{ $t(currentTask.description) }}</small>
         <button
           v-if="!isFilming"
           id="recordButton"

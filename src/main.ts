@@ -26,6 +26,7 @@ const i18n = createI18n({
             "Uus ülesanne!": "New task!",
             "Kinnita": "Confirm",
             "Lindista uuesti": "Record again",
+            "Kas oled videoga rahul?": "Are you satisfied with the video?",
             ...translations,
         },
     }

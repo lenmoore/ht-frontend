@@ -21,7 +21,7 @@
           <div class="task-description">
             <strong> Sinu ülesanne: </strong> <br />
             <span class="large">
-              {{ currentTask.description }}
+              {{ $t(currentTask.description) }}
             </span>
           </div>
           <div
