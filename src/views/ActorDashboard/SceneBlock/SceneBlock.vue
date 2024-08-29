@@ -84,6 +84,10 @@
 
         <div class="mx-4 mb-4">
           Ülesanne tiimile: {{ task.description }}
+
+            <small>
+                {{ $t(task.description) }}
+            </small>
           <div>
             {{ task.mediaType }} ({{ task.duration }} sek) -
             <strong :class="task.isConfirmedByTeam ? 'bg-green' : 'bg-red'">

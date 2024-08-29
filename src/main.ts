@@ -19,11 +19,10 @@ const i18n = createI18n({
             "Logi sisse": "Log in",
             "Hetkel pole sulle ülesandeid.": "You don't have any tasks at the moment.",
             "Oota järgmist ülesannet.": "Wait for the next task.",
-        },
-        et: {
-            "Logi sisse": "Logi sisse",
-            "Hetkel pole sulle ülesandeid.": "Hetkel pole sulle ülesandeid.",
-            "Oota järgmist ülesannet.": "Oota järgmist ülesannet.",
+            "Ava diktofon": "Open the dictaphone",
+            "Ava kaamera": "Open the camera",
+            "sek": "sec",
+            "Uus ülesanne!": "New task!",
         },
     }
 })

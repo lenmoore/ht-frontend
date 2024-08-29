@@ -7,10 +7,10 @@
       <img class="no-style-image task-icon" :src="imgSrc" alt="" />
       <div class="column">
         <small>{{ userPhoneName }}</small>
-        <strong> Uus ülesanne! <br /> </strong>
+        <strong> {{$t('Uus ülesanne!')}} <br /> </strong>
         <div class="task-desc">
-          {{ currentTask.description }} ({{ currentTask.duration }}
-          sek)
+          {{ $t(currentTask.description) }} ({{ currentTask.duration }}
+            {{ $t('sek') }})
         </div>
         <button
           v-if="currentTask.mediaType === 'video' && !isFilming"
@@ -19,7 +19,7 @@
           style="z-index: 100"
           @click="onClickOpenCamera"
         >
-          Ava kaamera
+            {{ $t('Ava kaamera') }}
         </button>
         <button
           v-else
@@ -28,7 +28,7 @@
           style="z-index: 100"
           @click="onClickOpenDictaphone"
         >
-          Ava diktofon
+            {{ $t('Ava diktofon') }}
         </button>
       </div>
     </div>
