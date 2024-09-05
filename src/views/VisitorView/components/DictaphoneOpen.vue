@@ -19,7 +19,7 @@
             <source type="audio/mp3" src="" />
           </audio>
           <div class="task-description">
-            <strong> Sinu ülesanne: </strong> <br />
+            <strong>{{ $t('Lindista tekst: ')}}</strong> <br />
             <span class="large">
               {{ $t(currentTask.description) }}
             </span>
