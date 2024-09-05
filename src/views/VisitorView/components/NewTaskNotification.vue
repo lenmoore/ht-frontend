@@ -6,8 +6,9 @@
     <div class="row">
       <img class="no-style-image task-icon" :src="imgSrc" alt="" />
       <div class="column">
-        <small>{{ userPhoneName }}</small>
-        <strong> {{$t('Uus ülesanne!')}} <br /> </strong>
+        <small >{{ userPhoneName }}</small>
+        <strong v-if="currentTask.mediaType === 'video'"> {{$t('Filmi klipp:')}} <br /> </strong>
+        <strong v-else> {{$t('Lindista tekst:')}} <br /> </strong>
         <div class="task-desc">
           {{ $t(currentTask.description) }} ({{ currentTask.duration }}
             {{ $t('sek') }})
