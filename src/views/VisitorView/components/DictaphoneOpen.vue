@@ -21,7 +21,7 @@
           <div class="task-description">
             <strong>{{ $t('Lindista tekst: ')}}</strong> <br />
             <span class="large">
-              {{ $t(currentTask.description) }}
+              "{{ $t(currentTask.description) }}"
             </span>
           </div>
           <div
