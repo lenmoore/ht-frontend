@@ -14,7 +14,7 @@ import translations from "./translations.json";
 // Create the Pinia store
 const pinia = createPinia();
 const i18n = createI18n({
-    locale: 'et',
+    locale: 'en',
     messages: {
         en: {
             "Logi sisse": "Log in",
@@ -25,6 +25,7 @@ const i18n = createI18n({
             "sek": "sec",
             "Uus ülesanne!": "New task!",
             "Kinnita": "Confirm",
+            "Lindista tekst: ": "Record the text: ",
             "Lindista uuesti": "Record again",
             "Kas oled videoga rahul?": "Are you satisfied with the video?",
             ...translations,
