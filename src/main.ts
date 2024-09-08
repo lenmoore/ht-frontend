@@ -13,6 +13,7 @@ const app = createApp(App);
 import translations from "./translations.json";
 // Create the Pinia store
 const pinia = createPinia();
+
 const i18n = createI18n({
     locale: 'en',
     messages: {
