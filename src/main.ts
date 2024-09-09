@@ -15,7 +15,7 @@ import translations from "./translations.json";
 const pinia = createPinia();
 
 const i18n = createI18n({
-    locale: 'en',
+    locale: 'et',
     messages: {
         en: {
             "Logi sisse": "Log in",
